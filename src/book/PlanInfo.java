@@ -1,5 +1,9 @@
 package book;
+<<<<<<< HEAD
 
+=======
+//곽테스트
+>>>>>>> e322a4b68a569775f0497f87fa89d83ec6d265a9
 
 import java.awt.Color;
 import java.awt.Dimension;
