@@ -44,39 +44,6 @@ public class CusMgr extends JFrame {
 	DefaultTableModel model = new DefaultTableModel(header,0);
 
 	
-//	public void setFont() {
-//		InputStream inputStream = null;
-		
-		// Font Setting
-//		try {
-//            String classPath = CusMgr.class.getResource("").getPath();
-//            String path = URLDecoder.decode(classPath, "UTF-8");
-//            inputStream = new BufferedInputStream(
-//                    new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
-//
-//            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-//            
-//            btnAddCus.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-//            btnEditCus.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-//            btnDelCus.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-//            btnBackCusMain.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-            
-//    		// Table Font
-//            tableCusList.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE));
-
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//        	if(inputStream != null) {
-//        		try {
-//            		inputStream.close();
-//        		} catch(Exception e2) { 
-//        			e2.printStackTrace();
-//        		}
-//        	}
-//        }
-//	}
-//	
 	/**
 	 * Launch the application.
 	 */
@@ -86,7 +53,6 @@ public class CusMgr extends JFrame {
 				try {
 					CusMgr frame = new CusMgr();
 					
-//					frame.setFont();
 
 					
 				       
@@ -120,16 +86,6 @@ public class CusMgr extends JFrame {
 		setContentPane(getContentPane);
 		TextField tf = new TextField();
 		
-
-	
-		
-		// Num, Service Name, Provide Technician, Service Price
-//		여기서부터 잠깐 놔둔다.
-		
-//		Object[][] data = {
-//				{"1", "김땡땡", "63하 2234", "현대","소나타","3000km","11223","부산광역시","010-1111-1111","2022-02-23"}
-//			
-//		};
 		table = new JTable(model);
 		
 		JTable tableCusList = new JTable(model);
@@ -230,7 +186,7 @@ public class CusMgr extends JFrame {
 					int num = DialogManager.createMsgDialog("수정하시겠습니까","\\img\\question6.png", "수정",JOptionPane.YES_NO_OPTION);
 			    	if(num==0){		    		
 			    		setVisible(false); 
-						new CusMgr_edit();
+						new CusMgr_edit(num);
 			    	}
 			    	else if(num==1) {
 			    		
@@ -284,12 +240,6 @@ public class CusMgr extends JFrame {
 		
 
 private void getInfo() {
-	
-//	DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-//	Connection con = null;
-//	PreparedStatement psmt = null;
-//	Statement stmt = null;
-//	ResultSet rs = null;
 	
 	Connection conn = null;
 	PreparedStatement pstmt = null;
