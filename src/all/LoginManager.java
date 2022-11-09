@@ -1,3 +1,4 @@
+package all;
 // 로그인 유저 정보만 포함하기때문에 암호는 없음
 public class LoginManager {
 	private String seperator;

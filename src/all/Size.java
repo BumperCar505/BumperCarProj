@@ -1,3 +1,4 @@
+package all;
 
 public class Size {
 	static final int BTN_B_W = 290;
