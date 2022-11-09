@@ -67,7 +67,7 @@ public class BookDetail extends JFrame {
 		
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 620, 900);
+		setBounds(100, 100, 620, 880);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -78,104 +78,99 @@ public class BookDetail extends JFrame {
 		
 		btnBook = new JButton();
 		btnBook.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		btnBook.setBounds(240, 775, 150, 50);
+		btnBook.setBounds(332, 765, 150, 50);
 		contentPane.add(btnBook);
 		
-		JButton btnBookCancel = new JButton("예약 취소");
-		btnBookCancel.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		btnBookCancel.setBounds(408, 775, 150, 50);
-		contentPane.add(btnBookCancel);
-		
 		JPanel panel = new JPanel();
-		panel.setBounds(46, 118, 512, 637);
+		panel.setBounds(73, 137, 458, 618);
 //		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("고객명");
 		lblNewLabel.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel.setBounds(37, 33, 144, 36);
+		lblNewLabel.setBounds(0, 36, 144, 36);
 		panel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("차번호");
 		lblNewLabel_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1.setBounds(37, 109, 144, 36);
+		lblNewLabel_1.setBounds(0, 108, 144, 36);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("브랜드");
 		lblNewLabel_2.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_2.setBounds(37, 185, 144, 36);
+		lblNewLabel_2.setBounds(0, 180, 144, 36);
 		panel.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("전화번호");
 		lblNewLabel_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_3.setBounds(37, 337, 144, 36);
+		lblNewLabel_3.setBounds(0, 324, 144, 36);
 		panel.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel("서비스");
 		lblNewLabel_4.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_4.setBounds(37, 409, 144, 36);
+		lblNewLabel_4.setBounds(0, 396, 144, 36);
 		panel.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel_5 = new JLabel("예약 시간");
 		lblNewLabel_5.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_5.setBounds(37, 489, 144, 36);
+		lblNewLabel_5.setBounds(0, 468, 144, 36);
 		panel.add(lblNewLabel_5);
 		
 		cusName = new JTextField();
 		cusName.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		cusName.setBounds(202, 26, 289, 50);
+		cusName.setBounds(169, 24, 289, 50);
 		panel.add(cusName);
 //		cusName.setColumns(10);
 		
 		cusCarNum = new JTextField();
 		cusCarNum.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		cusCarNum.setColumns(10);
-		cusCarNum.setBounds(202, 102, 289, 50);
+		cusCarNum.setBounds(169, 98, 289, 50);
 		panel.add(cusCarNum);
 		
 		cusCarBrand = new JTextField();
 		cusCarBrand.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		cusCarBrand.setColumns(10);
-		cusCarBrand.setBounds(202, 178, 289, 50);
+		cusCarBrand.setBounds(169, 172, 289, 50);
 		panel.add(cusCarBrand);
 		
 		cusCarType = new JTextField();
 		cusCarType.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		cusCarType.setColumns(10);
-		cusCarType.setBounds(202, 254, 289, 50);
+		cusCarType.setBounds(169, 246, 289, 50);
 		panel.add(cusCarType);
 		
 		cusTel = new JTextField();
 		cusTel.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		cusTel.setColumns(10);
-		cusTel.setBounds(202, 330, 289, 50);
+		cusTel.setBounds(169, 320, 289, 50);
 		panel.add(cusTel);
 		
 		JComboBox srvName = new JComboBox();
-		srvName.setBounds(202, 406, 289, 50);
+		srvName.setBounds(169, 394, 289, 50);
 		panel.add(srvName);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("차종");
 		lblNewLabel_2_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_2_1.setBounds(37, 261, 144, 36);
+		lblNewLabel_2_1.setBounds(0, 252, 144, 36);
 		panel.add(lblNewLabel_2_1);
 		
 		JLabel lblNewLabel_5_1 = new JLabel("정비 완료 시간");
 		lblNewLabel_5_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_5_1.setBounds(37, 565, 144, 36);
+		lblNewLabel_5_1.setBounds(0, 540, 144, 36);
 		panel.add(lblNewLabel_5_1);
 		
 		cusBookTime = new JTextField();
 		cusBookTime.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		cusBookTime.setColumns(10);
-		cusBookTime.setBounds(202, 482, 289, 50);
+		cusBookTime.setBounds(169, 468, 289, 50);
 		panel.add(cusBookTime);
 		
 		completedTime = new JTextField();
 		completedTime.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		completedTime.setColumns(10);
-		completedTime.setBounds(202, 558, 289, 50);
+		completedTime.setBounds(169, 542, 289, 50);
 		panel.add(completedTime);
 		
 		JLabel lblNewLabel_6 = new JLabel("");
@@ -184,7 +179,7 @@ public class BookDetail extends JFrame {
 		contentPane.add(lblNewLabel_6);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(46, 775, 54, 50);
+		panel_1.setBounds(73, 765, 54, 50);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -215,7 +210,7 @@ public class BookDetail extends JFrame {
 		});
 		
 		
-		statusBox.setBounds(103, 775, 116, 50);
+		statusBox.setBounds(130, 765, 150, 50);
 		
 //		statusBox.addItem(statusSymbol);
 //		statusBox.addItem(statusText);

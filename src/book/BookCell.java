@@ -28,7 +28,7 @@ public class BookCell extends JPanel {
 	private final DBManager dbManager = new DBManager();
 
 	BookCalendar bookCalendar;
-	BookSchedule schedule;
+//	BookSchedule schedule;
 	BookDetail detail;
 	BookMain bMain;
 	PlanCount planCount = new PlanCount();

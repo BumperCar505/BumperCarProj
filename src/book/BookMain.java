@@ -10,7 +10,7 @@ public class BookMain {
 
 	private Connection conn = null;
 	
-	private final DBConnectionMgr dbManager = new DBConnectionMgr();  // DB연결 
+//	private final DBConnectionMgr dbManager = new DBConnectionMgr();  // DB연결 
 	
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
