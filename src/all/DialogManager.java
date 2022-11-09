@@ -1,3 +1,4 @@
+package all;
 import java.awt.Font;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

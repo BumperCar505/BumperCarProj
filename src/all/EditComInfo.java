@@ -1,3 +1,4 @@
+package all;
 
 
 import java.awt.EventQueue;
