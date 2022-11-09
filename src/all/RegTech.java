@@ -1,3 +1,4 @@
+package all;
 
 // db연결...
 import java.awt.Color;

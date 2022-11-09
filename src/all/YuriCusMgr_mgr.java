@@ -1,3 +1,4 @@
+package all;
 //set은 값을 입력하는 것, get은 저장된 값을 불러오는 것.
 
 import java.sql.Connection;
