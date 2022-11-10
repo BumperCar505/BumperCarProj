@@ -8,6 +8,10 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +93,43 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	
 	private List<String> getDbTechNames(String comId) {
 		// DB에 접속해서 로그인한 회사의 기술자명단을 조회해서 반환한다.
-		return null;
+		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
+		Connection connection = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		List<String> list = new ArrayList<>();
+		
+		try {
+			connection = mgr.getConnection();
+			String query = "SELECT techName FROM technician "
+					+ "WHERE techComNum = ? "
+					+ "ORDER BY techName";
+			psmt = connection.prepareStatement(query);
+			psmt.setString(1, comId);
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				String techName = rs.getString("techName");
+				list.add(techName);
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} finally {
+			try {
+				if(rs != null) {rs.close();}
+				if(psmt != null) {psmt.close();}
+				if(connection != null) {connection.close();}
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+		}
+		
+		return list;
 	}
 	
 	private List<String> getDbPrice(String comId) {
@@ -107,6 +147,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 					ComSrvListSub1 frame = new ComSrvListSub1();
 					frame.setVisible(true);
 					frame.setFont();
+					frame.getDbTechNames(LoginManager.getInstance().getLogComNum());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -281,7 +322,8 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		this();
 		this.setTitle("기존 서비스 수정");
 		textFieldSrvName.setText(srvName);
-		textFieldSrvPrice.setText(srvPrice);
+		// DB에서 먼저 공임비 리스트를 다 가져와야함(위의 생성자에서)
+		comboBoxPrice.setSelectedItem(srvPrice);
 		btnSrvSave.setVisible(true);
 		addComboBoxData(srvTechAllList);
 		addListData(srvTechList);
