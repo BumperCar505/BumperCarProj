@@ -32,10 +32,11 @@ public class BookCell extends JPanel {
 	BookDetail detail;
 	BookMain bMain;
 	PlanCount planCount = new PlanCount();
+	DayDetail dayDetail = new DayDetail();
 	ArrayList<JLabel> plan_list = new ArrayList<JLabel>();
 	JLabel la_day, plan_count;
 	String printDay;
-	JPanel p_center, lday;
+	JPanel p_center, lday, plan_day;
 	int year, month, days;
 	
 	
@@ -53,12 +54,9 @@ public class BookCell extends JPanel {
 		
 		setLayout(new BorderLayout());
 		add(lday, BorderLayout.NORTH);
-//		add(p_center);
-//		p_center.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 1));
+		p_center.setLayout(new FlowLayout(FlowLayout.LEFT));
 		add(p_center);
 		
-//		setPreferredSize(new Dimension(180, 100));
-
 		
 	}
 	
@@ -70,6 +68,7 @@ public class BookCell extends JPanel {
 		
 		if (year > 0) {
 			setSchedule();
+//			setScheduleDay();
 		}
 	}
 	
@@ -93,7 +92,9 @@ public class BookCell extends JPanel {
 			@SuppressWarnings("deprecation")
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// cell 클릭
+				
+//				detailDay.setVisible(true);
+//				 cell 클릭
 				JFrame f = new JFrame((month+1) + "월 " + days + "일");
 				f.getContentPane().setLayout(null);
 				f.setSize(500,500);
@@ -112,7 +113,16 @@ public class BookCell extends JPanel {
 				btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 				f.getContentPane().add(btnAdd);
 				
+				plan_day = new JPanel();
+				plan_day.setBounds(12, 76, 460, 318);
+				f.getContentPane().add(plan_day);
+				
+//				plan_day = new JLabel();
+//				plan_day.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+				
+
 				f.show();
+				
 				
 				btnAdd.addActionListener(new ActionListener() {
 					
@@ -126,10 +136,6 @@ public class BookCell extends JPanel {
 			}
 		});
 	}
-	
-//	public void showPlan() {
-//		bMain.bMainFrame.showPage(BMainFrame.SCHEDULE);
-//	}
 	
 	public void labelDel() {
 		for (int i = 0; i < plan_list.size(); i++) {
@@ -187,20 +193,22 @@ public class BookCell extends JPanel {
 					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
 							 days, planCount);
 					
-				
+					
 					plan_list.add(tmpLabel);
+					
 					if (plan_list.size() < 3) {
 						p_center.add(tmpLabel);
 					}
 					else {
 					planCount.addData(tmpLabel);
-					plan_count.setText("+" + (plan_list.size() - 2) + "...");  // 일정이 많으면 +숫자로 표시 
-					plan_count.addMouseListener(new MouseAdapter() {
-						public void mouseClicked(MouseEvent e) { planCount.setVisible(true); }
-					});
+					plan_count.setText(" + " + (plan_list.size() - 2) + " ...");  // 일정이 많으면 +숫자로 표시 
+//					plan_count.addMouseListener(new MouseAdapter() {
+//						public void mouseClicked(MouseEvent e) { planCount.setVisible(true); }
+//					});
 				}
 			}
 			p_center.add(plan_count);
+			
 			plan_list.add(plan_count);
 			} else if (total < 4) {
 				for (int i = 0; i < total; i++) {
@@ -233,4 +241,74 @@ public class BookCell extends JPanel {
 		}
 		
 	}
+	
+	
+//	//////////////////////////////////////////////////////////////////
+//	public void setScheduleDay() {
+//		Connection conn = dbManager.getConn();
+////		Connection conn = null;
+//
+//		
+//		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
+//				+ "FROM maintenance "
+//				+ "JOIN customer "
+//				+ "ON customer.cusNum = maintenance.mainCusNum "
+//				+ "JOIN service "
+//				+ "ON service.srvNum = maintenance.mainSrvNum "
+//				+ "WHERE mainStartDay = ? ";
+//		
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		
+//		String now_date = year + "-" + (month + 1) + "-" + days;
+//		
+//		try {
+//			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//			pstmt.setString(1, now_date);
+//			
+//			rs = pstmt.executeQuery();
+//			rs.last();
+//			int total = rs.getRow();
+//			rs.beforeFirst();
+//			
+////			if (total > 3) {
+//				for (int i = 0; i < total; i++) {
+//					rs.next();
+//					int mainNum = rs.getInt("mainNum");
+//					String cusName = rs.getString("cusName");
+//					String cusCarNum = rs.getString("cusCarNum");
+//					String srvName = rs.getString("srvName");
+//					String cusTel = rs.getString("cusTel");
+//					String mainStartDay = rs.getString("mainStartDay");
+//					String mainStartTime = rs.getString("mainStartTime");
+//					String mainEndDay = rs.getString("mainEndDay");
+//					String mainEndTime = rs.getString("mainEndTime");
+//					// DB
+//					
+//					PlanInfo dayLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
+//							 days, planCount);
+//					
+//					plan_day.add(dayLabel);
+////					plan_list.add(tmpLabel);
+////					p_center.add(tmpLabel);
+//					
+////			}
+////			p_center.add(plan_count);
+////			
+////			plan_list.add(plan_count);
+//
+////				}
+//			}
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
+////			if (rs != null) { rs.close(); }
+////			if (pstmt != null) { pstmt.close(); }
+////			if (conn != null) { conn.close(); }
+//			
+//		}
+		
+	
 }

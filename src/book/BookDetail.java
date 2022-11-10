@@ -183,7 +183,7 @@ public class BookDetail extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel statusLabel = new JLabel(images[0]);
+		JLabel statusLabel = new JLabel();
 		statusLabel.setBounds(18, 14, 22, 22);
 		panel_1.add(statusLabel);
 		
@@ -213,10 +213,6 @@ public class BookDetail extends JFrame {
 		
 		
 		statusBox.setBounds(130, 765, 150, 50);
-		
-//		statusBox.addItem(statusSymbol);
-//		statusBox.addItem(statusText);
-//		statusBox.setRenderer();
 		contentPane.add(statusBox);
 		
 		
