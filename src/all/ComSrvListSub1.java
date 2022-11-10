@@ -134,7 +134,43 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	
 	private List<String> getDbPrice(String comId) {
 		// DB에 접속해서 등록되어있는 공임비를 조회해서 반환한다.
-		return null;
+		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
+		Connection connection = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		List<String> list = new ArrayList<>();
+		
+		try {
+			connection = mgr.getConnection();
+			String query = "SELECT unitName, unitPrice FROM unit "
+					+ "WHERE unitName LIKE '공임비%'"
+					+ "ORDER BY unitName";
+			psmt = connection.prepareStatement(query);
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				String unitName = rs.getString("unitName");
+				String unitPrice = rs.getString("unitPrice");
+				list.add(unitName + "(" + unitPrice + ")");
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} finally {
+			try {
+				if(rs != null) {rs.close();}
+				if(psmt != null) {psmt.close();}
+				if(connection != null) {connection.close();}
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+		}
+		
+		return list;
 	}
 	
 	/**
@@ -147,7 +183,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 					ComSrvListSub1 frame = new ComSrvListSub1();
 					frame.setVisible(true);
 					frame.setFont();
-					frame.getDbTechNames(LoginManager.getInstance().getLogComNum());
+					frame.getDbPrice(LoginManager.getInstance().getLogComNum());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
