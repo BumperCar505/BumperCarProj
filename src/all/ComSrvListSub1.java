@@ -48,7 +48,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	private JComboBox<String> comboBoxPrice;
 	private JScrollPane sc;
 	private final int FONT_SIZE = 20;
-	private boolean comboBoxInitFlag = false; // 생성자 호출시 리스트에 값 들어가는거 방지
+	private boolean comboBoxTechInitFlag = false; // 생성자 호출시 이벤트 발생해서 리스트에 값 들어가는거 방지
 	private LoginManager loginManager;
 	
 	public ComSrvListSub1 setFont() {
@@ -198,11 +198,12 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		Object obj = e.getSource();
 		
 		if(obj == btnSrvReg) {
-			System.out.println("이벤트 작동함");
+			System.out.println("이벤트 작동함1");
 		} else if(obj == btnSrvSave) { 
-			System.out.println("이벤트 작동함");
+			System.out.println("이벤트 작동함2");
 		} else if (obj == comboBoxTech) {
-			if(comboBoxInitFlag == false) {
+			if(comboBoxTechInitFlag == false) {
+				comboBoxTechInitFlag = true;
 				return;
 			}
 			
@@ -256,11 +257,10 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		listProvideTech.setModel(listModel);
 	}
 	
-	private void addComboBoxData(List<String> list) {
+	private void addComboBoxData(JComboBox<String> comboBox, List<String> list) {
 		for(int i = 0; i < list.size(); ++i) {
-			comboBoxTech.addItem(list.get(i));
+			comboBox.addItem(list.get(i));
 		}
-		comboBoxInitFlag = true;
 	}
 	
 	/**
@@ -275,6 +275,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setVisible(true);
+		this.setTitle("신규 서비스 등록");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -343,25 +344,20 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		comboBoxPrice = new JComboBox<String>();
 		comboBoxPrice.setBounds(208, 355, 200, 32);
 		contentPane.add(comboBoxPrice);
-	}
-	
-	// 서비스 목록 창에서 추가를 눌렀을때 이 생성자 호출
-	public ComSrvListSub1(List<String> srvTechAllList) {
-		this();
-		this.setTitle("신규 서비스 등록");
+		
+		addComboBoxData(comboBoxTech, getDbTechNames(loginManager.getLogComNum()));
+		addComboBoxData(comboBoxPrice, getDbPrice(loginManager.getLogComNum()));
 		btnSrvReg.setVisible(true);
-		addComboBoxData(srvTechAllList);
 	}
 	
 	// 테이블에서 셀 선택후 수정버튼을 클릭했을때 이 생성자 호출
-	public ComSrvListSub1(String srvName, String srvPrice, List<String> srvTechAllList, List<String> srvTechList) {
+	public ComSrvListSub1(String srvName, String srvPrice, List<String> srvTechList) {
 		this();
 		this.setTitle("기존 서비스 수정");
 		textFieldSrvName.setText(srvName);
-		// DB에서 먼저 공임비 리스트를 다 가져와야함(위의 생성자에서)
 		comboBoxPrice.setSelectedItem(srvPrice);
+		btnSrvReg.setVisible(false);
 		btnSrvSave.setVisible(true);
-		addComboBoxData(srvTechAllList);
 		addListData(srvTechList);
 	}
 }

@@ -113,17 +113,8 @@ public class ComSrvList extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		
-		// 테스트를 위해서 넣은 코드입니다.
-		ArrayList<String> techAllList = new ArrayList<>();
-		techAllList.add("정비사1");
-		techAllList.add("정비사2");
-		techAllList.add("정비사3");
-		techAllList.add("정비사4");
-		techAllList.add("정비사5");
-		techAllList.add("정비사6");
-		
 		if(obj == btnAddsrv) { // 서비스 신규 추가
-			new ComSrvListSub1(techAllList).setFont();
+			new ComSrvListSub1().setFont();
 		} else if(obj == btnEditSrv) { // 기존 서비스 수정
 			int selectedRow = tableSrvList.getSelectedRow();
 			
@@ -139,7 +130,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 			
 			ArrayList<String> techList = new ArrayList<>(List.of(selectedTechNames));
 			
-			new ComSrvListSub1(selectedSrvName, selectedSrvPrice, techAllList, techList).setFont();
+			new ComSrvListSub1(selectedSrvName, selectedSrvPrice, techList).setFont();
 		} else if(obj == btnDelSrv) { // 기존 서비스 삭제
 			int selectedRow = tableSrvList.getSelectedRow();
 			
@@ -182,8 +173,8 @@ public class ComSrvList extends JFrame implements ActionListener {
 		// Num, Service Name, Provide Technician, Service Price
 		Object[] columns = {"번호", "서비스 명", "제공 정비사", "서비스 가격"};
 		Object[][] rowNames = {
-				{"1", "타이어 교체", "김하하, 박나나", "공임비2"}, // 공임비 = 정비사 공임 + 부품가격
-				{"2", "엔진오일 교체", "김하하, 조마마", "공임비1"},
+				{"1", "타이어 교체", "김하하, 박나나", "공임비2(100000)"}, // 공임비 = 정비사 공임 + 부품가격
+				{"2", "엔진오일 교체", "김하하, 조마마", "공임비1(50000)"},
 		};
 		
 		// Text Align Center
