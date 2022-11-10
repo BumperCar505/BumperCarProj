@@ -230,7 +230,7 @@ public class CusMgr extends JFrame {
 					int num = DialogManager.createMsgDialog("수정하시겠습니까","\\img\\question6.png", "수정",JOptionPane.YES_NO_OPTION);
 			    	if(num==0){		    		
 			    		setVisible(false); 
-						new CusMgr_edit();
+//						new CusMgr_edit();
 			    	}
 			    	else if(num==1) {
 			    		

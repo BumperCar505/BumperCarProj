@@ -72,6 +72,7 @@ public class SalesMgr extends JFrame {
 	private JTextField totalIncom;
 	private JTextField totalCost;
 	private JComboBox comboY;
+	private JComboBox comboM;
 
 
 
@@ -92,16 +93,6 @@ public class SalesMgr extends JFrame {
 		try {
 			String classPath = SalesMgr.class.getResource("").getPath();
 			String path = URLDecoder.decode(classPath, "UTF-8");
-//            inputStream = new BufferedInputStream(
-//                    new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
-
-//            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-
-
-//            btnBackSalesMain.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-
-			// Table Font
-//            tableCusList.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,7 +116,7 @@ public class SalesMgr extends JFrame {
 				try {
 					SalesMgr frame = new SalesMgr();
 //               frame.setVisible(true);
-					frame.setFont();
+//					frame.setFont();
 
 
 
@@ -176,28 +167,102 @@ public class SalesMgr extends JFrame {
 //      년도 선택 콤보박스 넣기
 		comboY = new JComboBox();
 		comboY.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		comboY.setModel(new DefaultComboBoxModel(new String[] {"2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"}));
+		comboY.setModel(new DefaultComboBoxModel(new String[] {"2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012"}));
 		comboY.setBounds(82, 107, 95, 36);
-
-//      기본적으로 현재 년도 출력되게 잠시보류..
-		LocalDate now = LocalDate.now();
-		String year = Integer.toString(now.getYear());
-		getContentPane.add(comboY);
-		comboY.setSelectedItem("year");
-		System.out.print(year);
-
+		
 //      매 달 콤보박스 넣기
 		JComboBox comboM = new JComboBox();
 		comboM.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		comboM.setModel(new DefaultComboBoxModel(new String[] {"1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"}));
+		comboM.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
 		comboM.setBounds(189, 107, 87, 36);
+		
+		
+//      기본적으로 현재 년도 출력되게
+//		LocalDate now = LocalDate.now();
+//		String year = Integer.toString(now.getYear());
+//		getContentPane.add(comboY);
+//		getContentPane.add(comboM);
+//		comboY.setSelectedItem(year); //올해 년도 
+//		
+//		int yearInt = Integer.valueOf(year);  // 아래에서 사용할 목적으로 만든 year의 int버전
+		
 
 //      화면에 들어가면 기본적으로 현재 달이 출력될 수 있게.
 
-		int dayOfMonth = now.getDayOfMonth();
-		comboM.setSelectedIndex(dayOfMonth);
+//		int dayOfMonth = now.getDayOfMonth();
+//		comboM.setSelectedIndex(dayOfMonth);
 		getContentPane.add(comboM);
+		getContentPane.add(comboY);
+//		
+//		int IntMonth = Integer.valueOf(dayOfMonth); //현재 달 
+		
+		
+// 각 달 마다 날짜 칸 다르게 가져오기
+//      콤보박스에서 해당 값 가져오기.
+//		String str1 = comboM.getSelectedItem().toString();
+//
+//		char str2 = str1.charAt(0);
+////       첫 글자 숫자만 가져옴.(문자형으로)
+//
+//		int comboMonth = Character.getNumericValue(str2);
+////       받아온 문자를 int형으로 변환
+//		System.out.print(comboMonth);
+		
+//		아!!! 깨달았다. 지금 콤보박스 안의 값을 받아오지 않았구나! 계속 현재 달 값만 넣고 있으니까 변화가 없지!!!
+//		선택된 콤보박스 값가져오기
+//		String StringYear = comboY.getSelectedItem().toString();
+//		int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
+//
+//
+//		
+//		String StringMonth = comboM.getSelectedItem().toString();
+//		int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//		System.out.print(ComboSelectM);
 
+//		Calendar cal = Calendar.getInstance();
+//		cal.set(yearInt, IntMonth,1);
+		String StringYear = comboY.getSelectedItem().toString();
+		int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
+
+
+		
+		String StringMonth = comboM.getSelectedItem().toString();
+		int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//		System.out.print(ComboSelectM);
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(ComboSelectY,(ComboSelectM+1),1);
+		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+//		System.out.println("선택된 년도"+ComboSelectY);
+//		System.out.println(ComboSelectM-1);
+		
+		for(int j = 1; j<=monthDay; j++) {
+			model.addRow(new Object[] {j,"",""});
+
+//		String StringYear = comboY.getSelectedItem().toString();
+//		int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
+
+
+		
+//		String StringMonth = comboM.getSelectedItem().toString();
+//		int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//		System.out.println("ComboSelectY : " + ComboSelectM);
+//		
+//		다른 방법
+//		jcombo.getItemAt(jcombo.getSelectedIndex()).toString()
+
+		
+//		각 달의 마지막 날 만큼 출력
+
+//		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+//
+//		for(int i = 1; i<=monthDay; i++) {
+//			model.addRow(new Object[] {i,"",""});
+//		}
+//		System.out.println(StringYear);
+		
+		
 		//테이블 생성
 
 		table = new JTable(model);
@@ -232,33 +297,6 @@ public class SalesMgr extends JFrame {
 //      model.addRow(new Object[] {"1", "김땡땡", "63하 2234"}); //열 잘 들어가는지 테스트
 
 
-//      콤보박스에서 해당 값 가져오기.
-		String str1 = comboM.getSelectedItem().toString();
-
-		char str2 = str1.charAt(0);
-//       첫 글자 숫자만 가져옴.(문자형으로)
-
-		int comboMonth = Character.getNumericValue(str2);
-//       받아온 문자를 int형으로 변환
-
-		Calendar cal = Calendar.getInstance();
-		//  1월이 0으로 인식되기 때문에 month+1을 해줘야 한다.
-
-
-
-		cal.set(2022,comboMonth+1,1);
-
-
-//       System.out.println(comboMonth + comboMonth); int가 되었는지 확인
-		int comboMonth = Integer.parseInt(str2);
-		int comboMm = comboMonth.getSelectedItem();
-		System.out.println(comboMonth);
-
-		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-		for(int i = 1; i<=monthDay; i++) {
-			model.addRow(new Object[] {i,"",""});
-		}
 		JPanel jpList = new JPanel();
 		jpList.setLayout(new GridBagLayout());
 		JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
@@ -303,6 +341,7 @@ public class SalesMgr extends JFrame {
 		panel.add(totalCost);
 
 
+	
 
 
 
@@ -334,29 +373,48 @@ public class SalesMgr extends JFrame {
 //              }
 //          }
 //      });
-
+		
+	
+		
 //      드롭박스 바뀔 때마다 값 바뀌게
 		comboM.addActionListener (new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
-//              String str1 = comboM.getSelectedItem().toString();
-//
-//             char str2 = str1.charAt(0);
-//
-//             int comboMonth = Character.getNumericValue(str2);
-//
-//            Calendar cal = Calendar.getInstance();
-//         //  1월이 0으로 인식되기 때문에 month+1을 해줘야 한다.
-//
-//            cal.set(2022,comboMonth,1);
-//
-//            int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-//
-//            for(int i = 1; i<=monthDay; i++) {
-//               model.addRow(new Object[] {i,"",""});
-//            }
+				
+//			  콤보박스 값을 바꾸면 먼저 전체 열들을 다 삭제시켜준다.
+				model.setNumRows(0);
+//				setVisible(false);
+//				setVisible(true);
+				
+				String StringYear = comboY.getSelectedItem().toString();
+				int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
 
-			}
-		});
 
-	}
-}
+				
+				String StringMonth = comboM.getSelectedItem().toString();
+				int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//				System.out.print(ComboSelectM);
+
+				Calendar cal = Calendar.getInstance();
+				cal.set(ComboSelectY,(ComboSelectM-1),1);
+				int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+//				System.out.println("선택된 년도"+ComboSelectY);
+//				System.out.println("선택된 월" + ComboSelectM);
+				
+				for(int j = 1; j<=monthDay; j++) {
+					model.addRow(new Object[] {j,"",""}
+					
+							);
+//			
+		
+					}
+				 }
+		   });
+		}
+
+	}}
+			
+
+
+	
+		
