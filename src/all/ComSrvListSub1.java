@@ -173,6 +173,25 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		return list;
 	}
 	
+	private void setDbNewService(String srvName, String techName, String priceName) {
+		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
+		Connection connection = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		String query1 = "SELECT srvName FROM service WHERE srvName = ? "
+				+ "AND srvTechNum = ?";
+		String query2 = "UPDATE service SET deleted_yn = 'N'"
+				+ "WHERE srvTechNum = ? AND srvName = ? ";
+		String query3 = "INSERT INTO service(srvTechNum, srvName) "
+				+ "VALUES(?, ?)";
+		String query4 = "SELECT srvNum FROM service WHERE "
+				+ "srvTechNum = ? AND srvName = ? ";
+		String query5 = "SELECT unitNum FROM unit WHERE unitName = ? ";
+		String query6 = "INSERT INTO detail(dtlSrvNum, dtlUnitNum, dtlUnitQty) "
+				+ "VALUES(?, ?, ?)";
+	}
+	
 	/**
 	 * Launch the application.
 	 */
