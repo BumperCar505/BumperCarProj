@@ -68,12 +68,12 @@ public class CusMgr_add {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
+		frame.setBounds(100, 100, 800, 2000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(680, 0, 822, 1007);
+		panel.setBounds(12, 22, 762, 2000);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		// 저장버튼
@@ -183,7 +183,7 @@ public class CusMgr_add {
 		panel.add(lblCusDate);
 		
 		JButton btnBackCusMain = new JButton("돌아가기");
-		btnBackCusMain.setBounds(274, 940, 290, 65);
+		btnBackCusMain.setBounds(262, 941, 290, 65);
 		btnBackCusMain.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
 		frame.getContentPane().add(btnBackCusMain);
 		
@@ -194,15 +194,8 @@ public class CusMgr_add {
 		
 
 		
-		btnCusSave.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			frame.setVisible(false); 
-			new CusMgr();
 
-		}
-	});
+	
 		
 //		저장 버튼을 눌렀을 때
 		btnCusSave.addActionListener(new ActionListener() {
@@ -222,6 +215,9 @@ public class CusMgr_add {
 	            	bean.setCusDate(cusDate.getText());
 	            	
 	            	mgr.insertCusMgr(bean);
+	            	
+	            	frame.setVisible(false); 
+	    			new CusMgr();
 	            	
 	            }
 	           
