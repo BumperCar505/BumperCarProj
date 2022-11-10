@@ -1,9 +1,5 @@
 package book;
-<<<<<<< HEAD
-//test
-=======
 
->>>>>>> e322a4b68a569775f0497f87fa89d83ec6d265a9
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

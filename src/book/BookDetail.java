@@ -183,7 +183,7 @@ public class BookDetail extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel statusLabel = new JLabel();
+		JLabel statusLabel = new JLabel(images[0]);
 		statusLabel.setBounds(18, 14, 22, 22);
 		panel_1.add(statusLabel);
 		
@@ -195,21 +195,19 @@ public class BookDetail extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
-				int index = cb.getSelectedIndex();
-				System.out.println(index);
-				statusLabel.setIcon(images[index]);
-				System.out.print(statusLabel);
-//				panel_1.add(statusLabel);
-				statusLabel.setVisible(true);
-//				if ("예약됨".equals(cb.getSelectedItem())) {
-//					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusOrange.png")));
-//				} else if ("정비중".equals(cb.getSelectedItem())) {
-//					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusBlue.png")));
-//				} else if ("정비완료".equals(cb.getSelectedItem())) {
-//					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusGreen.png")));
-//				} else if ("예약취소".equals(cb.getSelectedItem())) {
-//					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusGray.png")));
-//				}
+//				int index = cb.getSelectedIndex();
+//				statusLabel.setIcon(images[index]);
+
+				
+				if ("예약됨".equals(cb.getSelectedItem())) {
+					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusOrange.png")));
+				} else if ("정비중".equals(cb.getSelectedItem())) {
+					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusBlue.png")));
+				} else if ("정비완료".equals(cb.getSelectedItem())) {
+					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusGreen.png")));
+				} else if ("예약취소".equals(cb.getSelectedItem())) {
+					statusLabel.setIcon(new ImageIcon(BookDetail.class.getResource("/img/statusGray.png")));
+				}
 			}
 		});
 		
