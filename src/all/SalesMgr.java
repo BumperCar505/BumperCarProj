@@ -2,7 +2,10 @@ package all;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Frame;
+<<<<<<< HEAD
 import java.awt.GridBagLayout;
+=======
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 import java.awt.Panel;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -13,8 +16,11 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
+<<<<<<< HEAD
 import java.time.LocalDate;
 import java.util.Calendar;
+=======
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,7 +32,10 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+<<<<<<< HEAD
 import javax.swing.ScrollPaneConstants;
+=======
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
@@ -36,11 +45,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Component;
+<<<<<<< HEAD
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollBar;
 import java.awt.Cursor;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+=======
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 
 // ComServiceList
 public class SalesMgr extends JFrame {
@@ -56,6 +68,7 @@ public class SalesMgr extends JFrame {
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
 	
+<<<<<<< HEAD
 //	이 페이지 해야 할 것들. 
 //	1. 각 달의 마지막 날 가져와 달마다 다르게 생성되게(ex.31일, 29일)
 //	2. 데이터가 있는 날, 없는 날 받아와서 그에 맞는 수입, 지출 보여주기(SalesMgr_day)
@@ -73,6 +86,8 @@ public class SalesMgr extends JFrame {
 	private JTextField totalCost;
 	private JComboBox comboY;
 	
+=======
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 	
 	
 //	앞으로 추가할 기능.
@@ -92,6 +107,7 @@ public class SalesMgr extends JFrame {
 		try {
             String classPath = SalesMgr.class.getResource("").getPath();
             String path = URLDecoder.decode(classPath, "UTF-8");
+<<<<<<< HEAD
 //            inputStream = new BufferedInputStream(
 //                    new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
 
@@ -99,6 +115,15 @@ public class SalesMgr extends JFrame {
             
             
 //            btnBackSalesMain.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
+=======
+            inputStream = new BufferedInputStream(
+                    new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
+
+            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            
+            
+            btnBackSalesMain.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
             
     		// Table Font
 //            tableCusList.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE));
@@ -126,7 +151,11 @@ public class SalesMgr extends JFrame {
 					SalesMgr frame = new SalesMgr();
 //					frame.setVisible(true);
 					frame.setFont();
+<<<<<<< HEAD
 				
+=======
+
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 					
 				       
 				} catch (Exception e) {
@@ -164,7 +193,10 @@ public class SalesMgr extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 		getContentPane = new JPanel();
 		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -172,6 +204,7 @@ public class SalesMgr extends JFrame {
 		TextField tf = new TextField();
 		
 //		addPanel = new JPanel();
+<<<<<<< HEAD
 		
 //		년도 선택 콤보박스 넣기
 		comboY = new JComboBox();
@@ -222,11 +255,78 @@ public class SalesMgr extends JFrame {
 		scSalesList = new JScrollPane(table);
 		scSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
 		scSalesList.setBounds(82, 153, 1099, 392);
+=======
+
+	
+		
+		//테이블 생성
+		Object[] columns = {"일", "수입", "지출"};
+		Object[][] rowNames = {
+				{"1", "1,100,000", "1,300,000"},
+				{"2", "1,100,000", "1,300,000"},
+				{"3", "1,100,000", "1,300,000"},
+				{"4", "1,100,000", "1,300,000"},
+				{"5", "1,100,000", "1,300,000"},
+				{"6", "1,100,000", "1,300,000"}
+				
+
+				
+	
+		};
+		
+		// Text Align Center
+		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+		render.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		tableSalesList = new JTable(rowNames, columns);
+		tableSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+		tableSalesList.setModel(new DefaultTableModel(
+			new Object[][] {
+				{"1", "1,100,000", "1,300,000"},
+				{"2", "1,100,000", "1,300,000"},
+				{"3", "1,100,000", "1,300,000"}
+
+			},
+			new String[] {
+//				"\uC77C", "\uC218\uC785", "\uC9C0\uCD9C" 한글로 수정 가능!
+					"일", "수입","지출"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		
+		
+		tableSalesList.getColumn("일").setCellRenderer(render);
+		tableSalesList.getColumn("수입").setCellRenderer(render);
+		tableSalesList.getColumn("지출").setCellRenderer(render);
+	
+		
+		// Column Not Move
+		tableSalesList.getTableHeader().setReorderingAllowed(false);
+		
+		// Column Change Width
+		tableSalesList.getColumn("수입").setPreferredWidth(200);
+		tableSalesList.getColumn("지출").setPreferredWidth(200);
+		
+		// Row Change Height 
+		tableSalesList.setRowHeight(55);
+		
+		// Table Set Area
+		scSalesList = new JScrollPane(tableSalesList);
+		scSalesList.setBounds(86, 140, 1462, 453);
+		scSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 		scSalesList.setVisible(true);
 		getContentPane.setLayout(null);
 		
 		getContentPane.add(scSalesList);
 		
+<<<<<<< HEAD
 		JScrollPane scrollPane = new JScrollPane();
 //		scSalesList.setColumnHeaderView(scrollPane);
 //		model.addRow(new Object[] {"1", "김땡땡", "63하 2234"}); //열 잘 들어가는지 테스트
@@ -267,12 +367,19 @@ public class SalesMgr extends JFrame {
 
 		btnBackSalesMain = new JButton("돌아가기");
 		btnBackSalesMain.setBounds(648, 555, 290, 65);
+=======
+
+		
+		btnBackSalesMain = new JButton("돌아가기");
+		btnBackSalesMain.setBounds(650, 614, 290, 65);
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 		getContentPane.add(btnBackSalesMain);
 		
 		lblYellowCat = new JLabel("");
 		lblYellowCat.setBounds(710, 50, 230, 80);
 		lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
 		getContentPane.add(lblYellowCat);
+<<<<<<< HEAD
 		
 		JLabel lblNewLabel = new JLabel("총 수입");
 		lblNewLabel.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
@@ -310,6 +417,11 @@ public class SalesMgr extends JFrame {
 		
 		
 //		돌아가기 버튼 누르면 main으로 이동
+=======
+
+		
+		
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 		btnBackSalesMain.addActionListener(new ActionListener() {
 			
 			@Override
@@ -321,6 +433,7 @@ public class SalesMgr extends JFrame {
 		});
 		
 		
+<<<<<<< HEAD
 		
 		//더블클릭하면 화면 넘어가게(일일매출관리페이지로) 
 //		tableSalesList.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -355,6 +468,47 @@ public class SalesMgr extends JFrame {
 //					model.addRow(new Object[] {i,"",""});
 //				}
 
+=======
+		//더블클릭
+//		table.addMouseListener(new MouseAdpter() {
+//		@Override
+//		public void MyMouseListener(MouseEvent e) {
+//			if (e.getClickCount() == 2) {
+//				setVisible(false);
+//				new SalesMgr_day();
+//			}
+//		});S
+		
+//		@Override
+//		public void mouseClick(MouseEvent e) {
+//			if(e.getClickCount()==2) {
+//				
+//			}
+//		}
+		
+		//더블클릭했을 때 일일 페이지로 넘어가게
+//		System.out.print(this);
+//		this.table.setFocusable(false);
+//		table.addMouseListener(new MouseAdapter() {
+//			public void mouseClicked(MouseEvent e) {
+//				if(e.getClickCount() == 2) {
+//					setVisible(false);
+////					new SalesMgr_day();
+//				}
+//			}
+//		});
+		
+		//더블클릭하면 화면 넘어가게(일일매출관리페이지로) 
+		tableSalesList.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = tableSalesList.rowAtPoint(evt.getPoint());
+		        int col = tableSalesList.columnAtPoint(evt.getPoint());
+		        if (evt.getClickCount() == 2) {
+		        	setVisible(false);
+				new SalesMgr_day();
+		        }
+>>>>>>> 1926d56ec09eaca156cd86b87510b17c6770d3b6
 		    }
 		});
 		
