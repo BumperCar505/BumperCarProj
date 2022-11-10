@@ -236,25 +236,29 @@ public class SalesMgr extends JFrame {
 		 String str1 = comboM.getSelectedItem().toString();
 			
 		 char str2 = str1.charAt(0);
+//		 첫 글자 숫자만 가져옴.(문자형으로)
 		 
 		 int comboMonth = Character.getNumericValue(str2);
+//		 받아온 문자를 int형으로 변환
 		
-//		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
 	//  1월이 0으로 인식되기 때문에 month+1을 해줘야 한다.
 		
-		int comboMonth = comboM.getSelectedItem();
+		
+		
 		cal.set(2022,comboMonth+1,1);
 		
 		
 //		 System.out.println(comboMonth + comboMonth); int가 되었는지 확인
-//		 int comboMonth = Integer.parseInt(str2);
-//		 System.out.println(comboMonth);
+		 int comboMonth = Integer.parseInt(str2);
+		 int comboMm = comboMonth.getSelectedItem();
+		 System.out.println(comboMonth);
 
-//		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		
-//		for(int i = 1; i<=monthDay; i++) {
-//			model.addRow(new Object[] {i,"",""});
-//		}
+		for(int i = 1; i<=monthDay; i++) {
+			model.addRow(new Object[] {i,"",""});
+		}
 		   JPanel jpList = new JPanel();		
 		   jpList.setLayout(new GridBagLayout());			
 		   JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
