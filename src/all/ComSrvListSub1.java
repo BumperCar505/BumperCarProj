@@ -31,7 +31,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField textFieldSrvName;
-	private JTextField textFieldSrvPrice;
 	private JLabel lblSrvName;
 	private JLabel lblProvideTechList;
 	private JLabel lblSrvPrice;
@@ -42,6 +41,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	private JButton btnSrvSave;
 	private JButton btnSelectedTechDel;
 	private JComboBox<String> comboBoxTech;
+	private JComboBox<String> comboBoxPrice;
 	private JScrollPane sc;
 	private final int FONT_SIZE = 20;
 	private boolean comboBoxInitFlag = false; // 생성자 호출시 리스트에 값 들어가는거 방지
@@ -61,7 +61,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
             Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             
             textFieldSrvName.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-            textFieldSrvPrice.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblSrvName.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblProvideTechList.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblSrvPrice.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
@@ -69,6 +68,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
             btnSrvReg.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             btnSrvSave.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             comboBoxTech.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
+            comboBoxPrice.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblRegTechList.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblSelectedTechDel.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             btnSelectedTechDel.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
@@ -229,12 +229,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		listProvideTech = new JList<>();
 		sc.setViewportView(listProvideTech);
 		
-		textFieldSrvPrice = new JTextField();
-		textFieldSrvPrice.setColumns(10);
-		textFieldSrvPrice.setBounds(208, 350, 200, 40);
-		textFieldSrvPrice.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(textFieldSrvPrice);
-		
 		btnSrvReg = new JButton("추가");
 		btnSrvReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		btnSrvReg.setBackground(new Color(244, 204, 204));
@@ -268,6 +262,10 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		btnSelectedTechDel.setBounds(208, 295, 200, 40);
 		btnSelectedTechDel.addActionListener(this);
 		contentPane.add(btnSelectedTechDel);
+		
+		comboBoxPrice = new JComboBox<String>();
+		comboBoxPrice.setBounds(208, 355, 200, 32);
+		contentPane.add(comboBoxPrice);
 	}
 	
 	// 서비스 목록 창에서 추가를 눌렀을때 이 생성자 호출
