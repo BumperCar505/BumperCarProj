@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -44,6 +45,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	private JScrollPane sc;
 	private final int FONT_SIZE = 20;
 	private boolean comboBoxInitFlag = false; // 생성자 호출시 리스트에 값 들어가는거 방지
+	private LoginManager loginManager;
 	
 	public ComSrvListSub1 setFont() {
 		InputStream inputStream = null;
@@ -83,6 +85,16 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
         }
 		
 		return this;
+	}
+	
+	private List<String> getDbTechNames(String comId) {
+		// DB에 접속해서 로그인한 회사의 기술자명단을 조회해서 반환한다.
+		return null;
+	}
+	
+	private List<String> getDbPrice(String comId) {
+		// DB에 접속해서 등록되어있는 공임비를 조회해서 반환한다.
+		return null;
 	}
 	
 	/**
@@ -178,6 +190,9 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public ComSrvListSub1() {
+		loginManager = LoginManager.getInstance();
+		loginManager.login("com", "1112233333");
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 466, 518);
 		this.setLocationRelativeTo(null);
