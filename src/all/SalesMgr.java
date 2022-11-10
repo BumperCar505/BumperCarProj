@@ -44,17 +44,17 @@ import javax.swing.DefaultComboBoxModel;
 
 // ComServiceList
 public class SalesMgr extends JFrame {
-	private JTable table;
-	private JPanel getContentPane;
-	private JPanel addPanel;
-	private JTable tableSalesList;
-	private JScrollPane scSalesList;
-	//   private JButton btnAddCus;
+   private JTable table;
+   private JPanel getContentPane;
+   private JPanel addPanel;
+   private JTable tableSalesList;
+   private JScrollPane scSalesList;
+   //   private JButton btnAddCus;
 //   private JButton btnEditCus;
 //   private JButton btnDelCus;
-	private JButton btnBackSalesMain;
-	private JLabel lblYellowCat;
-	private final int FONT_SIZE = 21;
+   private JButton btnBackSalesMain;
+   private JLabel lblYellowCat;
+   private final int FONT_SIZE = 21;
 
 //   이 페이지 해야 할 것들.
 //   1. 각 달의 마지막 날 가져와 달마다 다르게 생성되게(ex.31일, 29일)
@@ -67,12 +67,12 @@ public class SalesMgr extends JFrame {
 
 
 
-	String[] header = {"일", "수입", "지출"};
-	DefaultTableModel model = new DefaultTableModel(header,0);
-	private JTextField totalIncom;
-	private JTextField totalCost;
-	private JComboBox comboY;
-	private JComboBox comboM;
+   String[] header = {"일", "수입", "지출"};
+   DefaultTableModel model = new DefaultTableModel(header,0);
+   private JTextField totalIncom;
+   private JTextField totalCost;
+   private JComboBox comboY;
+   private JComboBox comboM;
 
 
 
@@ -86,57 +86,57 @@ public class SalesMgr extends JFrame {
 
 
 
-	public void setFont() {
-		InputStream inputStream = null;
+   public void setFont() {
+      InputStream inputStream = null;
 
-		// Font Setting
-		try {
-			String classPath = SalesMgr.class.getResource("").getPath();
-			String path = URLDecoder.decode(classPath, "UTF-8");
+      // Font Setting
+      try {
+         String classPath = SalesMgr.class.getResource("").getPath();
+         String path = URLDecoder.decode(classPath, "UTF-8");
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(inputStream != null) {
-				try {
-					inputStream.close();
-				} catch(Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
+      } catch (Exception e) {
+         e.printStackTrace();
+      } finally {
+         if(inputStream != null) {
+            try {
+               inputStream.close();
+            } catch(Exception e2) {
+               e2.printStackTrace();
+            }
+         }
+      }
+   }
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SalesMgr frame = new SalesMgr();
+   /**
+    * Launch the application.
+    */
+   public static void main(String[] args) {
+      EventQueue.invokeLater(new Runnable() {
+         public void run() {
+            try {
+               SalesMgr frame = new SalesMgr();
 //               frame.setVisible(true);
-//					frame.setFont();
+//               frame.setFont();
 
 
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+         }
+      });
+   }
 
 
 
-	/**
-	 * Create the frame.
-	 */
+   /**
+    * Create the frame.
+    */
 
 
 
 
-	public SalesMgr() {
+   public SalesMgr() {
 
 //      SalesMgr.addMouseListener(new MouseAdapter() {
 //      @Override
@@ -148,252 +148,200 @@ public class SalesMgr extends JFrame {
 //      }
 //      });
 
-		setVisible(true);
-		setTitle("수입관리페이지");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
+      setVisible(true);
+      setTitle("수입관리페이지");
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+      this.setLocationRelativeTo(null);
+      this.setResizable(false);
 
 
-		getContentPane = new JPanel();
-		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+      getContentPane = new JPanel();
+      getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(getContentPane);
-		TextField tf = new TextField();
+      setContentPane(getContentPane);
+      TextField tf = new TextField();
 
 //      addPanel = new JPanel();
 
 //      년도 선택 콤보박스 넣기
-		comboY = new JComboBox();
-		comboY.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		comboY.setModel(new DefaultComboBoxModel(new String[] {"2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012"}));
-		comboY.setBounds(82, 107, 95, 36);
-<<<<<<< HEAD
-		
-=======
-
-//      기본적으로 현재 년도 출력되게
-		LocalDate now = LocalDate.now();
-		String year = Integer.toString(now.getYear());
-		getContentPane.add(comboY);
-		comboY.setSelectedItem(year); //올해 년도 
-		
-		int yearInt = Integer.valueOf(year);  // 아래에서 사용할 목적으로 만든 year의 int버전
-		
-		
-//		아!!! 깨달았다. 지금 콤보박스 안의 값을 받아오지 않았구나! 계속 현재 달 값만 넣고 있으니까 변화가 없지!!!
-//		콤보박스 값가져오기
-		String StringYear = comboY.getSelectedItem().toString();
-		int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
-		
-		String StringMonth = comboM.getSelectedItem().toString();
-		int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
-		
-
-
->>>>>>> eaba3861c455f0870546b3cba19c5266f0368f68
+      comboY = new JComboBox();
+      comboY.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+      comboY.setModel(new DefaultComboBoxModel(new String[] {"2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012"}));
+      comboY.setBounds(82, 107, 95, 36);
+      
 //      매 달 콤보박스 넣기
-		JComboBox comboM = new JComboBox();
-		comboM.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		comboM.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
-		comboM.setBounds(189, 107, 87, 36);
-		
-		
+      JComboBox comboM = new JComboBox();
+      comboM.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+      comboM.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
+      comboM.setBounds(189, 107, 87, 36);
+      
+      
 //      기본적으로 현재 년도 출력되게
-//		LocalDate now = LocalDate.now();
-//		String year = Integer.toString(now.getYear());
-//		getContentPane.add(comboY);
-//		getContentPane.add(comboM);
-//		comboY.setSelectedItem(year); //올해 년도 
-//		
-//		int yearInt = Integer.valueOf(year);  // 아래에서 사용할 목적으로 만든 year의 int버전
-		
+//      LocalDate now = LocalDate.now();
+//      String year = Integer.toString(now.getYear());
+//      getContentPane.add(comboY);
+//      getContentPane.add(comboM);
+//      comboY.setSelectedItem(year); //올해 년도 
+//      
+//      int yearInt = Integer.valueOf(year);  // 아래에서 사용할 목적으로 만든 year의 int버전
+      
 
 //      화면에 들어가면 기본적으로 현재 달이 출력될 수 있게.
 
-//		int dayOfMonth = now.getDayOfMonth();
-//		comboM.setSelectedIndex(dayOfMonth);
-		getContentPane.add(comboM);
-<<<<<<< HEAD
-		getContentPane.add(comboY);
-//		
-//		int IntMonth = Integer.valueOf(dayOfMonth); //현재 달 
-=======
-		
-		int IntMonth = Integer.valueOf(dayOfMonth); //현재 달 
->>>>>>> eaba3861c455f0870546b3cba19c5266f0368f68
-		
-		
+//      int dayOfMonth = now.getDayOfMonth();
+//      comboM.setSelectedIndex(dayOfMonth);
+      getContentPane.add(comboM);
+      getContentPane.add(comboY);
+//      
+//      int IntMonth = Integer.valueOf(dayOfMonth); //현재 달 
+      
+      
 // 각 달 마다 날짜 칸 다르게 가져오기
 //      콤보박스에서 해당 값 가져오기.
-<<<<<<< HEAD
-//		String str1 = comboM.getSelectedItem().toString();
+//      String str1 = comboM.getSelectedItem().toString();
 //
-//		char str2 = str1.charAt(0);
+//      char str2 = str1.charAt(0);
 ////       첫 글자 숫자만 가져옴.(문자형으로)
 //
-//		int comboMonth = Character.getNumericValue(str2);
+//      int comboMonth = Character.getNumericValue(str2);
 ////       받아온 문자를 int형으로 변환
-//		System.out.print(comboMonth);
-		
-//		아!!! 깨달았다. 지금 콤보박스 안의 값을 받아오지 않았구나! 계속 현재 달 값만 넣고 있으니까 변화가 없지!!!
-//		선택된 콤보박스 값가져오기
-//		String StringYear = comboY.getSelectedItem().toString();
-//		int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
+//      System.out.print(comboMonth);
+      
+//      아!!! 깨달았다. 지금 콤보박스 안의 값을 받아오지 않았구나! 계속 현재 달 값만 넣고 있으니까 변화가 없지!!!
+//      선택된 콤보박스 값가져오기
+//      String StringYear = comboY.getSelectedItem().toString();
+//      int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
 //
 //
-//		
-//		String StringMonth = comboM.getSelectedItem().toString();
-//		int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
-//		System.out.print(ComboSelectM);
+//      
+//      String StringMonth = comboM.getSelectedItem().toString();
+//      int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//      System.out.print(ComboSelectM);
 
-//		Calendar cal = Calendar.getInstance();
-//		cal.set(yearInt, IntMonth,1);
-		String StringYear = comboY.getSelectedItem().toString();
-		int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
-
-
-		
-		String StringMonth = comboM.getSelectedItem().toString();
-		int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
-//		System.out.print(ComboSelectM);
-
-		Calendar cal = Calendar.getInstance();
-		cal.set(ComboSelectY,(ComboSelectM+1),1);
-		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-//		System.out.println("선택된 년도"+ComboSelectY);
-//		System.out.println(ComboSelectM-1);
-		
-		for(int j = 1; j<=monthDay; j++) {
-			model.addRow(new Object[] {j,"",""});
-
-//		String StringYear = comboY.getSelectedItem().toString();
-//		int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
+//      Calendar cal = Calendar.getInstance();
+//      cal.set(yearInt, IntMonth,1);
+      String StringYear = comboY.getSelectedItem().toString();
+      int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
 
 
-		
-//		String StringMonth = comboM.getSelectedItem().toString();
-//		int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
-//		System.out.println("ComboSelectY : " + ComboSelectM);
-//		
-//		다른 방법
-//		jcombo.getItemAt(jcombo.getSelectedIndex()).toString()
-=======
-		String str1 = comboM.getSelectedItem().toString();
+      
+      String StringMonth = comboM.getSelectedItem().toString();
+      int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//      System.out.print(ComboSelectM);
 
-		char str2 = str1.charAt(0);
-//       첫 글자 숫자만 가져옴.(문자형으로)
+      Calendar cal = Calendar.getInstance();
+      cal.set(ComboSelectY,(ComboSelectM+1),1);
+      int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-		int comboMonth = Character.getNumericValue(str2);
-//       받아온 문자를 int형으로 변환
+//      System.out.println("선택된 년도"+ComboSelectY);
+//      System.out.println(ComboSelectM-1);
+      
+      for(int j = 1; j<=monthDay; j++) {
+         model.addRow(new Object[] {j,"",""});
 
-		Calendar cal = Calendar.getInstance();
-		cal.set(ComboSelectY, comboMonth,1);
+//      String StringYear = comboY.getSelectedItem().toString();
+//      int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
 
 
->>>>>>> eaba3861c455f0870546b3cba19c5266f0368f68
+      
+//      String StringMonth = comboM.getSelectedItem().toString();
+//      int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//      System.out.println("ComboSelectY : " + ComboSelectM);
+//      
+//      다른 방법
+//      jcombo.getItemAt(jcombo.getSelectedIndex()).toString()
 
-		
-//		각 달의 마지막 날 만큼 출력
+      
+//      각 달의 마지막 날 만큼 출력
 
-<<<<<<< HEAD
-//		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+//      int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 //
-//		for(int i = 1; i<=monthDay; i++) {
-//			model.addRow(new Object[] {i,"",""});
-//		}
-//		System.out.println(StringYear);
-=======
-		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+//      for(int i = 1; i<=monthDay; i++) {
+//         model.addRow(new Object[] {i,"",""});
+//      }
+//      System.out.println(StringYear);
+      
+      
+      //테이블 생성
 
-		for(int i = 1; i<=monthDay; i++) {
-			model.addRow(new Object[] {i,"",""});
-		}
-
->>>>>>> eaba3861c455f0870546b3cba19c5266f0368f68
-		
-		
-		//테이블 생성
-
-		table = new JTable(model);
-		table.setDragEnabled(true);
-		table.setRowSelectionAllowed(false);
-		table.setRowHeight(40);
-		table.setAlignmentY(5.0f);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 17));
-		table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		table.setAlignmentX(10.0f);
-		table.getTableHeader().setReorderingAllowed(false); //컬럼 이동 불가
-		table.getTableHeader().setResizingAllowed(false); //컬럼 크기 조절 불가
+      table = new JTable(model);
+      table.setDragEnabled(true);
+      table.setRowSelectionAllowed(false);
+      table.setRowHeight(40);
+      table.setAlignmentY(5.0f);
+      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+      table.setFont(new Font("나눔바른고딕", Font.PLAIN, 17));
+      table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      table.setAlignmentX(10.0f);
+      table.getTableHeader().setReorderingAllowed(false); //컬럼 이동 불가
+      table.getTableHeader().setResizingAllowed(false); //컬럼 크기 조절 불가
 
 
 
 
 
-		JTable tableSalesList = new JTable(model);
+      JTable tableSalesList = new JTable(model);
 //      JScrollPane scrollpane = new JScrollPane(tableSalesList);
-		getContentPane.add(table);
-		scSalesList = new JScrollPane(table);
-		scSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
-		scSalesList.setBounds(82, 153, 1099, 392);
-		scSalesList.setVisible(true);
-		getContentPane.setLayout(null);
+      getContentPane.add(table);
+      scSalesList = new JScrollPane(table);
+      scSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+      scSalesList.setBounds(82, 153, 1099, 392);
+      scSalesList.setVisible(true);
+      getContentPane.setLayout(null);
 
-		getContentPane.add(scSalesList);
+      getContentPane.add(scSalesList);
 
-		JScrollPane scrollPane = new JScrollPane();
+      JScrollPane scrollPane = new JScrollPane();
 //      scSalesList.setColumnHeaderView(scrollPane);
 //      model.addRow(new Object[] {"1", "김땡땡", "63하 2234"}); //열 잘 들어가는지 테스트
 
 
-		JPanel jpList = new JPanel();
-		jpList.setLayout(new GridBagLayout());
-		JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollSingle.setPreferredSize(new Dimension(400, 200));
+      JPanel jpList = new JPanel();
+      jpList.setLayout(new GridBagLayout());
+      JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      scrollSingle.setPreferredSize(new Dimension(400, 200));
 
-		btnBackSalesMain = new JButton("돌아가기");
-		btnBackSalesMain.setBounds(648, 555, 290, 65);
-		getContentPane.add(btnBackSalesMain);
+      btnBackSalesMain = new JButton("돌아가기");
+      btnBackSalesMain.setBounds(648, 555, 290, 65);
+      getContentPane.add(btnBackSalesMain);
 
-		lblYellowCat = new JLabel("");
-		lblYellowCat.setBounds(710, 50, 230, 80);
-		lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
-		getContentPane.add(lblYellowCat);
+      lblYellowCat = new JLabel("");
+      lblYellowCat.setBounds(710, 50, 230, 80);
+      lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
+      getContentPane.add(lblYellowCat);
 
-		JLabel lblNewLabel = new JLabel("총 수입");
-		lblNewLabel.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
-		lblNewLabel.setBounds(1264, 209, 95, 73);
-		getContentPane.add(lblNewLabel);
+      JLabel lblNewLabel = new JLabel("총 수입");
+      lblNewLabel.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
+      lblNewLabel.setBounds(1264, 209, 95, 73);
+      getContentPane.add(lblNewLabel);
 
-		totalIncom = new JTextField();
-		totalIncom.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
-		totalIncom.setBounds(1381, 211, 166, 59);
-		getContentPane.add(totalIncom);
-		totalIncom.setColumns(10);
+      totalIncom = new JTextField();
+      totalIncom.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
+      totalIncom.setBounds(1381, 211, 166, 59);
+      getContentPane.add(totalIncom);
+      totalIncom.setColumns(10);
 
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel.setBounds(1223, 154, 387, 297);
-		getContentPane.add(panel);
-		panel.setLayout(null);
+      JPanel panel = new JPanel();
+      panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+      panel.setBounds(1223, 154, 387, 297);
+      getContentPane.add(panel);
+      panel.setLayout(null);
 
-		JLabel lblNewLabel_1 = new JLabel("총 지출");
-		lblNewLabel_1.setBounds(46, 165, 83, 26);
-		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
-		panel.add(lblNewLabel_1);
+      JLabel lblNewLabel_1 = new JLabel("총 지출");
+      lblNewLabel_1.setBounds(46, 165, 83, 26);
+      lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
+      panel.add(lblNewLabel_1);
 
-		totalCost = new JTextField();
-		totalCost.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
-		totalCost.setColumns(10);
-		totalCost.setBounds(159, 149, 166, 59);
-		panel.add(totalCost);
+      totalCost = new JTextField();
+      totalCost.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
+      totalCost.setColumns(10);
+      totalCost.setBounds(159, 149, 166, 59);
+      panel.add(totalCost);
 
 
-	
+   
 
 
 
@@ -401,19 +349,19 @@ public class SalesMgr extends JFrame {
 
 
 //      돌아가기 버튼 누르면 main으로 이동
-		btnBackSalesMain.addActionListener(new ActionListener() {
+      btnBackSalesMain.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				new ComMyPage();
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            setVisible(false);
+            new ComMyPage();
 
-			}
-		});
+         }
+      });
 
 
 
-		//더블클릭하면 화면 넘어가게(일일매출관리페이지로)
+      //더블클릭하면 화면 넘어가게(일일매출관리페이지로)
 //      tableSalesList.addMouseListener(new java.awt.event.MouseAdapter() {
 //          @Override
 //          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -425,59 +373,48 @@ public class SalesMgr extends JFrame {
 //              }
 //          }
 //      });
-		
-	
-		
+      
+   
+      
 //      드롭박스 바뀔 때마다 값 바뀌게
-		comboM.addActionListener (new ActionListener () {
-			public void actionPerformed(ActionEvent e) {
-				
-//			  콤보박스 값을 바꾸면 먼저 전체 열들을 다 삭제시켜준다.
-<<<<<<< HEAD
-				model.setNumRows(0);
-//				setVisible(false);
-//				setVisible(true);
-				
-				String StringYear = comboY.getSelectedItem().toString();
-				int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
-=======
-//				model.setNumRows(0);
-				
-//				다시 열을 넣어준다.
-				for(int j = 1; j<=monthDay; j++) {
-					model.addRow(new Object[] {j,"",""});
-				}
-				
-				
->>>>>>> eaba3861c455f0870546b3cba19c5266f0368f68
+      comboM.addActionListener (new ActionListener () {
+         public void actionPerformed(ActionEvent e) {
+            
+//           콤보박스 값을 바꾸면 먼저 전체 열들을 다 삭제시켜준다.
+            model.setNumRows(0);
+//            setVisible(false);
+//            setVisible(true);
+            
+            String StringYear = comboY.getSelectedItem().toString();
+            int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
 
 
-				
-				String StringMonth = comboM.getSelectedItem().toString();
-				int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
-//				System.out.print(ComboSelectM);
+            
+            String StringMonth = comboM.getSelectedItem().toString();
+            int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//            System.out.print(ComboSelectM);
 
-				Calendar cal = Calendar.getInstance();
-				cal.set(ComboSelectY,(ComboSelectM-1),1);
-				int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            Calendar cal = Calendar.getInstance();
+            cal.set(ComboSelectY,(ComboSelectM-1),1);
+            int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-//				System.out.println("선택된 년도"+ComboSelectY);
-//				System.out.println("선택된 월" + ComboSelectM);
-				
-				for(int j = 1; j<=monthDay; j++) {
-					model.addRow(new Object[] {j,"",""}
-					
-							);
-//			
-		
-					}
-				 }
-		   });
-		}
+//            System.out.println("선택된 년도"+ComboSelectY);
+//            System.out.println("선택된 월" + ComboSelectM);
+            
+            for(int j = 1; j<=monthDay; j++) {
+               model.addRow(new Object[] {j,"",""}
+               
+                     );
+//         
+      
+               }
+             }
+         });
+      }
 
-	}}
-			
+   }}
+         
 
 
-	
-		
+   
+      
