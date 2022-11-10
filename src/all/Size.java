@@ -1,7 +1,7 @@
 package all;
 
 public class Size {
-<<<<<<< HEAD
+
 	public static final int BTN_B_W = 290;
 	
 	public static final int BTN_B_H = 65;
