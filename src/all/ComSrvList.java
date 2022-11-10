@@ -51,6 +51,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 		try {
             String classPath = ComSrvList.class.getResource("").getPath();
             String path = URLDecoder.decode(classPath, "UTF-8");
+            path = path.split("all")[0];
             inputStream = new BufferedInputStream(
                     new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
 
