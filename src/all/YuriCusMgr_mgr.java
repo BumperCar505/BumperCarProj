@@ -113,7 +113,7 @@ public class YuriCusMgr_mgr {
 //		MemberBean bean = new MemberBean();
 		try {
 			con = pool.getConnection();
-			sql = "insert into customer(cusComNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusZip, cusAddr, cusTel,cusKm,cusDate) values(1112233333,?,?,?,?,?,?,?,?,?) " ;
+			sql = "insert into customer(cusComNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusZip, cusAddr, cusTel,cusKm,cusDate) values('1112233333',?,?,?,?,?,?,?,?,?) " ;
 			pstmt = con.prepareStatement(sql);
 
 //			데이터베이스에 값을 넣어줘야 하니까.set을 사용해야 한다.
@@ -127,8 +127,7 @@ public class YuriCusMgr_mgr {
 			pstmt.setString(7, bean.getCusTel());
 			pstmt.setInt(8, bean.getCusKm());
 			pstmt.setString(9, bean.getCusDate());
-			
-			
+
 			pstmt.execute();
 			
 		} catch (Exception e) {

@@ -68,19 +68,14 @@ public class CusMgr_add {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 2000);
+		frame.setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 22, 762, 2000);
+		panel.setBounds(82, 43, 762, 845);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
-		// 저장버튼
-		JButton btnCusSave = new JButton("저장");
-		btnCusSave.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
-		btnCusSave.setBounds(248, 743, 162, 61);
-		panel.add(btnCusSave);
 		
 		//텍스트필드
 		cusName = new JTextField();
@@ -183,7 +178,7 @@ public class CusMgr_add {
 		panel.add(lblCusDate);
 		
 		JButton btnBackCusMain = new JButton("돌아가기");
-		btnBackCusMain.setBounds(262, 941, 290, 65);
+		btnBackCusMain.setBounds(831, 253, 290, 65);
 		btnBackCusMain.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
 		frame.getContentPane().add(btnBackCusMain);
 		
@@ -191,6 +186,11 @@ public class CusMgr_add {
 		lblNewLabel_2.setIcon(new ImageIcon(CusMgr_add.class.getResource("/img/YellowCat.png")));
 		lblNewLabel_2.setBounds(231, 38, 235, 80);
 		frame.getContentPane().add(lblNewLabel_2);
+		// 저장버튼
+		JButton btnCusSave = new JButton("저장");
+		btnCusSave.setBounds(838, 148, 162, 61);
+		frame.getContentPane().add(btnCusSave);
+		btnCusSave.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
 		
 
 		
@@ -223,5 +223,17 @@ public class CusMgr_add {
 	           
 	            
 	        });
+		
+//		돌아가기 버튼 눌렀을 때
+		btnBackCusMain.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				new CusMgr();
+				
+				
+			}
+		});
 	}
 }
