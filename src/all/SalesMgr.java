@@ -13,6 +13,10 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 
@@ -55,6 +59,7 @@ public class SalesMgr extends JFrame {
    private JButton btnBackSalesMain;
    private JLabel lblYellowCat;
    private final int FONT_SIZE = 21;
+   private final DBConnectionMgr dbMgr = new DBConnectionMgr();
 
 //   이 페이지 해야 할 것들.
 //   1. 각 달의 마지막 날 가져와 달마다 다르게 생성되게(ex.31일, 29일) -> 성공
@@ -73,6 +78,16 @@ public class SalesMgr extends JFrame {
    private JTextField totalCost;
    private JComboBox comboY;
    private JComboBox comboM;
+   
+    DBConnectionMgr mgr = DBConnectionMgr.getInstance();
+	Connection con = null;
+	PreparedStatement psmt1, psmt2 = null;
+	ResultSet rs1, rs2 = null;
+	String sql1, sql2 = null;
+	
+   String year;
+   String month;
+   String day;
 
 
 
@@ -216,19 +231,19 @@ public class SalesMgr extends JFrame {
 //
 //
 //      
-//      String StringMonth = comboM.getSelectedItem().toString();
-//      int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//      String stringMonth = comboM.getSelectedItem().toString();
+//      int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
 //      System.out.print(ComboSelectM);
 
 //      Calendar cal = Calendar.getInstance();
 //      cal.set(yearInt, IntMonth,1);
-      String StringYear = comboY.getSelectedItem().toString();
-      int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
+      String stringYear = comboY.getSelectedItem().toString();
+      int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
 
 
       
-      String StringMonth = comboM.getSelectedItem().toString();
-      int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+      String stringMonth = comboM.getSelectedItem().toString();
+      int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
 //      System.out.print(ComboSelectM);
 
       Calendar cal = Calendar.getInstance();
@@ -247,8 +262,8 @@ public class SalesMgr extends JFrame {
 
 
       
-//      String StringMonth = comboM.getSelectedItem().toString();
-//      int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+//      String stringMonth = comboM.getSelectedItem().toString();
+//      int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
 //      System.out.println("ComboSelectY : " + ComboSelectM);
 //      
 //      다른 방법
@@ -345,7 +360,7 @@ public class SalesMgr extends JFrame {
 
    
 
-
+  
 
 
 
@@ -387,13 +402,13 @@ public class SalesMgr extends JFrame {
 //            setVisible(false);
 //            setVisible(true);
             
-            String StringYear = comboY.getSelectedItem().toString();
-            int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
+            String stringYear = comboY.getSelectedItem().toString();
+            int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
 
 
             
-            String StringMonth = comboM.getSelectedItem().toString();
-            int ComboSelectM = Integer.valueOf(StringMonth); //콤보박스에서 선택된 달의 값
+            String stringMonth = comboM.getSelectedItem().toString();
+            int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
 //            System.out.print(ComboSelectM);
 
             Calendar cal = Calendar.getInstance();
@@ -403,6 +418,7 @@ public class SalesMgr extends JFrame {
 //            System.out.println("선택된 년도"+ComboSelectY);
 //            System.out.println("선택된 월" + ComboSelectM);
             
+//            이거 없으면 큰일남.
             for(int j = 1; j<=monthDay; j++) {
                model.addRow(new Object[] {j,"",""}
                
@@ -411,10 +427,110 @@ public class SalesMgr extends JFrame {
          }
        });
       
-      
       }
+   //db연결
+   private void SalesIncome() {
+		
+		try {
+			con = mgr.getConnection();
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+//		sql1은 수입에 들어오는 부품비
+		try {
+			 String dbDate = year + '-' + month + '-' + day;
+			 
+		     while (rs1.next()) { 
+	              String comNum = rs1.getString("mainComNum");
+	              dbDate = rs1.getString("mainEndDay");
+	              String status = rs1.getString("mainStatus");
+	              int techNum = rs1.getInt("srvTechNum");
+	              
+	              
+				sql1 = "SELECT un.unitPrice\r\n"
+					+ "FROM maintenance main\r\n"
+					+ "JOIN detail dtl\r\n"
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum\r\n"
+					+ "JOIN unit un\r\n"
+					+ "ON un.unitNum = dtl.dtlUnitNum\r\n"
+					+ "JOIN service srv\r\n"
+					+ "ON srv.srvNum = dtl.dtlSrvNum\r\n"
+					+ "JOIN technician tech\r\n"
+					+ "ON tech.techNum = srv.srvTechNum\r\n"
+					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? \r\n"
+					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N'";
+			
+			psmt1 = con.prepareStatement(sql1);
+			psmt1.setString(1, comNum);
+			psmt1.setString(2, dbDate);
+			psmt1.setString(3, status);
+			psmt1.setInt(4, techNum);
+			rs1 = psmt1.executeQuery();
+		     }
+			
+			
+//			sql2 공임비 계산
+			while (rs2.next()) { 
+	              String comNum = rs2.getString("mainComNum");
+	              dbDate = rs2.getString("mainEndDay");
+	              String status = rs2.getString("mainStatus");
+	              int techNum = rs2.getInt("srvTechNum");
+	              
+	              
+				sql2 = "SELECT un.unitPrice\r\n"
+					+ "FROM maintenance main\r\n"
+					+ "JOIN detail dtl\r\n"
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum\r\n"
+					+ "JOIN unit un\r\n"
+					+ "ON un.unitNum = dtl.dtlUnitNum\r\n"
+					+ "JOIN service srv\r\n"
+					+ "ON srv.srvNum = dtl.dtlSrvNum\r\n"
+					+ "JOIN technician tech\r\n"
+					+ "ON tech.techNum = srv.srvTechNum\r\n"
+					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? \r\n"
+					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N'";
+			
+			psmt2 = con.prepareStatement(sql2);
+			psmt2.setString(1, comNum);
+			psmt2.setString(2, dbDate);
+			psmt2.setString(3, status);
+			psmt2.setInt(4, techNum);
+			rs2 = psmt2.executeQuery();
+			
+			}
+			 
+			
+//			 잠깐만,,, 여기 들어가는 년-월-일은 db의 것과 동일해야 하잖아?? 콤보박스의 값이 아니고!!
+//			 String stringYear = comboY.getSelectedItem().toString();
+//			 String stringMonth = comboM.getSelectedItem().toString();
+//			 int ComboSelectM = Integer.valueOf(stringMonth);
+//			 String stringMonth2 = Integer.toString(ComboSelectM-1);
+//			 String day = 
+
+			
+				System.out.println(sql1 +sql2);
+		} catch(Exception e) {
+			e.getMessage();
+		} finally {
+			try {
+				if(rs1 != null) {rs1.close();}
+				if(psmt1 != null) {psmt1.close();}
+				if(con != null) {con.close();}
+				if(rs2 != null) {rs2.close();}
+				if(psmt2 != null) {psmt2.close();}
+				if(con != null) {con.close();}
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+
+			}
+		}
+		
+    }
    }
-          
+
+            
 
 
    
