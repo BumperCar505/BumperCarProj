@@ -178,18 +178,83 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		Connection connection = null;
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
+		String unitName = priceName.split("(")[0];
+		int unitNum = 0;
+		int srvTechNum = 0;
 		
-		String query1 = "SELECT srvName FROM service WHERE srvName = ? "
+		String query2 = "SELECT srvName FROM service WHERE srvName = ? "
 				+ "AND srvTechNum = ?";
-		String query2 = "UPDATE service SET deleted_yn = 'N'"
+		String query3 = "UPDATE service SET deleted_yn = 'N'"
 				+ "WHERE srvTechNum = ? AND srvName = ? ";
-		String query3 = "INSERT INTO service(srvTechNum, srvName) "
+		String query4 = "INSERT INTO service(srvTechNum, srvName) "
 				+ "VALUES(?, ?)";
-		String query4 = "SELECT srvNum FROM service WHERE "
+		String query5 = "SELECT srvNum FROM service WHERE "
 				+ "srvTechNum = ? AND srvName = ? ";
-		String query5 = "SELECT unitNum FROM unit WHERE unitName = ? ";
-		String query6 = "INSERT INTO detail(dtlSrvNum, dtlUnitNum, dtlUnitQty) "
-				+ "VALUES(?, ?, ?)";
+		String query6 = "SELECT unitNum FROM unit WHERE unitName = ? ";
+		String query7 = "INSERT INTO detail(dtlSrvNum, dtlUnitNum, dtlUnitQty) "
+				+ "VALUES(?, ?, 1)";
+		
+		try {
+			connection = mgr.getConnection();
+			getDbTechNum(loginManager.getLogComNum(), techName, connection);
+			
+		} catch(SQLException ex) {
+			
+		} catch(Exception ex) {
+			
+		} finally {
+			try {
+				
+			} catch(SQLException ex) {
+				
+			}
+		}
+	}
+	
+	private int getDbTechNum(String comId, String techName, Connection connection) throws Exception {
+		int techNum = -1;
+		String query1 = "SELECT techNum FROM technicia "
+				+ "WHERE techComNum = ? AND techName = ? ";
+		
+		PreparedStatement psmt = connection.prepareStatement(query1);
+		psmt.setString(1, comId);
+		psmt.setString(2, techName);
+		ResultSet rs = psmt.executeQuery();
+		
+		if(rs.next()) {
+			techNum = rs.getInt(techNum);
+		}
+		
+		return techNum;
+	}
+	
+	private ResultSet executeQuery(Connection connection, String query) throws Exception {
+		PreparedStatement psmt = connection.prepareStatement(query);
+		return psmt.executeQuery();
+	}
+	
+	// 쿼리 파라미터에 넣을값은 반드시 순서대로 넣어줘야한다...
+	private ResultSet executeQuery(Connection connection, String query, Object... params) throws Exception {
+		PreparedStatement psmt = connection.prepareStatement(query);
+		
+		for(int i = 0; i < params.length; ++i) {
+			String type = params.getClass().getSimpleName();
+			
+			if(type.equals("Integer")) {
+				psmt.setInt(i, Integer.parseInt(params.toString()));
+			} else if(type.equals("Double")) {
+				psmt.setDouble(i, Double.parseDouble(params.toString()));
+			} else {
+				psmt.setString(i, params.toString());
+			}
+		}
+		
+		return psmt.executeQuery();
+	}
+	
+	private int executeUpdate(Connection connection, String query) throws Exception {
+		PreparedStatement psmt = connection.prepareStatement(query);
+		return psmt.executeUpdate();
 	}
 	
 	/**
@@ -202,7 +267,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 					ComSrvListSub1 frame = new ComSrvListSub1();
 					frame.setVisible(true);
 					frame.setFont();
-					frame.getDbPrice(LoginManager.getInstance().getLogComNum());
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
