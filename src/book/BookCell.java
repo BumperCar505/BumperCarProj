@@ -45,16 +45,13 @@ public class BookCell extends JPanel {
 		lday.add(la_day);
 		
 		plan_count = new JLabel();
-//		plan_count.setPreferredSize(new Dimension(180, 13));
-//		plan_count.setPreferredSize(null);
 		
 		plan_count.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		p_center = new JPanel();
 		
 		setLayout(new BorderLayout());
 		add(lday, BorderLayout.NORTH);
-//		add(p_center);
-//		p_center.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 1));
+		p_center.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		add(p_center);
 		
 //		setPreferredSize(new Dimension(180, 100));
@@ -127,9 +124,6 @@ public class BookCell extends JPanel {
 		});
 	}
 	
-//	public void showPlan() {
-//		bMain.bMainFrame.showPage(BMainFrame.SCHEDULE);
-//	}
 	
 	public void labelDel() {
 		for (int i = 0; i < plan_list.size(); i++) {
@@ -194,10 +188,7 @@ public class BookCell extends JPanel {
 					}
 					else {
 					planCount.addData(tmpLabel);
-					plan_count.setText("+" + (plan_list.size() - 2) + "...");  // 일정이 많으면 +숫자로 표시 
-					plan_count.addMouseListener(new MouseAdapter() {
-						public void mouseClicked(MouseEvent e) { planCount.setVisible(true); }
-					});
+					plan_count.setText("+ " + (plan_list.size() - 2) + " ... ");  // 일정이 많으면 +숫자로 표시 
 				}
 			}
 			p_center.add(plan_count);

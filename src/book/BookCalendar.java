@@ -108,6 +108,8 @@ public class BookCalendar extends JFrame {
 		la_month.setBounds(420, 2, 800, 50);
 		panel.add(la_month);
 		la_month.setHorizontalAlignment(JLabel.CENTER);
+		
+		// 이전 달
 		prev.addActionListener(new ActionListener() {
 
 			@Override
@@ -122,6 +124,8 @@ public class BookCalendar extends JFrame {
 			}
 			
 		});
+		
+		// 다음 달
 		next.addActionListener(new ActionListener() {
 
 			@Override
