@@ -28,6 +28,7 @@ public class DialogManager {
 			label.setText("<html><center>" + labelMsg);
 			String classPath = DialogManager.class.getResource("").getPath();
             String path = URLDecoder.decode(classPath, "UTF-8");
+            path = path.split("all")[0];
             String imgPath = path + labelImgPath;
             
             ImageIcon icon = new ImageIcon(imgPath);

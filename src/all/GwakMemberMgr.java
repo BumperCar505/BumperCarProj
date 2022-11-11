@@ -55,7 +55,7 @@ public class GwakMemberMgr {
 		GwakMemberBean bean = new GwakMemberBean();
 		try {
 			con = pool.getConnection();
-			sql = "SELECT unit.unitNum, unit.unitName, unit.unitPrice, unit.unitVendor, stock.stckQty, stock.stckBuyDate "
+			sql = "SELECT unit.unitNum, unit.unitName, unit.unitPrice, unit.unitVendor, stock.stckQty1, stock.stckBuyDate "
 					+ "FROM unit "
 					+ "JOIN stock "
 					+ "ON unit.unitNum = stock.stckUnitNum "
@@ -72,7 +72,7 @@ public class GwakMemberMgr {
 				bean.setUnitName(rs.getString("unit.unitName"));
 				bean.setUnitPrice(rs.getInt("unit.unitPrice"));
 				bean.setUnitVendor(rs.getString("unit.unitVendor"));
-				bean.setStckQty(rs.getInt("stock.stckQty"));
+				bean.setStckQty(rs.getInt("stock.stckQty1"));
 				bean.setStckBuyDate(rs.getString("stock.stckBuyDate"));
 			}
 		} catch (Exception e) {
@@ -174,7 +174,7 @@ public class GwakMemberMgr {
 		
 		try {
 			con = pool.getConnection();
-			sql = "INSERT INTO technician (techNum, comNum, techName, techTel, techLv) VALUES (NULL, '8885577777', ?, ?, ?) ";
+			sql = "INSERT INTO technician (techNum, techComNum, techName, techTel, techLv) VALUES (NULL, '1112233333', ?, ?, ?) ";
 			pstmt = con.prepareStatement(sql);
 
 			pstmt.setString(1, bean.getTechName());
@@ -204,6 +204,28 @@ public class GwakMemberMgr {
 			pstmt = con.prepareStatement(sql);
 
 			pstmt.setInt(1, bean.getTechNum());
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return bean;
+	}
+	
+	// UnitStockMgr의 삭제 기능
+	public GwakMemberBean delete2(GwakMemberBean bean){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			con = pool.getConnection();
+			sql = "DELETE FROM stock WHERE stckComNum = ? AND stckUnitNum = ? ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getStckComNum());
+			pstmt.setString(2, bean.getStckUnitNum());
 			pstmt.executeUpdate();
 
 		} catch (Exception e) {

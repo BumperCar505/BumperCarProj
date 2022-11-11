@@ -10,11 +10,21 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class UnitBuyHistory extends JFrame {
 
+	private JTable table;
 	private JPanel contentPane;
-
+	private String driver  = "com.mysql.cj.jdbc.Driver";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	private String header[] = {"구입날짜","부품번호","부품명","벤더", "구입수량"};  // 테이블 컬럼 값들
+	private DefaultTableModel model = new DefaultTableModel(header, 0);
 	/**
 	 * Launch the application.
 	 */
@@ -22,8 +32,8 @@ public class UnitBuyHistory extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UnitBuyHistory frame = new UnitBuyHistory();
-					frame.setVisible(true);
+//					UnitBuyHistory frame = new UnitBuyHistory();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -34,8 +44,8 @@ public class UnitBuyHistory extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public UnitBuyHistory() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public UnitBuyHistory(String unitName) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 895, 730);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -47,18 +57,7 @@ public class UnitBuyHistory extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		String header[] = {"구입날짜","부품번호","부품명", "벤더", "구입수량"};
-		String contents[][] = {
-				{"2022-10-10","hh111","타이어","한국타이어", "20"},
-				{"2022-09-09","hh111","타이어","한국타이어", "24"},
-				{"2022-08-08","hh111","타이어","한국타이어", "11"},
-				{"2022-07-07","hh111","타이어","한국타이어", "2"},
-				{"2022-06-06","hh111","타이어","한국타이어", "8"},
-		};
-
-		
-		DefaultTableModel model = new DefaultTableModel(contents, header);
-		JTable table = new JTable(model);
+		table = new JTable(model);
 		table.setAutoCreateRowSorter(true);
 		
 		table.getColumnModel().getColumn(0).setPreferredWidth(39);
