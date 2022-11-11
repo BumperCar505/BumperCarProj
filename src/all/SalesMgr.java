@@ -240,6 +240,7 @@ public class SalesMgr extends JFrame {
       
       for(int j = 1; j<=monthDay; j++) {
          model.addRow(new Object[] {j,"",""});
+      }
 
 //      String StringYear = comboY.getSelectedItem().toString();
 //      int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
@@ -409,10 +410,11 @@ public class SalesMgr extends JFrame {
            }
          }
        });
+      
+      
       }
    }
- }
-         
+          
 
 
    
