@@ -33,10 +33,12 @@ public class BookCell extends JPanel {
 	BookMain bMain;
 	PlanCount planCount = new PlanCount();
 	ArrayList<JLabel> plan_list = new ArrayList<JLabel>();
+	ArrayList<JLabel> day_list = new ArrayList<JLabel>();
 	JLabel la_day, plan_count;
 	String printDay;
-	JPanel p_center, lday;
+	JPanel p_center, lday, panel;
 	int year, month, days;
+	int get_maintenance_num;
 	
 	
 	public BookCell() {
@@ -70,6 +72,16 @@ public class BookCell extends JPanel {
 		}
 	}
 	
+//	public void setDayDate(int year, int month, int days) {
+//		this.year = year;
+//		this.month = month;
+//		this.days = days;
+//		
+//		if (year > 0) {
+//			setDaySchedule();
+//		}
+//	}
+	
 	public void setCellColor(Color color) { p_center.setBackground(color); }
 	
 	public void setOtherMonthDay() {
@@ -87,38 +99,52 @@ public class BookCell extends JPanel {
 		
 		
 		p_center.addMouseListener(new MouseAdapter() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// cell 클릭
-				JFrame f = new JFrame((month+1) + "월 " + days + "일");
-				f.getContentPane().setLayout(null);
-				f.setSize(500,500);
-				f.setLocationRelativeTo(null);
+////				// cell 클릭
+				DayDay dayDay = new DayDay(year, month, days);
+//				dayDay.setDayDate(year, month, days);
+				dayDay.setVisible(true);
+//			setDaySchedule();
 				
-				JLabel l = new JLabel();
-				l.setHorizontalAlignment(JLabel.CENTER);
-				l.setBounds(193, 10, 98, 36);
-				l.setText((month+1) + "월 " + days + "일");
-				l.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-				f.getContentPane().add(l);
-//				f.add(l, BorderLayout.NORTH);
-				
-				JButton btnAdd = new JButton("추가");
-				btnAdd.setBounds(192, 401, 100, 50);
-				btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-				f.getContentPane().add(btnAdd);
-				
-				f.show();
-				
-				btnAdd.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						BookDetail detail = new BookDetail();
-						detail.setVisible(true);
-					}
-				});
+////				dayDetail.setCellDate(year, month, days);
+////				dayDetail.setVisible(true);
+//				JFrame f = new JFrame((month+1) + "월 " + days + "일");
+//				f.getContentPane().setLayout(null);
+//				f.setSize(500,500);
+//				f.setLocationRelativeTo(null);
+//				
+//				JLabel l = new JLabel();
+//				l.setHorizontalAlignment(JLabel.CENTER);
+//				l.setBounds(193, 10, 98, 36);
+//				l.setText((month+1) + "월 " + days + "일");
+//				l.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+//				f.getContentPane().add(l);
+////				f.add(l, BorderLayout.NORTH);
+//				
+//				JPanel panel = new JPanel();
+//				panel.setBounds(12, 59, 460, 332);
+//				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//				f.getContentPane().add(panel);
+//				
+//				JButton btnAdd = new JButton("추가");
+//				btnAdd.setBounds(192, 401, 100, 50);
+//				btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
+//				f.getContentPane().add(btnAdd);
+//				
+
+//				
+//				f.show();
+//				
+//				btnAdd.addActionListener(new ActionListener() {
+//					
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						BookDetail detail = new BookDetail();
+////						setDaySchedule();
+//						detail.setVisible(true);
+//					}
+//				});
 				
 			}
 		});
@@ -224,4 +250,110 @@ public class BookCell extends JPanel {
 		}
 		
 	}
+	
+	public void move(int mainNum) {
+		Connection conn = bMain.getConn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+
+		String sql = "SELECT customer.cusName, customer.cusCarNum, customer.cusCarBrand, customer.cusCarType, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
+				+ "FROM maintenance "
+				+ "JOIN customer "
+				+ "ON customer.cusNum = maintenance.mainCusNum "
+				+ "JOIN service "
+				+ "ON service.srvNum = maintenance.mainSrvNum "
+				+ "WHERE maintenance.mainNum = ? ";
+		
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, get_maintenance_num);
+
+			rs = pstmt.executeQuery();
+			rs.next();
+			String cusName = rs.getString("cusName");
+			String cusCarNum = rs.getString("cusCarNum");
+			String cusCarBrand = rs.getString("cusCarBrand");
+			String cusCarType = rs.getString("cusCarType");
+			String cusTel = rs.getString("cusTel");
+			String srvName = rs.getString("srvName");
+			String mainStartDay = rs.getString("mainStartDay");
+			String mainStartTime = rs.getString("mainStartTime");
+			String mainEndDay = rs.getString("mainEndDay");
+			String mainEndTime = rs.getString("mainEndTime");
+			detail.setSchedule(mainNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusTel, srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			bMain.closeDB(pstmt, rs);
+		}
+
+	}
+	
+////	날짜 클릭하면 나오는 폼 스케쥴
+//	public void setDaySchedule() {
+//		Connection conn = dbManager.getConn();
+////		Connection conn = null;
+//
+//		
+//		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
+//				+ "FROM maintenance "
+//				+ "JOIN customer "
+//				+ "ON customer.cusNum = maintenance.mainCusNum "
+//				+ "JOIN service "
+//				+ "ON service.srvNum = maintenance.mainSrvNum "
+//				+ "WHERE mainStartDay = ? ";
+//		
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		
+//		String now_date = year + "-" + (month + 1) + "-" + days;
+//		
+//		try {
+//			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//			pstmt.setString(1, now_date);
+//			
+//			rs = pstmt.executeQuery();
+//			rs.last();
+//			int total = rs.getRow();
+//			rs.beforeFirst();
+//			
+////			planCount.removeData();
+//
+//				for (int i = 0; i < total; i++) {
+//					rs.next();
+//					int mainNum = rs.getInt("mainNum");
+//					String cusName = rs.getString("cusName");
+//					String cusCarNum = rs.getString("cusCarNum");
+//					String srvName = rs.getString("srvName");
+//					String cusTel = rs.getString("cusTel");
+//					String mainStartDay = rs.getString("mainStartDay");
+//					String mainStartTime = rs.getString("mainStartTime");
+//					String mainEndDay = rs.getString("mainEndDay");
+//					String mainEndTime = rs.getString("mainEndTime");
+//					// DB
+//					
+//					DayDetail tmpLabel = new DayDetail(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
+//							 days);
+//					
+//				
+////					day_list.add(tmpLabel);
+//					panel.add(tmpLabel);
+//			}
+//
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
+////			if (rs != null) { rs.close(); }
+////			if (pstmt != null) { pstmt.close(); }
+////			if (conn != null) { conn.close(); }
+//			
+//		}
+//		
+//	}
+
 }

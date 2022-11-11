@@ -20,12 +20,16 @@ import all.Size;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.ImageIcon;
 
 public class BookCalendar extends JFrame {
 
 	BookMain bMain;
 	ArrayList<BookCell> cell_list = new ArrayList<BookCell>();
+	ArrayList<DayDetail> day_list = new ArrayList<DayDetail>();
 	JPanel p_center, p_south;
 	JButton prev, next;
 	JLabel la_month;
@@ -182,6 +186,7 @@ public class BookCalendar extends JFrame {
 			BookCell tmpCell = new BookCell();
 			tmpCell = cell_list.get(i);
 			tmpCell.labelDel();
+			
 		}
 		days = 0;
 		
@@ -189,15 +194,18 @@ public class BookCalendar extends JFrame {
 		la_month.setFont(new Font("Dialog", Font.BOLD, 25));
 		cal.set(year, month, 1);
 		
+		
 		int startday = cal.get(Calendar.DAY_OF_WEEK);
 		int lastday = cal.getActualMaximum(Calendar.DATE);
 		
 		for (int i = 0; i < 42; i++) {
 			BookCell tmp_cell = cell_list.get(i);
+			
 			if((i + 1) >= startday && days < lastday) {
 				days++;
 				tmp_cell.setCellDate(year, month, days);
 				tmp_cell.setMonthDay();
+								
 			}
 			else {
 				tmp_cell.setCellDate(0, 0, 0);
