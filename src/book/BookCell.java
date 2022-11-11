@@ -103,7 +103,7 @@ public class BookCell extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 ////				// cell 클릭
 				DayDay dayDay = new DayDay(year, month, days);
-//				dayDay.setDayDate(year, month, days);
+				dayDay.setDayDate(year, month, days);
 				dayDay.setVisible(true);
 //			setDaySchedule();
 				

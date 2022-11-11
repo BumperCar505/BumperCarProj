@@ -41,7 +41,7 @@ public class DayDay extends JFrame {
 		this.days = days;
 		
 		if (year > 0) {
-			setDaySchedule();
+			setDaySchedule(year, month, days);
 		}
 	}
 	
@@ -84,7 +84,7 @@ public class DayDay extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BookDetail detail = new BookDetail();
-				setDayDate(year, month, days);
+//				setDayDate(year, month, days);
 //				setDaySchedule(year, month, days);
 				detail.setVisible(true);
 			}
@@ -92,8 +92,8 @@ public class DayDay extends JFrame {
 	}
 
 //	날짜 클릭하면 나오는 폼 스케쥴
-//	public void setDaySchedule(int year, int month, int days) {
-	public void setDaySchedule() {
+	public void setDaySchedule(int year, int month, int days) {
+//	public void setDaySchedule() {
 		Connection conn = dbManager.getConn();
 //		Connection conn = null;
 
@@ -140,7 +140,7 @@ public class DayDay extends JFrame {
 				
 					System.out.println(dayLabel);
 //					day_list.add(dayLabel);
-					panel.add(dayLabel);
+//					panel.add(dayLabel);
 			}
 
 		} catch (SQLException e1) {
