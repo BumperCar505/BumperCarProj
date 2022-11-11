@@ -1,12 +1,8 @@
 package book;
-<<<<<<< HEAD
-
-=======
-//곽테스트
->>>>>>> e322a4b68a569775f0497f87fa89d83ec6d265a9
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -25,7 +21,6 @@ import javax.swing.JLabel;
 
 public class PlanInfo extends JLabel {
 	BookMain bMain;
-//	BookSchedule schedule;
 	BookDetail detail;
 	PlanCount planCount;
 	int get_maintenance_num;
@@ -41,9 +36,10 @@ public class PlanInfo extends JLabel {
 		this.get_maintenance_num = mainNum;
 		this.bMain = bMain;
 		this.planCount = planCount;
-
+		
 		setOpaque(true);
 //		setBackground(getColor(schedule_no));
+		setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		if (month < 10) {
 			mon = "0" + (month + 1);
 		} else {
@@ -62,27 +58,19 @@ public class PlanInfo extends JLabel {
 		}
 		cal.setTime(this_date);
 		int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
-		if (mainStartDay.equals(thisDay) || dayofweek == 1) {// dayofweek가 1이라는게 그날이 일요일이라는것
+		if (mainStartDay.equals(thisDay) || dayofweek == 1) { // dayofweek가 1이라는게 그날이 일요일이라는것
 			setText(cusName + "-" + srvName);
 		} else {
 			setText("  ");
 		}
-		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				move(mainNum);
-				planCount.setVisible(false);
-			}
-		});
-
-		setPreferredSize(new Dimension(110, 13));
+		setPreferredSize(new Dimension(170, 21));
 	}
 
 	public void move(int mainNum) {
 		Connection conn = bMain.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-//		bMain.mainFrame.showPage(MainFrame.SCHEDULE);// 패널누르면 일정등록페이지
-//		schedule = (BookSchedule) bMain.mainFrame.getPages(MainFrame.SCHEDULE);
+
 
 		String sql = "SELECT customer.cusName, customer.cusCarNum, customer.cusCarBrand, customer.cusCarType, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
 				+ "FROM maintenance "
