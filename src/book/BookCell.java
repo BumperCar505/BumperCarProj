@@ -28,7 +28,6 @@ public class BookCell extends JPanel {
 	private final DBManager dbManager = new DBManager();
 
 	BookCalendar bookCalendar;
-//	BookSchedule schedule;
 	BookDetail detail;
 	BookMain bMain;
 	PlanCount planCount = new PlanCount();
@@ -36,7 +35,7 @@ public class BookCell extends JPanel {
 	ArrayList<JLabel> day_list = new ArrayList<JLabel>();
 	JLabel la_day, plan_count;
 	String printDay;
-	JPanel p_center, lday, panel;
+	JPanel p_center, lday;
 	int year, month, days;
 	int get_maintenance_num;
 	
@@ -101,50 +100,10 @@ public class BookCell extends JPanel {
 		p_center.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-////				// cell 클릭
+				// cell 클릭
 				DayDay dayDay = new DayDay(year, month, days);
 				dayDay.setDayDate(year, month, days);
 				dayDay.setVisible(true);
-//			setDaySchedule();
-				
-////				dayDetail.setCellDate(year, month, days);
-////				dayDetail.setVisible(true);
-//				JFrame f = new JFrame((month+1) + "월 " + days + "일");
-//				f.getContentPane().setLayout(null);
-//				f.setSize(500,500);
-//				f.setLocationRelativeTo(null);
-//				
-//				JLabel l = new JLabel();
-//				l.setHorizontalAlignment(JLabel.CENTER);
-//				l.setBounds(193, 10, 98, 36);
-//				l.setText((month+1) + "월 " + days + "일");
-//				l.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-//				f.getContentPane().add(l);
-////				f.add(l, BorderLayout.NORTH);
-//				
-//				JPanel panel = new JPanel();
-//				panel.setBounds(12, 59, 460, 332);
-//				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-//				f.getContentPane().add(panel);
-//				
-//				JButton btnAdd = new JButton("추가");
-//				btnAdd.setBounds(192, 401, 100, 50);
-//				btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-//				f.getContentPane().add(btnAdd);
-//				
-
-//				
-//				f.show();
-//				
-//				btnAdd.addActionListener(new ActionListener() {
-//					
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						BookDetail detail = new BookDetail();
-////						setDaySchedule();
-//						detail.setVisible(true);
-//					}
-//				});
 				
 			}
 		});
@@ -206,6 +165,7 @@ public class BookCell extends JPanel {
 					
 					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
 							 days, planCount);
+					
 					
 				
 					plan_list.add(tmpLabel);
@@ -291,69 +251,5 @@ public class BookCell extends JPanel {
 		}
 
 	}
-	
-////	날짜 클릭하면 나오는 폼 스케쥴
-//	public void setDaySchedule() {
-//		Connection conn = dbManager.getConn();
-////		Connection conn = null;
-//
-//		
-//		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
-//				+ "FROM maintenance "
-//				+ "JOIN customer "
-//				+ "ON customer.cusNum = maintenance.mainCusNum "
-//				+ "JOIN service "
-//				+ "ON service.srvNum = maintenance.mainSrvNum "
-//				+ "WHERE mainStartDay = ? ";
-//		
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		
-//		String now_date = year + "-" + (month + 1) + "-" + days;
-//		
-//		try {
-//			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-//			pstmt.setString(1, now_date);
-//			
-//			rs = pstmt.executeQuery();
-//			rs.last();
-//			int total = rs.getRow();
-//			rs.beforeFirst();
-//			
-////			planCount.removeData();
-//
-//				for (int i = 0; i < total; i++) {
-//					rs.next();
-//					int mainNum = rs.getInt("mainNum");
-//					String cusName = rs.getString("cusName");
-//					String cusCarNum = rs.getString("cusCarNum");
-//					String srvName = rs.getString("srvName");
-//					String cusTel = rs.getString("cusTel");
-//					String mainStartDay = rs.getString("mainStartDay");
-//					String mainStartTime = rs.getString("mainStartTime");
-//					String mainEndDay = rs.getString("mainEndDay");
-//					String mainEndTime = rs.getString("mainEndTime");
-//					// DB
-//					
-//					DayDetail tmpLabel = new DayDetail(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
-//							 days);
-//					
-//				
-////					day_list.add(tmpLabel);
-//					panel.add(tmpLabel);
-//			}
-//
-//		} catch (SQLException e1) {
-//			e1.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt, rs);
-//			dbManager.closeDB();
-////			if (rs != null) { rs.close(); }
-////			if (pstmt != null) { pstmt.close(); }
-////			if (conn != null) { conn.close(); }
-//			
-//		}
-//		
-//	}
 
 }

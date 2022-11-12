@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.FlowLayout;
 
 public class DayDay extends JFrame {
 	
@@ -24,7 +25,6 @@ public class DayDay extends JFrame {
 
 	private JPanel contentPane;
 	BookCalendar bookCalendar;
-//	BookSchedule schedule;
 	BookDetail detail;
 	BookMain bMain;
 	PlanCount planCount = new PlanCount();
@@ -45,7 +45,6 @@ public class DayDay extends JFrame {
 		}
 	}
 	
-//	public DayDay() {
 		
 	public DayDay(int year, int month, int days) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -65,16 +64,17 @@ public class DayDay extends JFrame {
 		l.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		contentPane.add(l);
 
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBounds(12, 59, 460, 332);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		contentPane.add(panel);
-//		
+
 		JButton btnAdd = new JButton("추가");
 		btnAdd.setBounds(192, 401, 100, 50);
 		btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		contentPane.add(btnAdd);
-//		
+
 //		setDayDate(year, month, days);
 ////		setDaySchedule();
 
@@ -93,17 +93,18 @@ public class DayDay extends JFrame {
 
 //	날짜 클릭하면 나오는 폼 스케쥴
 	public void setDaySchedule(int year, int month, int days) {
-//	public void setDaySchedule() {
 		Connection conn = dbManager.getConn();
 //		Connection conn = null;
 
 		
-		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
+		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusTel, service.srvName, technician.techName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
 				+ "FROM maintenance "
 				+ "JOIN customer "
 				+ "ON customer.cusNum = maintenance.mainCusNum "
 				+ "JOIN service "
 				+ "ON service.srvNum = maintenance.mainSrvNum "
+				+ "JOIN technician "
+				+ "ON technician.techNum = mainTechNum "
 				+ "WHERE mainStartDay = ? ";
 		
 		PreparedStatement pstmt = null;
@@ -127,6 +128,7 @@ public class DayDay extends JFrame {
 					String cusName = rs.getString("cusName");
 					String cusCarNum = rs.getString("cusCarNum");
 					String srvName = rs.getString("srvName");
+					String techName = rs.getString("techName");
 					String cusTel = rs.getString("cusTel");
 					String mainStartDay = rs.getString("mainStartDay");
 					String mainStartTime = rs.getString("mainStartTime");
@@ -134,13 +136,12 @@ public class DayDay extends JFrame {
 					String mainEndTime = rs.getString("mainEndTime");
 					// DB
 					
-					DayDetail dayLabel = new DayDetail(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
+					DayDetail dayLabel = new DayDetail(mainNum, cusName, cusCarNum, srvName, techName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
 							 days);
 					
-				
-					System.out.println(dayLabel);
-//					day_list.add(dayLabel);
-//					panel.add(dayLabel);
+//					System.out.println(dayLabel);
+					panel.add(dayLabel);
+					
 			}
 
 		} catch (SQLException e1) {
