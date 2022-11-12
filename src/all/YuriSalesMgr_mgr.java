@@ -10,191 +10,136 @@ public class YuriSalesMgr_mgr {
 	
 	private DBConnectionMgr pool;
 	
+// 공임비
 	public YuriSalesMgr_mgr() {
 		//DBConnection 객체 10개 미리 생성
 		pool = DBConnectionMgr.getInstance();
 	}
 
-//	//한개의 레코드
-//	public YuriSalesMgrBean select(int id){
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		String sql = null;
-//		YuriCusMgrBean bean = new YuriCusMgrBean();
-//		try {
-//			con = pool.getConnection();
-//			sql = "select * from tblMember where id=?";
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setInt(1, id);
-//			rs = pstmt.executeQuery();
-//			if(rs.next()){
-//				bean.setId(rs.getInt("id"));
-//				bean.setName(rs.getString("name"));
-//				bean.setPhone(rs.getString("phone"));
-//				bean.setTeam(rs.getString("team"));
-//				bean.setAddress(rs.getString("address"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			pool.freeConnection(con, pstmt, rs);
-//		}
-//		return bean;
-//	}
-//	
-//	public boolean update(YuriCusMgrBean bean){
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		String sql = null;
-//		boolean flag = false;
-//		try {
-//			con = pool.getConnection();
-//			sql = "update tblMember set name=?,phone=?,team=?,address=? "
-//					+ "where id=?";
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setString(1, bean.getName());
-//			pstmt.setString(2, bean.getPhone());
-//			pstmt.setString(3, bean.getTeam());
-//			pstmt.setString(4, bean.getAddress());
-//			pstmt.setInt(5, bean.getId());
-//			int cnt = pstmt.executeUpdate();
-//			if(cnt==1) flag = true;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			pool.freeConnection(con, pstmt);
-//		}
-//		return flag;
-//	}
-//	
-//	
-////	 CusMgr 모든 값 가져오기(화면에 전체 값 보여주기)
-//	public YuriCusMgrBean showCusMgr(int cusNum){
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		String sql = null;
-//		YuriCusMgrBean bean = new YuriCusMgrBean();
-//		try {
-//			con = pool.getConnection();
-//			sql = "select * from customer where cusNum = ? " ;
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setInt(1, cusNum);
-//			rs = pstmt.executeQuery();
-//			if(rs.next()){
-//				bean.setCusNum(rs.getInt("cusNum"));
-//				bean.setCusName(rs.getString("cusName"));
-//				bean.setCusCarNum(rs.getString("cusCarNum"));
-//				bean.setCusCarBrand(rs.getString("cusCarBrand"));
-//				bean.setCusCarType(rs.getString("cusCarType"));
-//				bean.setCusZip(rs.getInt("cusZip"));
-//				bean.setCusAddr(rs.getString("cusAddr"));
-//				bean.setCusTel(rs.getString("cusTel"));
-//				bean.setCusDate(rs.getString("cusDate"));
-//				bean.setCusKm(rs.getInt("cusKm"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			pool.freeConnection(con, pstmt, rs);
-//		}
-//		return bean;
-//	}
-//	
-//	
-//
-//	
-////	선택한 열 값 가져오기 위해
-//	public YuriCusMgrBean select_(int cusNum){
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		String sql = null;
-//		YuriCusMgrBean bean = new YuriCusMgrBean();
-//		try {
-//			con = pool.getConnection();
-//			sql = "select * from customer where cusNum=?";
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setInt(1, cusNum);
-//			rs = pstmt.executeQuery();
-//			if(rs.next()){
-//				bean.setCusNum(rs.getInt("cusNum"));
-//				bean.setCusName(rs.getString("cusName"));
-//				bean.setCusCarNum(rs.getString("cusCarNum"));
-//				bean.setCusCarBrand(rs.getString("cusCarBrand"));
-//				bean.setCusCarType(rs.getString("cusCarType"));
-//				bean.setCusZip(rs.getInt("cusZip"));
-//				bean.setCusAddr(rs.getString("cusAddr"));
-//				bean.setCusTel(rs.getString("cusTel"));
-//				bean.setCusDate(rs.getString("cusDate"));
-//				bean.setCusKm(rs.getInt("cusKm"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			pool.freeConnection(con, pstmt, rs);
-//		}
-//		return bean;
-//	}
-//	
-
 	
-	public YuriSalesMgrBean monthIncome(int cusNum){
+	public YuriSalesMgrBean monthService(String cumNum, String endDate, String mainStatus, int techNum ){
 		Connection con = null;
-		PreparedStatement pstmt1, pstmt2 = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql1 = null;
-		String sql2 = null;
+		String sql = null;
+
 		YuriSalesMgrBean bean = new YuriSalesMgrBean();
 		try {
 			con = pool.getConnection();
-			sql1 = "SELECT un.unitPrice\r\n"
-					+ "FROM maintenance main\r\n"
-					+ "JOIN detail dtl\r\n"
-					+ "ON dtl.dtlSrvNum = main.mainSrvNum\r\n"
-					+ "JOIN unit un\r\n"
-					+ "ON un.unitNum = dtl.dtlUnitNum\r\n"
-					+ "JOIN service srv\r\n"
-					+ "ON srv.srvNum = dtl.dtlSrvNum\r\n"
-					+ "JOIN technician tech\r\n"
-					+ "ON tech.techNum = srv.srvTechNum\r\n"
-					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? \r\n"
-					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N' " ;
-			
-			sql2 = "SELECT un.unitPrice\r\n"
-					+ "FROM maintenance main\r\n"
-					+ "JOIN detail dtl\r\n"
-					+ "ON dtl.dtlSrvNum = main.mainSrvNum\r\n"
-					+ "JOIN unit un\r\n"
-					+ "ON un.unitNum = dtl.dtlUnitNum\r\n"
-					+ "JOIN service srv\r\n"
-					+ "ON srv.srvNum = dtl.dtlSrvNum\r\n"
-					+ "JOIN technician tech\r\n"
-					+ "ON tech.techNum = srv.srvTechNum\r\n"
-					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? \r\n"
+			sql  = "SELECT un.unitPrice "
+					+ "FROM maintenance main "
+					+ "JOIN detail dtl "
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum "
+					+ "JOIN unit un "
+					+ "ON un.unitNum = dtl.dtlUnitNum "
+					+ "JOIN service srv "
+					+ "ON srv.srvNum = dtl.dtlSrvNum "
+					+ "JOIN technician tech "
+					+ "ON tech.techNum = srv.srvTechNum "
+					+ "WHERE main.mainComNum=1112233333 AND main.mainEndDay = ? and main.mainStatus=? "
 					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N' " ;
-		
-					
-			pstmt1 = con.prepareStatement(sql1);
-			pstmt2 = con.prepareStatement(sql2);
+
+			pstmt = con.prepareStatement(sql);
 			
-			pstmt1.setString(1, cusName);
-			rs = pstmt1.executeQuery();
+			pstmt.setString(1, cumNum);
+			pstmt.setString(2, endDate);
+			pstmt.setString(3, mainStatus);
+			pstmt.setInt(4, techNum);
+			rs = pstmt.executeQuery();
 			if(rs.next()){
-				bean.setCumNum(rs.getInt("cusNum"));
-				bean.setCusName(rs.getString("cusName"));
-				bean.setCusCarNum(rs.getString("cusCarNum"));
-				bean.setCusCarBrand(rs.getString("cusCarBrand"));
+				bean.setCumNum(rs.getString("mainComNum"));
+				bean.setEndDate(rs.getString("mainEndDay"));
+				bean.setMainStatus(rs.getString("mainStatus"));
+				bean.setTechNum(rs.getInt("srvTechNum"));
+				bean.setSrvIncome(rs.getInt("unitPrice"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-		return null;
+		return bean;
 	}
 	
+
+// 수입에 들어가는 부품비
+  public YuriSalesMgrBean monthProduct(String cumNum, String endDate, String mainStatus, int techNum ){
+	Connection con = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	String sql = null;
+
+	YuriSalesMgrBean bean = new YuriSalesMgrBean();
+	try {
+		con = pool.getConnection();
+		sql  = "SELECT un.unitPrice "
+				+ "FROM maintenance main "
+				+ "JOIN detail dtl "
+				+ "ON dtl.dtlSrvNum = main.mainSrvNum "
+				+ "JOIN unit un "
+				+ "ON un.unitNum = dtl.dtlUnitNum "
+				+ "JOIN service srv "
+				+ "ON srv.srvNum = dtl.dtlSrvNum "
+				+ "JOIN technician tech "
+				+ "ON tech.techNum = srv.srvTechNum "
+				+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+				+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N' " ;
+
+		pstmt = con.prepareStatement(sql);
+		
+		pstmt.setString(1, cumNum);
+		pstmt.setString(2, endDate);
+		pstmt.setString(3, mainStatus);
+		pstmt.setInt(4, techNum);
+		rs = pstmt.executeQuery();
+		if(rs.next()){
+			bean.setCumNum(rs.getString("mainComNum"));
+			bean.setEndDate(rs.getString("mainEndDay"));
+			bean.setMainStatus(rs.getString("mainStatus"));
+			bean.setTechNum(rs.getInt("srvTechNum"));
+			bean.setProIncome(rs.getInt("unitprice"));
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		pool.freeConnection(con, pstmt, rs);
+	}
+	return bean;
+ }
+  
+  
+  // 비용으로 나가는 부품
+  public YuriSalesMgrBean monthOutput(String buyDate){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+
+		YuriSalesMgrBean bean = new YuriSalesMgrBean();
+		try {
+			con = pool.getConnection();
+			sql  = "SELECT un.unitprice * st.stckQty "
+					+ "FROM stock st "
+					+ "JOIN unit un "
+					+ "ON st.stckUnitNum = un.unitNum "
+					+ "WHERE st.stckBuyDate = ? " ;
+
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, buyDate);
+		
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				bean.setBuyDate(rs.getString("stckBuyDate"));
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+  }
 }
 
 

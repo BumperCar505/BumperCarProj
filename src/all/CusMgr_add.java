@@ -36,7 +36,7 @@ public class CusMgr_add {
 	private JLabel lblCusTel;
 	private JLabel lblNewLabel_2;
 	
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -212,7 +212,7 @@ public class CusMgr_add {
 	            	bean.setCusZip (Integer.parseInt(cusZip.getText().toString()));
 	            	bean.setCusAddr(cusAddr.getText());
 	            	bean.setCusTel(cusTel.getText());
-	            	bean.setCusDate(cusDate.getText());
+
 	            	
 	            	mgr.insertCusMgr(bean);
 	            	

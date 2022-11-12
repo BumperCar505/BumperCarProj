@@ -2,8 +2,11 @@ package all;
 
 // db연결...
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.ScrollPane;
 import java.awt.TextField;
 import java.awt.event.ActionListener;
@@ -12,11 +15,13 @@ import java.sql.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollBar;
 import javax.swing.JFrame;
@@ -51,6 +56,10 @@ public class RegTech extends JFrame {
 	private int flag = 0;
 	TextField tf = new TextField();
 	private JTextField textField_1;
+	
+	String header[]= {"정비사 이름", "정비사전화번호", "정비사 직급"};
+	DefaultTableModel model = new DefaultTableModel(header,0);
+	
 	int a = 0; 
 	
 //	여기서부터
@@ -91,11 +100,30 @@ public class RegTech extends JFrame {
 		
 		
 		
-		
-		contentPane = new JPanel();
+		  table = new JTable(model);
+	      table.setDragEnabled(true);
+	      table.setRowSelectionAllowed(false);
+	      table.setRowHeight(40);
+	      table.setAlignmentY(5.0f);
+	      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+	      table.setFont(new Font("나눔바른고딕", Font.PLAIN, 17));
+	      table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+	      table.setAlignmentX(10.0f);
+	      table.getTableHeader().setReorderingAllowed(false);
+	      table.getTableHeader().setResizingAllowed(false); 
+	      JTable tableSalesList = new JTable(model);
+		  contentPane = new JPanel();
+		  contentPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 32 ));
+		  
 
-		setContentPane(contentPane);
+		  setContentPane(contentPane);
 		
+		  
+		  JPanel jpList = new JPanel();
+	      jpList.setLayout(new GridBagLayout());
+	      JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+	            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+	      scrollSingle.setPreferredSize(new Dimension(400, 200));
 
 		
 		
@@ -104,7 +132,7 @@ public class RegTech extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 //		panel.setForeground(new Color(255, 0, 0));
-		panel.setBounds(57, 93, 535, 565);
+		panel.setBounds(220, 189, 535, 565);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(949, 139, 684, 745);
@@ -128,20 +156,20 @@ public class RegTech extends JFrame {
 		
 //		정보 입력하는 텍스트 필드 모음
 		techName = new JTextField();
-		techName.setBounds(26, 99, 206, 31);
+		techName.setBounds(168, 158, 226, 49);
 		techName.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		panel.add(techName);
 		techName.setColumns(10);
 		
 		techLv = new JTextField();
-		techLv.setBounds(26, 347, 206, 31);
+		techLv.setBounds(168, 392, 226, 49);
 		techLv.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		techLv.setColumns(10);
 		panel.add(techLv);
 		
 		
 		techTel = new JTextField();
-		techTel.setBounds(26, 220, 206, 31);
+		techTel.setBounds(168, 281, 226, 43);
 		techTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		techTel.setColumns(10);
 		panel.add(techTel);
@@ -152,19 +180,19 @@ public class RegTech extends JFrame {
 		
 		
 		JLabel lblNewLabel = new JLabel("정비사이름");
-		lblNewLabel.setBounds(26, 45, 100, 25);
+		lblNewLabel.setBounds(216, 109, 116, 25);
 		lblNewLabel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		panel.add(lblNewLabel);
 		
 		
 		JLabel lblNewLabel_1 = new JLabel("정비사 전화번호");
-		lblNewLabel_1.setBounds(26, 172, 145, 25);
+		lblNewLabel_1.setBounds(200, 234, 145, 25);
 		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		panel.add(lblNewLabel_1);
 		
 		
 		JLabel lblNewLabel_2 = new JLabel("정비사 직급");
-		lblNewLabel_2.setBounds(26, 291, 105, 25);
+		lblNewLabel_2.setBounds(216, 354, 116, 25);
 		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		panel.add(lblNewLabel_2);
 		setLocationRelativeTo(null);
@@ -172,22 +200,20 @@ public class RegTech extends JFrame {
 		
 //		우측 표 삽입
 	
-	// 여기서 부터
-		String header[]= {"정비사 이름", "정비사전화번호", "정비사 직급"};
-//
-//
 		DefaultTableModel model = new DefaultTableModel(header,0);
 		JTable listTech = new JTable(model);
+		listTech.setFont(new Font("나눔바른고딕", Font.PLAIN, 22));
+		listTech.setRowHeight(40);
 		JScrollPane scrollPane = new JScrollPane(table);
 //
 //		
 		JScrollPane scrollpane = new JScrollPane(table);
 		scrollpane.setAutoscrolls(true);
 //		
-		listTech.setBounds(994, 71, 548, 565);
+		listTech.setBounds(867, 189, 548, 565);
 		contentPane.add(listTech);
 		JLabel lblRegTec = new JLabel("");
-		lblRegTec.setFont(new Font("나눔바른고딕", Font.BOLD, 15));
+		lblRegTec.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
 
 		
 //		고양이 이미지 삽입
@@ -200,13 +226,13 @@ public class RegTech extends JFrame {
 		
 //		등록 버튼
 		JButton btnTechReg = new JButton("등록");
-		btnTechReg.setBounds(222, 451, 73, 33);
+		btnTechReg.setBounds(240, 483, 73, 33);
 		btnTechReg.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		panel.add(btnTechReg);
 		
 //		삭제버튼
 		JButton btnTechDel = new JButton("삭제");
-		btnTechDel.setBounds(1459, 26, 83, 35);
+		btnTechDel.setBounds(1206, 151, 83, 35);
 		contentPane.add(btnTechDel);
 		panel.setLayout(null);
 		
@@ -214,17 +240,18 @@ public class RegTech extends JFrame {
 		
 //		다음버튼
 		JButton btnTechNext = new JButton("다음");
-		btnTechNext.setBounds(655, 611, 172, 49);
+		btnTechNext.setBounds(666, 837, Size.BTN_B_W , Size.BTN_B_H );
 		btnTechNext.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
 		contentPane.add(btnTechNext);
 		
 		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(1542, 71, 17, 565);
+		scrollBar.setAutoscrolls(true);
+		scrollBar.setBounds(1415, 189, 17, 565);
 		contentPane.add(scrollBar);
 		
 		JLabel lblNewLabel_4 = new JLabel("입력된 정비사");
 		lblNewLabel_4.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		lblNewLabel_4.setBounds(1184, 36, 140, 25);
+		lblNewLabel_4.setBounds(1054, 154, 140, 25);
 		contentPane.add(lblNewLabel_4);
 	
 		
@@ -253,13 +280,6 @@ public class RegTech extends JFrame {
 				techName.setText("");
 				techTel.setText("");
 				techLv.setText("");
-//			
-				
-//				String techNN = techName.getText();
-//				String techTT = techTel.getText();
-//				String techLL = techLv.getText();
-				
-				
 
 			}
 		});
@@ -332,7 +352,6 @@ public class RegTech extends JFrame {
 				this.techLv = techLv;
 			}
 		}
-//		은비언니가 받을 때는 new RegTech(RegTecData regTec) // maybe...
 
 }
 

@@ -47,7 +47,8 @@ public class CusMgr_edit extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					CusMgr_edit window = new CusMgr_edit();
+					CusMgr_edit window = new CusMgr_edit();
+					
 					
 					
 				} catch (Exception e) {
@@ -60,10 +61,11 @@ public class CusMgr_edit extends JFrame{
 	/**
 	 * Create the application.
 	 */
-		public CusMgr_edit(int a) {
+		public CusMgr_edit() {
+			
 			setBounds(100, 100, 592, 764);
 			contentPane = new JPanel();
-			
+			setVisible(true);
 		
 		 
 
@@ -157,9 +159,9 @@ public class CusMgr_edit extends JFrame{
 		
 		//데이터넣기
 		YuriCusMgr_mgr mgr = new YuriCusMgr_mgr();
-		YuriCusMgrBean bean = mgr.select_(a);
+		YuriCusMgrBean bean = mgr.select_(aa);
 		
-		aa = a;
+		aa = 2;
 		
 
 		cusName.setText(bean.getCusName());
@@ -248,7 +250,7 @@ public class CusMgr_edit extends JFrame{
 	            	
 	            	frame.setVisible(false); 
 	    			new CusMgr();
-	
+	    			
 	            }       
 	        });
 		

@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,54 +54,43 @@ public class SalesMgr extends JFrame {
    private JPanel addPanel;
    private JTable tableSalesList;
    private JScrollPane scSalesList;
-   //   private JButton btnAddCus;
-//   private JButton btnEditCus;
-//   private JButton btnDelCus;
    private JButton btnBackSalesMain;
    private JLabel lblYellowCat;
    private final int FONT_SIZE = 21;
-   private final DBConnectionMgr dbMgr = new DBConnectionMgr();
-
-//   이 페이지 해야 할 것들.
-//   1. 각 달의 마지막 날 가져와 달마다 다르게 생성되게(ex.31일, 29일) -> 성공
-//   2. 데이터가 있는 날, 없는 날 받아와서 그에 맞는 수입, 지출 보여주기(SalesMgr_day)
-//   3. 달 옆에 페이지 넘길 수 있게 넣어서 넘겨 볼 수 있도록 -> 비슷하게 성공...?
-//   4. 옆에 스크롤바 삽입 -> 성공
-//   5. 총수입 총지출 확인할 수 있게(옆에 따로 만들면 좋을 듯)
-//   6. 기간 설정하기 -> 시간 남으면 하겠다..
-//   7. 덧셈 sql 쿼리
 
 
 
    String[] header = {"일", "수입", "지출"};
    DefaultTableModel model = new DefaultTableModel(header,0);
+   
+    private String driver = "com.mysql.cj.jdbc.Driver";
+	private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+   
+//   DefaultTableModel에 넣는 방법을 찾아
    private JTextField totalIncom;
    private JTextField totalCost;
    private JComboBox comboY;
    private JComboBox comboM;
    
-    DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-	Connection con = null;
-	PreparedStatement psmt1, psmt2 = null;
-	ResultSet rs1, rs2 = null;
-	String sql1, sql2 = null;
+   YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
+   YuriSalesMgrBean bean = new YuriSalesMgrBean();
+    int a = bean.getSrvIncome();
+	int b = bean.getProIncome();
+	int c = bean.getProOut();
 	
+	int result = a + b;
+
+   
    String year;
    String month;
    String day;
+   String dbDate = year + '-' + month + '-' + day;
 
-
-
-//   앞으로 추가할 기능.
-//   1. 여기있는 데이터 엑셀로 내보내는 기능
-//   2. 프린트 연결
-//   3. 화살표로 다른 달 넘길 수 있는 기능
-//   일단 말이다...
-
-   
+   int techNum;
   
-
-
 
    public void setFont() {
       InputStream inputStream = null;
@@ -131,10 +121,6 @@ public class SalesMgr extends JFrame {
          public void run() {
             try {
                SalesMgr frame = new SalesMgr();
-//               frame.setVisible(true);
-//               frame.setFont();
-
-
 
             } catch (Exception e) {
                e.printStackTrace();
@@ -154,16 +140,6 @@ public class SalesMgr extends JFrame {
 
    public SalesMgr() {
 
-//      SalesMgr.addMouseListener(new MouseAdapter() {
-//      @Override
-//      public addMouseListener(MouseEvent e) {
-//         if (e.getClickCount() == 2) {
-//            setVisible(false);
-//            new SalesMgr_day();
-//         }
-//      }
-//      });
-
       setVisible(true);
       setTitle("수입관리페이지");
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -171,14 +147,13 @@ public class SalesMgr extends JFrame {
       this.setLocationRelativeTo(null);
       this.setResizable(false);
 
-
+//       mgr = DBConnectionMgr.getInstance();
+      
       getContentPane = new JPanel();
       getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
       setContentPane(getContentPane);
       TextField tf = new TextField();
-
-//      addPanel = new JPanel();
 
 //      년도 선택 콤보박스 넣기
       comboY = new JComboBox();
@@ -191,52 +166,10 @@ public class SalesMgr extends JFrame {
       comboM.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
       comboM.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
       comboM.setBounds(189, 107, 87, 36);
-      
-      
-//      기본적으로 현재 년도 출력되게
-//      LocalDate now = LocalDate.now();
-//      String year = Integer.toString(now.getYear());
-//      getContentPane.add(comboY);
-//      getContentPane.add(comboM);
-//      comboY.setSelectedItem(year); //올해 년도 
-//      
-//      int yearInt = Integer.valueOf(year);  // 아래에서 사용할 목적으로 만든 year의 int버전
-      
 
-//      화면에 들어가면 기본적으로 현재 달이 출력될 수 있게.
-
-//      int dayOfMonth = now.getDayOfMonth();
-//      comboM.setSelectedIndex(dayOfMonth);
       getContentPane.add(comboM);
       getContentPane.add(comboY);
-//      
-//      int IntMonth = Integer.valueOf(dayOfMonth); //현재 달 
-      
-      
-// 각 달 마다 날짜 칸 다르게 가져오기
-//      콤보박스에서 해당 값 가져오기.
-//      String str1 = comboM.getSelectedItem().toString();
-//
-//      char str2 = str1.charAt(0);
-////       첫 글자 숫자만 가져옴.(문자형으로)
-//
-//      int comboMonth = Character.getNumericValue(str2);
-////       받아온 문자를 int형으로 변환
-//      System.out.print(comboMonth);
-      
-//      아!!! 깨달았다. 지금 콤보박스 안의 값을 받아오지 않았구나! 계속 현재 달 값만 넣고 있으니까 변화가 없지!!!
-//      선택된 콤보박스 값가져오기
-//      String StringYear = comboY.getSelectedItem().toString();
-//      int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
-//
-//
-//      
-//      String stringMonth = comboM.getSelectedItem().toString();
-//      int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
-//      System.out.print(ComboSelectM);
 
-//      Calendar cal = Calendar.getInstance();
-//      cal.set(yearInt, IntMonth,1);
       String stringYear = comboY.getSelectedItem().toString();
       int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
 
@@ -244,41 +177,18 @@ public class SalesMgr extends JFrame {
       
       String stringMonth = comboM.getSelectedItem().toString();
       int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
-//      System.out.print(ComboSelectM);
 
       Calendar cal = Calendar.getInstance();
       cal.set(ComboSelectY,(ComboSelectM+1),1);
       int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-//      System.out.println("선택된 년도"+ComboSelectY);
-//      System.out.println(ComboSelectM-1);
+
       
       for(int j = 1; j<=monthDay; j++) {
          model.addRow(new Object[] {j,"",""});
       }
 
-//      String StringYear = comboY.getSelectedItem().toString();
-//      int ComboSelectY = Integer.valueOf(StringYear); //콤보박스에서 선택된 년도 값.
 
-
-      
-//      String stringMonth = comboM.getSelectedItem().toString();
-//      int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
-//      System.out.println("ComboSelectY : " + ComboSelectM);
-//      
-//      다른 방법
-//      jcombo.getItemAt(jcombo.getSelectedIndex()).toString()
-
-      
-//      각 달의 마지막 날 만큼 출력
-
-//      int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-//
-//      for(int i = 1; i<=monthDay; i++) {
-//         model.addRow(new Object[] {i,"",""});
-//      }
-//      System.out.println(StringYear);
-      
       
       //테이블 생성
 
@@ -357,14 +267,6 @@ public class SalesMgr extends JFrame {
       totalCost.setBounds(159, 149, 166, 59);
       panel.add(totalCost);
 
-
-   
-
-  
-
-
-
-
 //      돌아가기 버튼 누르면 main으로 이동
       btnBackSalesMain.addActionListener(new ActionListener() {
 
@@ -399,8 +301,6 @@ public class SalesMgr extends JFrame {
             
 //           콤보박스 값을 바꾸면 먼저 전체 열들을 다 삭제시켜준다.
             model.setNumRows(0);
-//            setVisible(false);
-//            setVisible(true);
             
             String stringYear = comboY.getSelectedItem().toString();
             int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
@@ -409,18 +309,16 @@ public class SalesMgr extends JFrame {
             
             String stringMonth = comboM.getSelectedItem().toString();
             int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
-//            System.out.print(ComboSelectM);
+
 
             Calendar cal = Calendar.getInstance();
             cal.set(ComboSelectY,(ComboSelectM-1),1);
             int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-//            System.out.println("선택된 년도"+ComboSelectY);
-//            System.out.println("선택된 월" + ComboSelectM);
-            
-//            이거 없으면 큰일남.
+
             for(int j = 1; j<=monthDay; j++) {
-               model.addRow(new Object[] {j,"",""}
+            
+               model.addRow(new Object[] {j, result,c } //돌면서 계산할 수있게
                
               );
            }
@@ -429,105 +327,48 @@ public class SalesMgr extends JFrame {
       
       }
    //db연결
-   private void SalesIncome() {
-		
-		try {
-			con = mgr.getConnection();
-			
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		
-//		sql1은 수입에 들어오는 부품비
-		try {
-			 String dbDate = year + '-' + month + '-' + day;
-			 
-		     while (rs1.next()) { 
-	              String comNum = rs1.getString("mainComNum");
-	              dbDate = rs1.getString("mainEndDay");
-	              String status = rs1.getString("mainStatus");
-	              int techNum = rs1.getInt("srvTechNum");
-	              
-	              
-				sql1 = "SELECT un.unitPrice\r\n"
-					+ "FROM maintenance main\r\n"
-					+ "JOIN detail dtl\r\n"
-					+ "ON dtl.dtlSrvNum = main.mainSrvNum\r\n"
-					+ "JOIN unit un\r\n"
-					+ "ON un.unitNum = dtl.dtlUnitNum\r\n"
-					+ "JOIN service srv\r\n"
-					+ "ON srv.srvNum = dtl.dtlSrvNum\r\n"
-					+ "JOIN technician tech\r\n"
-					+ "ON tech.techNum = srv.srvTechNum\r\n"
-					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? \r\n"
-					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N'";
-			
-			psmt1 = con.prepareStatement(sql1);
-			psmt1.setString(1, comNum);
-			psmt1.setString(2, dbDate);
-			psmt1.setString(3, status);
-			psmt1.setInt(4, techNum);
-			rs1 = psmt1.executeQuery();
-		     }
-			
-			
-//			sql2 공임비 계산
-			while (rs2.next()) { 
-	              String comNum = rs2.getString("mainComNum");
-	              dbDate = rs2.getString("mainEndDay");
-	              String status = rs2.getString("mainStatus");
-	              int techNum = rs2.getInt("srvTechNum");
-	              
-	              
-				sql2 = "SELECT un.unitPrice\r\n"
-					+ "FROM maintenance main\r\n"
-					+ "JOIN detail dtl\r\n"
-					+ "ON dtl.dtlSrvNum = main.mainSrvNum\r\n"
-					+ "JOIN unit un\r\n"
-					+ "ON un.unitNum = dtl.dtlUnitNum\r\n"
-					+ "JOIN service srv\r\n"
-					+ "ON srv.srvNum = dtl.dtlSrvNum\r\n"
-					+ "JOIN technician tech\r\n"
-					+ "ON tech.techNum = srv.srvTechNum\r\n"
-					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? \r\n"
-					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N'";
-			
-			psmt2 = con.prepareStatement(sql2);
-			psmt2.setString(1, comNum);
-			psmt2.setString(2, dbDate);
-			psmt2.setString(3, status);
-			psmt2.setInt(4, techNum);
-			rs2 = psmt2.executeQuery();
-			
-			}
-			 
-			
-//			 잠깐만,,, 여기 들어가는 년-월-일은 db의 것과 동일해야 하잖아?? 콤보박스의 값이 아니고!!
-//			 String stringYear = comboY.getSelectedItem().toString();
-//			 String stringMonth = comboM.getSelectedItem().toString();
-//			 int ComboSelectM = Integer.valueOf(stringMonth);
-//			 String stringMonth2 = Integer.toString(ComboSelectM-1);
-//			 String day = 
+   private void monthIncome() {
 
-			
-				System.out.println(sql1 +sql2);
-		} catch(Exception e) {
-			e.getMessage();
-		} finally {
-			try {
-				if(rs1 != null) {rs1.close();}
-				if(psmt1 != null) {psmt1.close();}
-				if(con != null) {con.close();}
-				if(rs2 != null) {rs2.close();}
-				if(psmt2 != null) {psmt2.close();}
-				if(con != null) {con.close();}
-			} catch(SQLException ex) {
-				ex.printStackTrace();
-
-			}
-		}
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
 		
-    }
+
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,"root","1234");
+			sql = "SELECT un.unitPrice "
+					+ "FROM maintenance main "
+					+ "JOIN detail dtl "
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum "
+					+ "JOIN unit un "
+					+ "ON un.unitNum = dtl.dtlUnitNum "
+					+ "JOIN service srv "
+					+ "ON srv.srvNum = dtl.dtlSrvNum "
+					+ "JOIN technician tech "
+					+ "ON tech.techNum = srv.srvTechNum "
+					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N' " ;
+
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				model.addRow(new Object[] {
+						rs.getString("unitprice")
+				});
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+		
+		}
+		}
+		   
+
    }
 
             
