@@ -197,7 +197,7 @@ public class QueryCommunicator {
      * @param columnNames 서버에서 가져올 컬럼의 이름들을 넣으세요.(순서 무관)
      * @return key 값은 컬럼의 이름 value 값은 해당 컬럼의 값(String으로 반환)<br> 값이 없는경우 List의 데이터의 개수가 0<br> 에러 발생시 null 반환
      */
-	public List<HashMap<String, String>> executeQuery(String... columnNames) {
+	public List<HashMap<String, String>> executeQueryToList(String... columnNames) {
 		try {
 			connection = mgr.getConnection();
 			psmt = connection.prepareStatement(query);
@@ -220,6 +220,64 @@ public class QueryCommunicator {
 			}
 			
 			return rows;
+		} catch(SQLException ex) { 
+			ex.printStackTrace();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				clearQuery();
+				clearParams();
+				if(rs != null) { rs.close(); }
+				if(psmt != null) { psmt.close(); }
+				if(connection != null) { connection.close(); }
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		// 에러 발생시 null
+		return null;
+	}
+	
+    /**
+     * 연결되어있는 서버에 쿼리를 전송합니다.<br>
+     * 하나의 String에 하나의 행의 결과값이 저장되서 반환되는 형식입니다.
+     * @param columnName 서버에서 가져올 컬럼의 이름들을 넣으세요.
+     * @return String[] 형태로 결과값을 반환합니다.<br> 
+     * 에러 발생시 null 반환
+     * <p><b>값이 하나면 하나의 행에 [unitNum:s003]같은 형태로 반환됩니다.</b></p>
+     * <p><b>값이 여러개면 하나의 행에 [unitNum:s003],[unitPrice:150000]같은 형태로 반환됩니다.</b></p>
+     */
+	public String[] executeQueryToString(String... columnName) {
+		try {
+			connection = mgr.getConnection();
+			psmt = connection.prepareStatement(query);
+			
+			if(combineParams() == false) {
+				return null; // 파라미터 결합 실패시 null 반환
+			}
+			
+			rs = psmt.executeQuery();
+			
+			List<String> list = new ArrayList<String>();
+			while(rs.next()) {
+				String result = "";
+				for(int i = 0; i < columnName.length; ++i) {
+					result += "[" + columnName[i] + ":";
+					result += rs.getString(columnName[i]) + "],";
+				}
+				result = result.substring(0, result.length() - 1);
+				list.add(result);
+			}
+			
+			final int LIST_COUNT = list.size();
+			String[] strArray = new String[LIST_COUNT];
+			for(int i = 0; i < LIST_COUNT; ++i) {
+				strArray[i] = list.get(i);
+			}
+			
+			return strArray;
 		} catch(SQLException ex) { 
 			ex.printStackTrace();
 		} catch(Exception ex) {
