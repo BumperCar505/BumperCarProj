@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -43,6 +44,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 	private JButton btnBackMain;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
+	private LoginManager loginManager;
 	
 	public void setFont() {
 		InputStream inputStream = null;
@@ -101,11 +103,45 @@ public class ComSrvList extends JFrame implements ActionListener {
 					ComSrvList frame = new ComSrvList();
 					frame.setVisible(true);
 					frame.setFont();
+					frame.getDbService(LoginManager.getInstance().getLogComNum());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+	
+	private List<ServiceBeans> getDbService(String comId) {
+		List<ServiceBeans> list = new ArrayList<ServiceBeans>();
+		String query = "SELECT ser.srvNum, ser.srvName, tech.techName, u.unitName, u.unitPrice "
+				+ "FROM service AS ser "
+				+ "INNER JOIN technician AS tech ON ser.srvTechNum = tech.techNum "
+				+ "INNER JOIN detail AS de ON ser.srvNum = de.dtlSrvNum "
+				+ "INNER JOIN unit AS u ON de.dtlUnitNum = u.unitNum "
+				+ "WHERE u.unitName LIKE '공임비%' AND tech.techComNum = ? "
+				+ "AND ser.deleted_yn = 'N' "
+				+ "ORDER BY ser.srvNum";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, comId);
+		List<HashMap<String, String>> result = communicator.executeQueryToList(
+				"srvNum", "srvName", "techName", "unitName", "unitPrice");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				ServiceBeans beans = new ServiceBeans();
+				beans.setSrvNum(Integer.parseInt(row.get("srvNum")));
+				beans.setSrvName(row.get("srvName"));
+				beans.setTechName(row.get("techName"));
+				beans.setUnitName(row.get("unitName"));
+				beans.setUnitPrice(Integer.parseInt(row.get("unitPrice")));
+				list.add(beans);
+			}
+		}
+		
+		return list;
 	}
 	
 	@Override
@@ -159,6 +195,9 @@ public class ComSrvList extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public ComSrvList() {
+		loginManager = LoginManager.getInstance();
+		loginManager.login("com", "6665544444"); // 가상 로그인
+		
 		setTitle("다고쳐카센터 - 서비스 목록");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
