@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * <p>쿼리 전달용 클래스</p>
- * <p>객체 생성후 사용하면 됩니다.<p>
- * <p>사용방법 : 객체 생성(최초 1회만) => 쿼리 및 쿼리와 파라미터 설정 => 서버에 전송</p>
- * <p>서버에 전송후 설정된 쿼리 및 파라미터는 초기화됩니다.</p>
- * <p>내부적으로 서버와 연결후 알아서 close() 처리합니다.</p>
+ * 쿼리 전달용 클래스<br>
+ * 객체 생성후 사용하면 됩니다.<br>
+ * 사용방법 : 객체 생성(최초 1회만) => 쿼리 및 쿼리와 파라미터 설정 => 서버에 전송<br>
+ * <b>서버에 전송후 설정된 쿼리 및 파라미터는 초기화됩니다.</b><br>
+ * 내부적으로 서버와 연결후 알아서 close() 처리합니다.
  * @author MoonNight285
  */
 public class QueryCommunicator {
@@ -43,7 +43,8 @@ public class QueryCommunicator {
 	}
 	
     /**
-     * 전달하고자하는 쿼리를 설정합니다.
+     * 전달하고자하는 쿼리를 설정합니다.<br>
+     * 쿼리의 값이 덮어씌워지고 파라미터는 설정되지않습니다.
      * @param query 전달할 쿼리
      */
 	public void setQuery(String query) {
@@ -52,8 +53,12 @@ public class QueryCommunicator {
 	}
 	
     /**
-     * 전달하고자하는 쿼리와 파라미터를 설정합니다.
-     * 반드시 쿼리에 들어갈 순서대로 파라미터를 설정하세요.
+     * 전달하고자하는 쿼리와 파라미터를 설정합니다.<br>
+     * <b>반드시 쿼리에 들어갈 순서대로 파라미터를 설정하세요.</b><br>
+     * <b>이전의 쿼리의 값이 덮어씌워집니다.</b><br>
+     * <b>이전에 저장된 파라미터가 지워지고 새롭게 추가됩니다!</b>
+     * <p><b>예) INSERT INTO service(srvTechNum, srvName)
+			VALUES(?, ?) 라는 쿼리를 전달했다면 ? 안에 전달한 파라미터가 들어갑니다.</b></p>
      * @param query 전달할 쿼리
      * @param params 전달할 파라미터
      */
@@ -73,12 +78,12 @@ public class QueryCommunicator {
 	}
 	
     /**
-     * 전달할 파라미터를 설정합니다.
-     * 반드시 쿼리에 들어갈 순서대로 파라미터를 설정하세요.
-     * @param params 전달할 파라미터
+     * 전달할 파라미터를 추가합니다.<br>
+     * <b>반드시 쿼리에 들어갈 순서대로 파라미터를 추가하세요.</b><br>
+     * 서버로 전송전까지 파라미터를 계속 추가할수있습니다.<br>
+     * @param params 추가할 파라미터
      */
-	public void setParams(Object... params) {
-		this.params.clear();
+	public void addParams(Object... params) {
 		for(int i = 0; i < params.length; ++i) {
 			this.params.add(params[i]);
 		}
@@ -90,6 +95,60 @@ public class QueryCommunicator {
      */
 	public List<Object> getParams() {
 		return params;
+	}
+	
+    /**
+     * <p>Insert 쿼리문에 ? 와 () 를 전달된 개수만큼 추가합니다.</p>
+     * <p>Insert 쿼리를 한번에 날리기 위한 용도입니다.</p>
+     * <p><b>반드시 Insert문에 사용해야합니다.</b><p>
+     * <p><b>전달한 쿼리문은 반드시 VALUE/VALUES가 마지막으로 끝나야합니다.</b><p>
+     * <p><b>예) INSERT INTO service(srvTechNum, srvName)
+		VALUES(7, '엔진오일교체'), (8, '엔진오일교체'), (9, '엔진오일교체') 같은 쿼리를 전달한다면<br>
+		INSERT INTO service(srvTechNum, srvName) VALUES 까지 만들어서 저장하면됩니다.</b><p>
+     * @param paramCount () 안에 ? 를 추가할 개수를 전달
+     * @param repeatCount () 를 추가할 개수를 전달
+     */
+	public void appendInsertValueQuery(int paramCount, int repeatCount) {
+		String values = "(";
+		
+		for(int rCount = 0; rCount < repeatCount; ++rCount) {
+			for(int pCount = 0; pCount < paramCount; ++pCount) {
+				if(pCount == paramCount - 1) {
+					values += "?)";
+				} else {
+					values += "?, ";
+				}
+			}
+			
+			if(rCount != repeatCount - 1) {
+				values += ", (";
+			}
+		}
+		
+		query = query + values;
+	}
+	
+    /**
+     * <p>쿼리문에 ? 를 전달된 개수만큼 추가합니다.</p>
+     * <p>마지막에 동적으로 파라미터가 늘어나는 부분을 대응하기 위해 만들었습니다.</p>
+     * <p><b>반드시 (?,?,?) 형태로 끝나는 쿼리에 사용해야합니다.</b><p>
+     * <p><b>예) SELECT srvNum FROM service WHERE srvName = '엔진오일교체' AND
+			srvTechNum IN (7, 8, 9) 같은 쿼리가 있다면<br> SELECT srvNum FROM service WHERE srvName = '엔진오일교체' AND
+			srvTechNum IN 로 끝나게 쿼리값을 전달해야합니다.</b><p>
+     * @param paramCount () 안에 ? 를 추가할 개수를 전달
+     */
+	public void appendLastValueQuery(int paramCount) {
+		String values = "(";
+		
+		for(int pCount = 0; pCount < paramCount; ++pCount) {
+			if(pCount == paramCount - 1) {
+				values += "?)";
+			} else {
+				values += "?, ";
+			}
+		}
+		
+		query = query + values;
 	}
 	
     /**
