@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import book.DBManager;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -21,6 +24,8 @@ import java.awt.event.ActionEvent;
 
 public class EditComInfo extends JFrame {
 
+	private final DBManager dbManager = new DBManager();
+	
 	private JPanel contentPane;
 	private JTextField comNum;
 	private JTextField comPw;
@@ -31,15 +36,13 @@ public class EditComInfo extends JFrame {
 	private JTextField comAddr;
 	private JTextField comTel;
 
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					EditComInfo frame = new EditComInfo();
-					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -47,14 +50,15 @@ public class EditComInfo extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	
 	public EditComInfo() {
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
+		setLocationRelativeTo(null);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -99,12 +103,11 @@ public class EditComInfo extends JFrame {
 		lblNewLabel_1_7.setBounds(158, 524, 136, 41);
 		panel.add(lblNewLabel_1_7);
 		
-		comNum = new JTextField();
-		comNum.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		comNum.setEditable(false);
-		comNum.setBounds(304, 76, 384, 42);
-		panel.add(comNum);
-		comNum.setColumns(10);
+		this.comNum = new JTextField();
+		this.comNum.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		this.comNum.setEditable(false);
+		this.comNum.setBounds(304, 76, 384, 42);
+		panel.add(this.comNum);
 		
 		comPw = new JTextField();
 		comPw.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
@@ -151,7 +154,8 @@ public class EditComInfo extends JFrame {
 		JButton btnFixedComInfo = new JButton("수정 완료");
 		btnFixedComInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UpdateComInfo();
+				EditComInfo editComInfo = new EditComInfo();
+				editComInfo.updateComInfo("1112233333");
 			}
 		});
 		btnFixedComInfo.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
@@ -169,11 +173,67 @@ public class EditComInfo extends JFrame {
 		panel.add(lblNewLabel_1_3_1);
 	}
 
-	protected void UpdateComInfo() {
-		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-		Connection conn = null;
-		PreparedStatement psmt = null;
+	public void updateComInfo(String comNum) {
+//		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
+//		Connection conn = null;
+		Connection conn = dbManager.getConn();
+		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+		
+		String sql = "UPDATE company, login SET login.pw = ?, comName = ?, comEmail = ?, comZip = ?, comAddr = ?, comTel = ? "
+				+ "WHERE company.comNum = login.logComNum AND comNum = ? ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, this.comPw.getText());
+			pstmt.setString(2, this.comName.getText());
+			pstmt.setString(3, this.comEmail.getText());
+			pstmt.setString(4, this.comZip.getText());
+			pstmt.setString(5, this.comAddr.getText());
+			pstmt.setString(6, this.comTel.getText());
+			pstmt.setString(7, comNum);
+			pstmt.executeUpdate();
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} finally {
+			dbManager.closeDB(pstmt);
+			dbManager.closeDB();
+		}
+	}
+	
+	
+	public void showComInfo(String comNum) {
+		Connection conn = dbManager.getConn();
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
+		String sql = "SELECT comNum, comName, comEmail, comZip, comAddr, comTel, login.pw "
+				+ "FROM company "
+				+ "JOIN login "
+				+ "ON company.comNum = login.logComNum "
+				+ "WHERE comNum = ? ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, comNum);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				this.comNum.setText(rs.getString("comNum"));
+				this.comName.setText(rs.getString("comName"));
+				this.comEmail.setText(rs.getString("comEmail"));
+				this.comZip.setText(rs.getString("comZip"));
+				this.comAddr.setText(rs.getString("comAddr"));
+				this.comTel.setText(rs.getString("comTel"));
+				
+			}
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		} finally {
+			dbManager.closeDB(pstmt, rs);
+			dbManager.closeDB();
+		}
 	}
+	
+	
 }
