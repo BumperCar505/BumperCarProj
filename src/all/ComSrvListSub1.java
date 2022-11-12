@@ -8,7 +8,12 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -30,7 +35,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField textFieldSrvName;
-	private JTextField textFieldSrvPrice;
 	private JLabel lblSrvName;
 	private JLabel lblProvideTechList;
 	private JLabel lblSrvPrice;
@@ -41,9 +45,11 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	private JButton btnSrvSave;
 	private JButton btnSelectedTechDel;
 	private JComboBox<String> comboBoxTech;
+	private JComboBox<String> comboBoxPrice;
 	private JScrollPane sc;
 	private final int FONT_SIZE = 20;
-	private boolean comboBoxInitFlag = false; // 생성자 호출시 리스트에 값 들어가는거 방지
+	private boolean comboBoxTechInitFlag = false; // 생성자 호출시 이벤트 발생해서 리스트에 값 들어가는거 방지
+	private LoginManager loginManager;
 	
 	public ComSrvListSub1 setFont() {
 		InputStream inputStream = null;
@@ -59,7 +65,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
             Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             
             textFieldSrvName.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-            textFieldSrvPrice.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblSrvName.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblProvideTechList.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblSrvPrice.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
@@ -67,6 +72,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
             btnSrvReg.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             btnSrvSave.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             comboBoxTech.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
+            comboBoxPrice.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblRegTechList.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             lblSelectedTechDel.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
             btnSelectedTechDel.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
@@ -83,6 +89,177 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
         }
 		
 		return this;
+	}
+	
+	private List<String> getDbTechNames(String comId) {
+		// DB에 접속해서 로그인한 회사의 기술자명단을 조회해서 반환한다.
+		List<String> list = new ArrayList<String>();
+		String query = "SELECT techNum, techName FROM technician "
+				+ "WHERE techComNum = ? "
+				+ "ORDER BY techNum";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.addParams(comId);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("techNum", "techName");
+		
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String techNum = row.get("techNum");
+				String techName = row.get("techName");
+				list.add(techNum + ". " + techName);
+			}
+		}
+		
+		return list;
+	}
+	
+	private List<String> getDbPrice() {
+		// DB에 접속해서 등록되어있는 공임비를 조회해서 반환한다.
+		List<String> list = new ArrayList<String>();
+		String query = "SELECT unitName, unitPrice FROM unit "
+				+ "WHERE unitName LIKE '공임비%' "
+				+ "ORDER BY unitName";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("unitName", "unitPrice");
+		
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String priceName = row.get("unitName");
+				String price = row.get("unitPrice");
+				list.add(priceName + "(" + price + ")");
+			}
+		}
+		
+		return list;
+	}
+	
+	private boolean isDbUsedService(String comId, String srvName) {
+		String query = "SELECT COUNT(*) FROM service AS ser "
+				+ "INNER JOIN technician AS tech ON ser.srvTechNum = tech.techNum "
+				+ "WHERE ser.srvName = ? AND ser.deleted_yn = 'N' "
+				+ "AND tech.techComNum = ? ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.addParams(srvName.trim(), comId);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("COUNT(*)");
+		
+		if(result == null) {
+			return true;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String count = row.get("COUNT(*)");
+				
+				if(count.equals("0")) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	private void setDbService(List<Integer> techNums, String srvName) {
+		String query = "INSERT INTO service(srvTechNum, srvName) "
+				+ "VALUES";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendInsertValueQuery(2, techNums.size());
+		
+		for(int i = 0; i < techNums.size(); ++i) {
+			communicator.addParams(techNums.get(i), srvName.trim());
+		}
+		
+		communicator.executeUpdate();
+	}
+	
+	private List<Integer> getDbServiceNumber(List<Integer> techNums, String srvName) {
+		List<Integer> list = new ArrayList<Integer>();
+		String query = "SELECT srvNum FROM service WHERE srvName = ? AND "
+				+ "srvTechNum IN ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.addParams(srvName.trim());
+		communicator.appendLastValueQuery(techNums.size());
+		
+		for(int i = 0; i < techNums.size(); ++i) {
+			communicator.addParams(techNums.get(i));
+		}
+		
+		List<HashMap<String, String>> result = communicator.executeQueryToList("srvNum");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String srvNum = row.get("srvNum");
+				list.add(Integer.parseInt(srvNum));
+			}
+		}
+		
+		return list;
+	}
+	
+	private String getDbPriceNumber(String priceName) {
+		String priceNumber = "";
+		String query = "SELECT unitNum FROM unit WHERE unitName = ? ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, priceName);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("unitNum");
+		if(result == null) {
+			return null;
+		} else {
+			priceNumber = result.get(0).get("unitNum");
+		}
+		
+		return priceNumber;
+	}
+	
+	private void setDbPriceInfo(List<Integer> srvNumbers, String priceNumber) {
+		String query = "INSERT INTO detail(dtlSrvNum, dtlUnitNum, dtlUnitQty) "
+				+ "VALUES";
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendInsertValueQuery(3, srvNumbers.size());
+		
+		for(int i = 0; i < srvNumbers.size(); ++i) {
+			communicator.addParams(srvNumbers.get(i), priceNumber, 1);
+		}
+		
+		communicator.executeUpdate();
+	}
+	
+	private boolean addNewService(String srvName, List<String> techInfos, String priceInfo) {
+		if(isDbUsedService(loginManager.getLogComNum(), srvName)) {
+			return false;
+		}
+		
+		List<Integer> techNums = new ArrayList<Integer>();
+		for(int i = 0; i < techInfos.size(); ++i) {
+			techNums.add(Integer.parseInt(techInfos.get(i).split("\\.")[0]));
+		}
+		
+		setDbService(techNums, srvName);
+		List<Integer> srvNums = getDbServiceNumber(techNums, srvName);
+		String priceNumber = getDbPriceNumber(priceInfo.split("\\(")[0]);
+		setDbPriceInfo(srvNums, priceNumber);
+		
+		return true;
 	}
 	
 	/**
@@ -109,11 +286,21 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		Object obj = e.getSource();
 		
 		if(obj == btnSrvReg) {
-			System.out.println("이벤트 작동함");
+			String srvName = textFieldSrvName.getText().trim();
+			List<String> techList = getListData();
+			String priceInfo = comboBoxPrice.getSelectedItem().toString();
+			if(addNewService(srvName, techList, priceInfo)) {
+				DialogManager.createMsgDialog("정상적으로 처리되었습니다.", "\\img\\success1.png",
+						"알림", JOptionPane.PLAIN_MESSAGE);
+			} else {
+				DialogManager.createMsgDialog("동일한 서비스가 이미 사용중입니다.", "\\img\\information5.png",
+						"에러", JOptionPane.PLAIN_MESSAGE);
+			}
 		} else if(obj == btnSrvSave) { 
-			System.out.println("이벤트 작동함");
+			System.out.println("이벤트 작동함2");
 		} else if (obj == comboBoxTech) {
-			if(comboBoxInitFlag == false) {
+			if(comboBoxTechInitFlag == false) {
+				comboBoxTechInitFlag = true;
 				return;
 			}
 			
@@ -167,22 +354,25 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		listProvideTech.setModel(listModel);
 	}
 	
-	private void addComboBoxData(List<String> list) {
+	private void addComboBoxData(JComboBox<String> comboBox, List<String> list) {
 		for(int i = 0; i < list.size(); ++i) {
-			comboBoxTech.addItem(list.get(i));
+			comboBox.addItem(list.get(i));
 		}
-		comboBoxInitFlag = true;
 	}
 	
 	/**
 	 * Create the frame.
 	 */
 	public ComSrvListSub1() {
+		loginManager = LoginManager.getInstance();
+		loginManager.login("com", "1112233333");
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 466, 518);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setVisible(true);
+		this.setTitle("신규 서비스 등록");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -213,12 +403,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		contentPane.add(sc);
 		listProvideTech = new JList<>();
 		sc.setViewportView(listProvideTech);
-		
-		textFieldSrvPrice = new JTextField();
-		textFieldSrvPrice.setColumns(10);
-		textFieldSrvPrice.setBounds(208, 350, 200, 40);
-		textFieldSrvPrice.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(textFieldSrvPrice);
 		
 		btnSrvReg = new JButton("추가");
 		btnSrvReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
@@ -253,24 +437,24 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		btnSelectedTechDel.setBounds(208, 295, 200, 40);
 		btnSelectedTechDel.addActionListener(this);
 		contentPane.add(btnSelectedTechDel);
-	}
-	
-	// 서비스 목록 창에서 추가를 눌렀을때 이 생성자 호출
-	public ComSrvListSub1(List<String> srvTechAllList) {
-		this();
-		this.setTitle("신규 서비스 등록");
+		
+		comboBoxPrice = new JComboBox<String>();
+		comboBoxPrice.setBounds(208, 355, 200, 32);
+		contentPane.add(comboBoxPrice);
+		
+		addComboBoxData(comboBoxTech, getDbTechNames(loginManager.getLogComNum()));
+		addComboBoxData(comboBoxPrice, getDbPrice());
 		btnSrvReg.setVisible(true);
-		addComboBoxData(srvTechAllList);
 	}
 	
 	// 테이블에서 셀 선택후 수정버튼을 클릭했을때 이 생성자 호출
-	public ComSrvListSub1(String srvName, String srvPrice, List<String> srvTechAllList, List<String> srvTechList) {
+	public ComSrvListSub1(String srvName, String srvPrice, List<String> srvTechList) {
 		this();
 		this.setTitle("기존 서비스 수정");
 		textFieldSrvName.setText(srvName);
-		textFieldSrvPrice.setText(srvPrice);
+		comboBoxPrice.setSelectedItem(srvPrice);
+		btnSrvReg.setVisible(false);
 		btnSrvSave.setVisible(true);
-		addComboBoxData(srvTechAllList);
 		addListData(srvTechList);
 	}
 }
