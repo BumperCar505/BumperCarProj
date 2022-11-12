@@ -93,168 +93,86 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	
 	private List<String> getDbTechNames(String comId) {
 		// DB에 접속해서 로그인한 회사의 기술자명단을 조회해서 반환한다.
-		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-		Connection connection = null;
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
+		String query = "SELECT techNum, techName FROM technician "
+				+ "WHERE techComNum = ? "
+				+ "ORDER BY techNum";
 		
-		try {
-			connection = mgr.getConnection();
-			String query = "SELECT techName FROM technician "
-					+ "WHERE techComNum = ? "
-					+ "ORDER BY techName";
-			psmt = connection.prepareStatement(query);
-			psmt.setString(1, comId);
-			rs = psmt.executeQuery();
-			
-			while(rs.next()) {
-				String techName = rs.getString("techName");
-				list.add(techName);
-			}
-		} catch(SQLException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			try {
-				if(rs != null) {rs.close();}
-				if(psmt != null) {psmt.close();}
-				if(connection != null) {connection.close();}
-			} catch(SQLException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.setParams(comId);
+		List<HashMap<String, String>> result = communicator.executeQuery("techNum", "techName");
+		
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String techNum = row.get("techNum");
+				String techName = row.get("techName");
+				list.add(techNum + ". " + techName);
 			}
 		}
 		
 		return list;
 	}
 	
-	private List<String> getDbPrice(String comId) {
+	private List<String> getDbPrice() {
 		// DB에 접속해서 등록되어있는 공임비를 조회해서 반환한다.
-		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-		Connection connection = null;
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
+		String query = "SELECT unitName, unitPrice FROM unit "
+				+ "WHERE unitName LIKE '공임비%' "
+				+ "ORDER BY unitName";
 		
-		try {
-			connection = mgr.getConnection();
-			String query = "SELECT unitName, unitPrice FROM unit "
-					+ "WHERE unitName LIKE '공임비%'"
-					+ "ORDER BY unitName";
-			psmt = connection.prepareStatement(query);
-			rs = psmt.executeQuery();
-			
-			while(rs.next()) {
-				String unitName = rs.getString("unitName");
-				String unitPrice = rs.getString("unitPrice");
-				list.add(unitName + "(" + unitPrice + ")");
-			}
-		} catch(SQLException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			try {
-				if(rs != null) {rs.close();}
-				if(psmt != null) {psmt.close();}
-				if(connection != null) {connection.close();}
-			} catch(SQLException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		List<HashMap<String, String>> result = communicator.executeQuery("unitName", "unitPrice");
+		
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String priceName = row.get("unitName");
+				String price = row.get("unitPrice");
+				list.add(priceName + "(" + price + ")");
 			}
 		}
 		
 		return list;
 	}
 	
-	private void setDbNewService(String srvName, String techName, String priceName) {
-		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-		Connection connection = null;
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		String unitName = priceName.split("(")[0];
-		int unitNum = 0;
-		int srvTechNum = 0;
+	private boolean isDbUsedService(String comId, String srvName) {
+		String query = "SELECT COUNT(*) FROM service AS ser "
+				+ "INNER JOIN technician AS tech ON ser.srvTechNum = tech.techNum "
+				+ "WHERE ser.srvName = ? AND ser.deleted_yn = 'N' "
+				+ "AND tech.techComNum = ? ";
 		
-		String query2 = "SELECT srvName FROM service WHERE srvName = ? "
-				+ "AND srvTechNum = ?";
-		String query3 = "UPDATE service SET deleted_yn = 'N'"
-				+ "WHERE srvTechNum = ? AND srvName = ? ";
-		String query4 = "INSERT INTO service(srvTechNum, srvName) "
-				+ "VALUES(?, ?)";
-		String query5 = "SELECT srvNum FROM service WHERE "
-				+ "srvTechNum = ? AND srvName = ? ";
-		String query6 = "SELECT unitNum FROM unit WHERE unitName = ? ";
-		String query7 = "INSERT INTO detail(dtlSrvNum, dtlUnitNum, dtlUnitQty) "
-				+ "VALUES(?, ?, 1)";
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.setParams(srvName.trim(), comId);
+		List<HashMap<String, String>> result = communicator.executeQuery("COUNT(*)");
 		
-		try {
-			connection = mgr.getConnection();
-			getDbTechNum(loginManager.getLogComNum(), techName, connection);
-			
-		} catch(SQLException ex) {
-			
-		} catch(Exception ex) {
-			
-		} finally {
-			try {
+		if(result == null) {
+			return true;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String count = row.get("COUNT(*)");
 				
-			} catch(SQLException ex) {
-				
-			}
-		}
-	}
-	
-	private int getDbTechNum(String comId, String techName, Connection connection) throws Exception {
-		int techNum = -1;
-		String query1 = "SELECT techNum FROM technicia "
-				+ "WHERE techComNum = ? AND techName = ? ";
-		
-		PreparedStatement psmt = connection.prepareStatement(query1);
-		psmt.setString(1, comId);
-		psmt.setString(2, techName);
-		ResultSet rs = psmt.executeQuery();
-		
-		if(rs.next()) {
-			techNum = rs.getInt(techNum);
-		}
-		
-		return techNum;
-	}
-	
-	private ResultSet executeQuery(Connection connection, String query) throws Exception {
-		PreparedStatement psmt = connection.prepareStatement(query);
-		return psmt.executeQuery();
-	}
-	
-	// 쿼리 파라미터에 넣을값은 반드시 순서대로 넣어줘야한다...
-	private ResultSet executeQuery(Connection connection, String query, Object... params) throws Exception {
-		PreparedStatement psmt = connection.prepareStatement(query);
-		
-		for(int i = 0; i < params.length; ++i) {
-			String type = params.getClass().getSimpleName();
-			
-			if(type.equals("Integer")) {
-				psmt.setInt(i, Integer.parseInt(params.toString()));
-			} else if(type.equals("Double")) {
-				psmt.setDouble(i, Double.parseDouble(params.toString()));
-			} else {
-				psmt.setString(i, params.toString());
+				if(count.equals("0")) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		}
 		
-		return psmt.executeQuery();
+		return true;
 	}
 	
-	private int executeUpdate(Connection connection, String query) throws Exception {
-		PreparedStatement psmt = connection.prepareStatement(query);
-		return psmt.executeUpdate();
+	private void addNewService(String srvName, String techInfo, String priceInfo) {
+		
 	}
 	
 	/**
@@ -352,7 +270,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	 */
 	public ComSrvListSub1() {
 		loginManager = LoginManager.getInstance();
-		loginManager.login("com", "1112233333");
+		loginManager.login("com", "6665544444");
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 466, 518);
@@ -430,7 +348,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		contentPane.add(comboBoxPrice);
 		
 		addComboBoxData(comboBoxTech, getDbTechNames(loginManager.getLogComNum()));
-		addComboBoxData(comboBoxPrice, getDbPrice(loginManager.getLogComNum()));
+		addComboBoxData(comboBoxPrice, getDbPrice());
 		btnSrvReg.setVisible(true);
 	}
 	
