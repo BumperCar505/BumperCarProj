@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import all.ComMyPage;
 import all.Size;
 
 import java.awt.event.ActionEvent;
@@ -46,15 +47,11 @@ public class BookCalendar extends JFrame {
 	
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					BookCalendar frame = new BookCalendar();
-					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,10 +59,9 @@ public class BookCalendar extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+
 	public BookCalendar() {
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
@@ -145,6 +141,12 @@ public class BookCalendar extends JFrame {
 		});
 		
 		JButton btnBackCusMain = new JButton("돌아가기");
+		btnBackCusMain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				frame.setVisible(false);
+				new ComMyPage();
+			}
+		});
 		btnBackCusMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnBackCusMain.setBounds(687, 914, Size.BTN_B_W, Size.BTN_B_H);
 		contentPane.add(btnBackCusMain);

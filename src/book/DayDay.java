@@ -47,6 +47,7 @@ public class DayDay extends JFrame {
 	
 		
 	public DayDay(int year, int month, int days) {
+		setTitle((month+1) + "월 " + days + "일 일정");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 500);
 		contentPane = new JPanel();
@@ -54,8 +55,7 @@ public class DayDay extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-//		JFrame f = new JFrame((month+1) + "월 " + days + "일");
+
 
 		JLabel l = new JLabel();
 		l.setHorizontalAlignment(JLabel.CENTER);
@@ -66,7 +66,7 @@ public class DayDay extends JFrame {
 
 		panel = new JPanel();
 		panel.setBounds(12, 59, 460, 332);
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		contentPane.add(panel);
 
@@ -75,8 +75,6 @@ public class DayDay extends JFrame {
 		btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		contentPane.add(btnAdd);
 
-//		setDayDate(year, month, days);
-////		setDaySchedule();
 
 	
 		btnAdd.addActionListener(new ActionListener() {
@@ -84,8 +82,6 @@ public class DayDay extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BookDetail detail = new BookDetail();
-//				setDayDate(year, month, days);
-//				setDaySchedule(year, month, days);
 				detail.setVisible(true);
 			}
 		});

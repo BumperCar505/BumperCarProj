@@ -43,28 +43,11 @@ public class BookDetail extends JFrame {
 			new ImageIcon("/img/statusGray.png")
 	};
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BookDetail frame = new BookDetail();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
+
+
 	public BookDetail() {
-		
-		
+			
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 620, 890);
@@ -226,6 +209,7 @@ public class BookDetail extends JFrame {
 			String srvName, String mainStartDay, String mainStartTime, String mainEndDay, String mainEndTime) {
 		this.mainNum = mainNum;
 		this.cusName.setText(cusName);
+		this.cusCarNum.setText(cusCarNum);
 		this.cusCarBrand.setText(cusCarBrand);
 		this.cusCarType.setText(cusCarType);
 		this.cusTel.setText(cusTel);
@@ -260,6 +244,7 @@ public class BookDetail extends JFrame {
 
 		btnBook.setText("수정");
 		this.cusName.setEnabled(true);
+		this.cusCarNum.setEnabled(true);
 		this.cusCarBrand.setEnabled(true);
 		this.cusCarType.setEnabled(true);
 		this.cusTel.setEnabled(true);

@@ -46,7 +46,7 @@ public class DBManager {
 		}
 	}
 	
-	void closeDB() {
+	public void closeDB() {
 		if (this.conn != null) {
 			try {
 				this.conn.close();
@@ -56,7 +56,7 @@ public class DBManager {
 		}
 	}
 
-	void closeDB(PreparedStatement pstmt, ResultSet rs) {
+	public void closeDB(PreparedStatement pstmt, ResultSet rs) {
 		if (rs != null) {
 			try {
 				rs.close();
@@ -73,7 +73,7 @@ public class DBManager {
 		}
 	}
 
-	void closeDB(PreparedStatement pstmt) {
+	public void closeDB(PreparedStatement pstmt) {
 
 		if (pstmt != null) {
 			try {
