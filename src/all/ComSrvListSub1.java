@@ -101,7 +101,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		QueryCommunicator communicator = new QueryCommunicator();
 		communicator.setQuery(query);
 		communicator.addParams(comId);
-		List<HashMap<String, String>> result = communicator.executeQuery("techNum", "techName");
+		List<HashMap<String, String>> result = communicator.executeQueryToList("techNum", "techName");
 		
 		if(result == null) {
 			return null;
@@ -126,7 +126,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		
 		QueryCommunicator communicator = new QueryCommunicator();
 		communicator.setQuery(query);
-		List<HashMap<String, String>> result = communicator.executeQuery("unitName", "unitPrice");
+		List<HashMap<String, String>> result = communicator.executeQueryToList("unitName", "unitPrice");
 		
 		if(result == null) {
 			return null;
@@ -151,7 +151,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		QueryCommunicator communicator = new QueryCommunicator();
 		communicator.setQuery(query);
 		communicator.addParams(srvName.trim(), comId);
-		List<HashMap<String, String>> result = communicator.executeQuery("COUNT(*)");
+		List<HashMap<String, String>> result = communicator.executeQueryToList("COUNT(*)");
 		
 		if(result == null) {
 			return true;
@@ -200,7 +200,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 			communicator.addParams(techNums.get(i));
 		}
 		
-		List<HashMap<String, String>> result = communicator.executeQuery("srvNum");
+		List<HashMap<String, String>> result = communicator.executeQueryToList("srvNum");
 		if(result == null) {
 			return null;
 		} else {
@@ -212,6 +212,36 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		}
 		
 		return list;
+	}
+	
+	private String getDbPriceNumber(String priceName) {
+		String priceNumber = "";
+		String query = "SELECT unitNum FROM unit WHERE unitName = ? ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, priceName);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("unitNum");
+		if(result == null) {
+			return null;
+		} else {
+			priceNumber = result.get(0).get("unitNum");
+		}
+		
+		return priceNumber;
+	}
+	
+	private void setDbPriceInfo(List<Integer> srvNumbers, String priceNumber) {
+		String query = "INSERT INTO detail(dtlSrvNum, dtlUnitNum, dtlUnitQty) "
+				+ "VALUES";
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendInsertValueQuery(3, srvNumbers.size());
+		
+		for(int i = 0; i < srvNumbers.size(); ++i) {
+			communicator.addParams(srvNumbers.get(i), priceNumber, 1);
+		}
+		
+		communicator.executeUpdate();
 	}
 	
 	private void addNewService(String srvName, String techInfo, String priceInfo) {
