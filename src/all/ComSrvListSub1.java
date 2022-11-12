@@ -100,7 +100,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		
 		QueryCommunicator communicator = new QueryCommunicator();
 		communicator.setQuery(query);
-		communicator.setParams(comId);
+		communicator.addParams(comId);
 		List<HashMap<String, String>> result = communicator.executeQuery("techNum", "techName");
 		
 		if(result == null) {
@@ -150,7 +150,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		
 		QueryCommunicator communicator = new QueryCommunicator();
 		communicator.setQuery(query);
-		communicator.setParams(srvName.trim(), comId);
+		communicator.addParams(srvName.trim(), comId);
 		List<HashMap<String, String>> result = communicator.executeQuery("COUNT(*)");
 		
 		if(result == null) {
@@ -171,6 +171,49 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		return true;
 	}
 	
+	private void setDbService(List<Integer> techNums, String srvName) {
+		String query = "INSERT INTO service(srvTechNum, srvName) "
+				+ "VALUES";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendInsertValueQuery(2, techNums.size());
+		
+		for(int i = 0; i < techNums.size(); ++i) {
+			communicator.addParams(techNums.get(i), srvName.trim());
+		}
+		
+		communicator.executeUpdate();
+	}
+	
+	private List<String> getDbServiceNumber(List<Integer> techNums, String srvName) {
+		List<String> list = new ArrayList<String>();
+		String query = "SELECT srvNum FROM service WHERE srvName = ? AND "
+				+ "srvTechNum IN ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.addParams(srvName.trim());
+		communicator.appendLastValueQuery(techNums.size());
+		
+		for(int i = 0; i < techNums.size(); ++i) {
+			communicator.addParams(techNums.get(i));
+		}
+		
+		List<HashMap<String, String>> result = communicator.executeQuery("srvNum");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String srvNum = row.get("srvNum");
+				list.add(srvNum);
+			}
+		}
+		
+		return list;
+	}
+	
 	private void addNewService(String srvName, String techInfo, String priceInfo) {
 		
 	}
@@ -185,7 +228,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 					ComSrvListSub1 frame = new ComSrvListSub1();
 					frame.setVisible(true);
 					frame.setFont();
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
