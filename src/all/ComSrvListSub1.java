@@ -186,8 +186,8 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		communicator.executeUpdate();
 	}
 	
-	private List<String> getDbServiceNumber(List<Integer> techNums, String srvName) {
-		List<String> list = new ArrayList<String>();
+	private List<Integer> getDbServiceNumber(List<Integer> techNums, String srvName) {
+		List<Integer> list = new ArrayList<Integer>();
 		String query = "SELECT srvNum FROM service WHERE srvName = ? AND "
 				+ "srvTechNum IN ";
 		
@@ -207,7 +207,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 			for(int i = 0; i < result.size(); ++i) {
 				HashMap<String, String> row = result.get(i);
 				String srvNum = row.get("srvNum");
-				list.add(srvNum);
+				list.add(Integer.parseInt(srvNum));
 			}
 		}
 		
@@ -244,8 +244,22 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		communicator.executeUpdate();
 	}
 	
-	private void addNewService(String srvName, String techInfo, String priceInfo) {
+	private boolean addNewService(String srvName, List<String> techInfos, String priceInfo) {
+		if(isDbUsedService(loginManager.getLogComNum(), srvName)) {
+			return false;
+		}
 		
+		List<Integer> techNums = new ArrayList<Integer>();
+		for(int i = 0; i < techInfos.size(); ++i) {
+			techNums.add(Integer.parseInt(techInfos.get(i).split("\\.")[0]));
+		}
+		
+		setDbService(techNums, srvName);
+		List<Integer> srvNums = getDbServiceNumber(techNums, srvName);
+		String priceNumber = getDbPriceNumber(priceInfo.split("\\(")[0]);
+		setDbPriceInfo(srvNums, priceNumber);
+		
+		return true;
 	}
 	
 	/**
@@ -272,7 +286,16 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		Object obj = e.getSource();
 		
 		if(obj == btnSrvReg) {
-			System.out.println("이벤트 작동함1");
+			String srvName = textFieldSrvName.getText().trim();
+			List<String> techList = getListData();
+			String priceInfo = comboBoxPrice.getSelectedItem().toString();
+			if(addNewService(srvName, techList, priceInfo)) {
+				DialogManager.createMsgDialog("정상적으로 처리되었습니다.", "\\img\\success1.png",
+						"알림", JOptionPane.PLAIN_MESSAGE);
+			} else {
+				DialogManager.createMsgDialog("동일한 서비스가 이미 사용중입니다.", "\\img\\information5.png",
+						"에러", JOptionPane.PLAIN_MESSAGE);
+			}
 		} else if(obj == btnSrvSave) { 
 			System.out.println("이벤트 작동함2");
 		} else if (obj == comboBoxTech) {
@@ -342,7 +365,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	 */
 	public ComSrvListSub1() {
 		loginManager = LoginManager.getInstance();
-		loginManager.login("com", "6665544444");
+		loginManager.login("com", "1112233333");
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 466, 518);
