@@ -114,13 +114,14 @@ public class QueryCommunicator {
 		try {
 			for(int i = 0; i < params.size(); ++i) {
 				String classType = params.get(i).getClass().getSimpleName();
+				Object value = params.get(i);
 				
 				if(classType.equals("Integer")) {
-					psmt.setInt(i, Integer.parseInt(params.toString()));
+					psmt.setInt(i + 1, Integer.parseInt(value.toString()));
 				} else if(classType.equals("Double")) {
-					psmt.setDouble(i, Double.parseDouble(params.toString()));
+					psmt.setDouble(i + 1, Double.parseDouble(value.toString()));
 				} else {
-					psmt.setString(i, params.toString());
+					psmt.setString(i + 1, value.toString());
 				}
 			}
 			
