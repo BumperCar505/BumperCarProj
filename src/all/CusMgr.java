@@ -1,6 +1,7 @@
 package all;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.Panel;
 import java.awt.TextField;
 import java.awt.event.*;
@@ -13,13 +14,14 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.mysql.cj.xdevapi.Statement;
+import java.awt.CardLayout;
 
-// ComServiceList
 public class CusMgr extends JFrame {
 	private JTable table;
 	private JPanel getContentPane;
@@ -34,7 +36,7 @@ public class CusMgr extends JFrame {
 	private final int FONT_SIZE = 21;
 	private JPanel mainPanel;
 	
-//	db connect
+
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection conn = null;
@@ -87,20 +89,21 @@ public class CusMgr extends JFrame {
 		table = new JTable(model);
 		
 		JTable tableCusList = new JTable(model);
+		tableCusList.setAutoCreateRowSorter(true);
+		tableCusList.setRowMargin(4);
+		tableCusList.setRowHeight(30);
+		tableCusList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
 		
 		JScrollPane scrollpane = new JScrollPane(table);
-//		tableCusList.setBounds(994, 71, 548, 506);
 		getContentPane.add(tableCusList);
 		JLabel lblRegTec = new JLabel("");
 		lblRegTec.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
 		
-//		private JTable = table;
-
-		
-		// Table Set Area
 		scCusList = new JScrollPane(tableCusList);
+		scCusList.setEnabled(false);
+		scCusList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scCusList.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
 		scCusList.setBounds(100, 145, 1462, 750);
-		scCusList.setVisible(true);
 		getContentPane.setLayout(null);
 		
 		getContentPane.add(scCusList);
@@ -127,11 +130,20 @@ public class CusMgr extends JFrame {
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1666, 1037);
 		getContentPane.add(mainPanel);
-		mainPanel.setLayout(null);
-
+		mainPanel.setLayout(new CardLayout(0, 0));
+//		
+//		JScrollPane scroll = new JScrollPane(table);  // 스크롤패널을 선언
+//		scroll.setBounds(0,0,160,160);
+//		table.add(scroll); 
+		
+		JPanel jpList = new JPanel();		
+	    jpList.setLayout(new GridBagLayout());			
+		JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollSingle.setPreferredSize(new Dimension(400, 200));
 	
 
-//		button event
+
 		
 		//돌아가기 버튼 누르면 메인화면으로 간다.
 		btnBackCusMain.addActionListener(new ActionListener() {

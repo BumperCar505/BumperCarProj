@@ -148,8 +148,8 @@ public class YuriCusMgr_mgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update customer set cusName=?,cusCarNum=?,CusCarBrand=?,CusCarType=? "
-					+ " cusZip=?, cusAddr=?,cusTel=?,cusKm=? "
+			sql = " update customer  "
+					+ "set cusName=?,cusCarNum=?,CusCarBrand=?,CusCarType=?, cusZip=?, cusAddr=?,cusTel=?,cusKm=?  "
 					+ "where cusNum=? " ;
 			
 			pstmt = con.prepareStatement(sql);

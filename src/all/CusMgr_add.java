@@ -122,7 +122,6 @@ public class CusMgr_add {
 		panel.add(cusAddr);
 		
 		cusTel = new JTextField();
-		cusTel.setEnabled(false);
 		cusTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		cusTel.setColumns(10);
 		cusTel.setBounds(304, 561, 365, 54);
