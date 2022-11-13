@@ -4,10 +4,18 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.mysql.cj.xdevapi.Statement;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -28,13 +36,17 @@ import javax.swing.JList;
 public class UnitStockMgr_add extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField unitName;
 	private JTextField unitPrice;
 	private JTextField unitVendor;
 	private JButton btnUnitReg;
 	private JLabel lblNewLabel;
 	private JTextField stockUnitQty;
 	private JTextField stockUnitBuyDate;
+	private String driver  = "com.mysql.cj.jdbc.Driver";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
 
 	/**
 	 * Launch the application.
@@ -81,11 +93,6 @@ public class UnitStockMgr_add extends JFrame {
 		unitVendorlbl.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		contentPane.add(unitVendorlbl);
 		
-		unitName = new JTextField();
-		unitName.setBounds(93, 135, 390, 39);
-		contentPane.add(unitName);
-		unitName.setColumns(10);
-		
 		unitPrice = new JTextField();
 		unitPrice.setColumns(10);
 		unitPrice.setBounds(93, 225, 390, 39);
@@ -126,13 +133,43 @@ public class UnitStockMgr_add extends JFrame {
 		stockUnitBuyDate.setBounds(93, 495, 390, 39);
 		contentPane.add(stockUnitBuyDate);
 		
-		// 등록 버튼 누르면 현재 창이 닫히면서 TechListEdit 창이 뜸(데이터 이동 완료상태)
-		// 또는 추가 버튼 누르면 기존 폼이 닫히고, 등록 버튼 누를때 기존 폼 새로 뜨게??????????????????????????????????????????????????????????
+		JComboBox unitName = new JComboBox();
+		unitName.setMaximumRowCount(10);
+		unitName.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+		unitName.setBounds(93, 140, 390, 47);
+		contentPane.add(unitName);
+		
+
+		// 등록 완료 버튼
 		btnUnitReg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UnitStockMgr uform = new UnitStockMgr();
+				
+				GwakMemberMgr mgr = new GwakMemberMgr();
+				GwakMemberBean bean =  new GwakMemberBean();
+
+				// 임의설정 -> 나중에 값 받아오도록 변경
+				bean.setStckComNum("1112233333");
+				//bean.setTechName(unitName.getText());
+				bean.setTechTel(unitPrice.getText());
+				bean.setTechLv(unitVendor.getText());	
+
+				
+				mgr.add(bean);
+				
+				TechListEdit a1 = new TechListEdit();
+				a1.setVisible(true);
+				
 				dispose();//--
 			}
 		});
+		
+		
+		
+
+		 
+
+
 	}
+	
 }

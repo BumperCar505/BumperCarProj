@@ -41,7 +41,7 @@ public class UnitStockMgr extends JFrame {
 	private Connection con = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-	private String header[] = {"부품번호","부품명","벤더", "재고수량"};  // 테이블 컬럼 값들
+	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 
 	// Launch the application.
@@ -86,6 +86,10 @@ public class UnitStockMgr extends JFrame {
 
 		table.setBounds(247, 231, 1170, 671);
 		
+		table.getColumn("stckNum").setWidth(0);
+		table.getColumn("stckNum").setMinWidth(0);
+		table.getColumn("stckNum").setMaxWidth(0);
+		
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table); //
 		
@@ -129,28 +133,26 @@ public class UnitStockMgr extends JFrame {
 		btnUnitBuyHistory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String unitName = "a";
+				int row = table.getSelectedRow();
+				int column1 = 0;
+				int column2 = 1;
+				int stckNum = (int) table.getValueAt(row, column1);
+				String unitNum = (String) table.getValueAt(row, column2);
 				
-				UnitBuyHistory history = new UnitBuyHistory(unitName);
+				UnitBuyHistory history = new UnitBuyHistory(stckNum, unitNum);
+				
+				
 				history.setVisible(true);
+
 			}
 		});
-		
-		
-		//추가 버튼 누르면 실행됨 -> 새 폼 띄우기
-		btnAddUnitStock.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				UnitStockMgr_add add = new UnitStockMgr_add();
-				add.setVisible(true);
-			}
-		});
-		
+
 		// 삭제 버튼 누르면 실행됨
 				btnDelUnitStock.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
 						int row = table.getSelectedRow();
-						int column = 0;
+						int column = 1;
 						String editIndex = (String) table.getValueAt(row, column);
 						
 						if(row == -1){
@@ -182,6 +184,19 @@ public class UnitStockMgr extends JFrame {
 				        	}
 						}
 					});
+				
+				
+				// 입고버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
+				btnAddUnitStock.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// 메인화면은 visible true, 현재화면은 false
+						UnitStockMgr_add history = new UnitStockMgr_add();
+						
+						
+						history.setVisible(true);
+
+					}
+				});
 		
 		// 돌아가기 버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
 		btnBackUnitStockMain.addActionListener(new ActionListener() {
@@ -190,6 +205,9 @@ public class UnitStockMgr extends JFrame {
 
 			}
 		});
+		
+		
+		
 		
 	}
 
@@ -209,7 +227,7 @@ public class UnitStockMgr extends JFrame {
 					
 					// UnitStockMgr 메인화면 테이블 값 쿼리문
 					// 재고는 stckQty2 (정비완료시 재고 빠진것 업데이트 된 열)
-					sql = "SELECT stock.stckUnitNum, unit.unitName, unit.unitVendor, sum(stock.stckQty2) "
+					sql = "SELECT stock.stckNum, stock.stckUnitNum, unit.unitName, unit.unitVendor, sum(stock.stckQty2) "
 							+ "FROM stock " 
 							+ "inner join unit "
 							+ "on stock.stckUnitNum = unit.unitNum "
@@ -222,7 +240,7 @@ public class UnitStockMgr extends JFrame {
 			
 					rs = pstmt.executeQuery();
 						while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
-		                 model.addRow(new Object[]{rs.getString("stock.stckUnitNum"), rs.getString("unit.unitName"), rs.getString("unit.unitVendor"),rs.getString("sum(stock.stckQty2)")});
+		                 model.addRow(new Object[]{rs.getInt("stock.stckNum"), rs.getString("stock.stckUnitNum"), rs.getString("unit.unitName"), rs.getString("unit.unitVendor"),rs.getInt("sum(stock.stckQty2)")});
 		                }
 						
 					} catch (Exception e) {
