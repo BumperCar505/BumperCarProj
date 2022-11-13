@@ -12,7 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -29,6 +32,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.Color;
 
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -43,6 +47,8 @@ public class ComSrvList extends JFrame implements ActionListener {
 	private JButton btnBackMain;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
+	private LoginManager loginManager;
+	private Vector<String> headerNames = new Vector<>(Arrays.asList("번호", "서비스 명", "제공 정비사", "서비스 가격"));
 	
 	public void setFont() {
 		InputStream inputStream = null;
@@ -108,13 +114,140 @@ public class ComSrvList extends JFrame implements ActionListener {
 		});
 	}
 	
+	private List<ComSrvBeans> getDbService(String comId) {
+		List<ComSrvBeans> list = new ArrayList<ComSrvBeans>();
+		String query = "SELECT ser.srvNum, ser.srvName, tech.techName, u.unitName, u.unitPrice "
+				+ "FROM service AS ser "
+				+ "INNER JOIN technician AS tech ON ser.srvTechNum = tech.techNum "
+				+ "INNER JOIN detail AS de ON ser.srvNum = de.dtlSrvNum "
+				+ "INNER JOIN unit AS u ON de.dtlUnitNum = u.unitNum "
+				+ "WHERE u.unitName LIKE '공임비%' AND tech.techComNum = ? "
+				+ "AND ser.deleted_yn = 'N' "
+				+ "ORDER BY ser.srvNum";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, comId);
+		List<HashMap<String, String>> result = communicator.executeQueryToList(
+				"srvNum", "srvName", "techName", "unitName", "unitPrice");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				ComSrvBeans beans = new ComSrvBeans();
+				beans.setSrvNum(Integer.parseInt(row.get("srvNum")));
+				beans.setSrvName(row.get("srvName"));
+				beans.setTechName(row.get("techName"));
+				beans.setUnitName(row.get("unitName"));
+				beans.setUnitPrice(Integer.parseInt(row.get("unitPrice")));
+				list.add(beans);
+			}
+		}
+		
+		return list;
+	}
+	
+	private List<Vector<String>> reassembleData(List<ComSrvBeans> beans) {
+		List<Vector<String>> tableRows = new ArrayList<Vector<String>>();
+		HashMap<String, String> provideTechList = new HashMap<String, String>();
+		HashMap<String, String> srvPriceInfos = new HashMap<String, String>();
+		
+		for(int i = 0; i < beans.size(); ++i) {
+			ComSrvBeans comSrvBeans = beans.get(i);
+			if(provideTechList.getOrDefault(comSrvBeans.getSrvName(), "").equals("")) {
+				provideTechList.put(comSrvBeans.getSrvName(), comSrvBeans.getTechName());
+			} else {
+				String provideTechNames = provideTechList.get(comSrvBeans.getSrvName());
+				provideTechList.put(comSrvBeans.getSrvName(), provideTechNames + ", " + comSrvBeans.getTechName());
+			}
+			
+			if(srvPriceInfos.getOrDefault(comSrvBeans.getSrvName(), "").equals("")) {
+				srvPriceInfos.put(comSrvBeans.getSrvName(), comSrvBeans.getUnitName() + "(" + 
+						comSrvBeans.getUnitPrice() + ")");
+			}
+		}
+		
+		int rowCount = 1;
+		Set<String> srvNames = provideTechList.keySet();
+		for(String srvName : srvNames) {
+			Vector<String> tableRow = new Vector<String>();
+			String provideTechs = provideTechList.get(srvName);
+			String srvPriceInfo = srvPriceInfos.get(srvName);
+			tableRow.add(String.valueOf(rowCount++));
+			tableRow.add(srvName);
+			tableRow.add(provideTechs);
+			tableRow.add(srvPriceInfo);
+			tableRows.add(tableRow);
+		}
+		
+		return tableRows;
+	}
+	
+	private void setTableColumn(List<Vector<String>> datas) {
+		// 가져온 데이터를 테이블에 저장
+		
+		DefaultTableModel model = new DefaultTableModel(headerNames, 0);
+		for(int i = 0; i < datas.size(); ++i) {
+			model.addRow(datas.get(i));
+		}
+		
+		tableSrvList.setModel(model);
+	}
+	
+	private void setTableTextCenter(JTable table) {
+		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+		render.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		table.getColumn("번호").setCellRenderer(render);
+		table.getColumn("서비스 명").setCellRenderer(render);
+		table.getColumn("제공 정비사").setCellRenderer(render);
+		table.getColumn("서비스 가격").setCellRenderer(render);
+	}
+	
+	private void resizeTableRow(JTable table) {
+		table.setRowHeight(50);
+	}
+	
+	private void resizeTableColumn(JTable table) {
+		table.getColumn("번호").setPreferredWidth(30);
+		table.getColumn("서비스 명").setPreferredWidth(30);
+		table.getColumn("제공 정비사").setPreferredWidth(150);
+		table.getColumn("서비스 가격").setPreferredWidth(200);
+	}
+	
+	private void resizeTableHeader(JTable table) {
+		TableColumnModel columnModel = table.getColumnModel();
+		String prefix = "<html><body><table><tr><td height=50>";
+		String suffix = "</td></tr></table></body><html>";
+		
+		for (int col = 0; col < columnModel.getColumnCount(); col++) {
+		    TableColumn column = columnModel.getColumn(col);
+		    String text = prefix + columnModel.getColumn(col).getHeaderValue().toString() + suffix;
+		    column.setHeaderValue(text);
+		}
+	}
+	
+	public void requestRefreshAllDatas(ComSrvList comSrvList) {
+		if(comSrvList.equals(this)) {
+			refreshAllDatas();
+		}
+	}
+	
+	private void refreshAllDatas() {
+		setTableColumn(reassembleData(getDbService(loginManager.getLogComNum())));
+		setTableTextCenter(tableSrvList);
+		resizeTableRow(tableSrvList);
+		resizeTableColumn(tableSrvList);
+		resizeTableHeader(tableSrvList); // 반드시 이게 마지막으로 설정되어야 함
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Object obj = e.getSource();
 		
 		if(obj == btnAddsrv) { // 서비스 신규 추가
-			new ComSrvListSub1().setFont();
+			new ComSrvListSub1(this).setFont();
 		} else if(obj == btnEditSrv) { // 기존 서비스 수정
 			int selectedRow = tableSrvList.getSelectedRow();
 			
@@ -130,7 +263,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 			
 			ArrayList<String> techList = new ArrayList<>(List.of(selectedTechNames));
 			
-			new ComSrvListSub1(selectedSrvName, selectedSrvPrice, techList).setFont();
+			new ComSrvListSub1(this, selectedSrvName, selectedSrvPrice, techList).setFont();
 		} else if(obj == btnDelSrv) { // 기존 서비스 삭제
 			int selectedRow = tableSrvList.getSelectedRow();
 			
@@ -159,6 +292,9 @@ public class ComSrvList extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public ComSrvList() {
+		loginManager = LoginManager.getInstance();
+		loginManager.login("com", "1112233333"); // 가상 로그인
+		
 		setTitle("다고쳐카센터 - 서비스 목록");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
@@ -246,5 +382,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 		lblYellowCat.setIcon(new ImageIcon(ComSrvList.class.getResource("/img/YellowCat.png")));
 		lblYellowCat.setBounds(710, 50, 230, 80);
 		contentPane.add(lblYellowCat);
+		
+		refreshAllDatas();
 	}
 }
