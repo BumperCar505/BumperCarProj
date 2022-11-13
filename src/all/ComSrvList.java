@@ -147,6 +147,32 @@ public class ComSrvList extends JFrame implements ActionListener {
 		return list;
 	}
 	
+	private List<Integer> getDbServiceNumber(String comId, String srvName) {
+		List<Integer> list = new ArrayList<Integer>();
+		String query = "SELECT ser.srvNum "
+				+ "FROM service AS ser "
+				+ "INNER JOIN technician AS tech ON ser.srvTechNum = tech.techNum "
+				+ "INNER JOIN detail AS de ON ser.srvNum = de.dtlSrvNum "
+				+ "INNER JOIN unit AS u ON de.dtlUnitNum = u.unitNum "
+				+ "WHERE u.unitName LIKE '공임비%' AND tech.techComNum = ? "
+				+ "AND srvName = ? AND ser.deleted_yn = 'N' "
+				+ "ORDER BY ser.srvNum";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, comId, srvName);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("srvNum");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				list.add(Integer.parseInt(row.get("srvNum")));
+			}
+		}
+		
+		return list;
+	}
+	
 	private List<Vector<String>> reassembleData(List<ComSrvBeans> beans) {
 		List<Vector<String>> tableRows = new ArrayList<Vector<String>>();
 		HashMap<String, String> provideTechList = new HashMap<String, String>();
