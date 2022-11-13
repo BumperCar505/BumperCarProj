@@ -52,6 +52,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	private LoginManager loginManager;
 	private ComSrvList parent;
 	private String seletedSrvName;
+	private List<String> seletedTechList;
 	
 	public ComSrvListSub1 setFont() {
 		InputStream inputStream = null;
@@ -324,20 +325,25 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 			return false;
 		}
 		
-		List<Integer> techNums = new ArrayList<Integer>();
-		
-		for(int i = 0; i < techInfos.size(); ++i) {
-			techNums.add(Integer.parseInt(techInfos.get(i).split("\\.")[0]));
+		List<Integer> oldTechNums = new ArrayList<Integer>();
+		for(int i = 0; i < seletedTechList.size(); ++i) {
+			oldTechNums.add(Integer.parseInt(seletedTechList.get(i).split("\\.")[0]));
 		}
 		
-		List<Integer> oldSrvNums = getDbServiceNumber(techNums, seletedSrvName);
+		List<Integer> newTechNums = new ArrayList<Integer>();
+		for(int i = 0; i < techInfos.size(); ++i) {
+			newTechNums.add(Integer.parseInt(techInfos.get(i).split("\\.")[0]));
+		}
+		
+		List<Integer> oldSrvNums = getDbServiceNumber(oldTechNums, seletedSrvName);
 		boolean result1 = setDbServiceStatus(oldSrvNums);
 		boolean result2 = setDbDetailStatus(oldSrvNums);
 		String srvPriceNumber = getDbPriceNumber(priceInfo.split("\\(")[0]);
-		boolean result3 = setDbService(techNums, srvName);
+		boolean result3 = setDbService(newTechNums, srvName);
 		List<Integer> newSrvNums = getDbServiceNumber(comId, srvName);
 		boolean result4 = setDbPriceInfo(newSrvNums, srvPriceNumber);
 		seletedSrvName = srvName;
+		seletedTechList = getListData();
 		
 		return result1 && result2 && result3 && result4;
 	}
@@ -602,5 +608,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		addListData(reassembleTechNames(getComboBoxData(comboBoxTech), srvTechList));
 		this.parent = parent;
 		seletedSrvName = srvName;
+		seletedTechList = getListData();
 	}
 }
