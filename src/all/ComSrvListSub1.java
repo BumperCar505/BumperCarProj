@@ -187,6 +187,36 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		communicator.executeUpdate();
 	}
 	
+	private boolean setDbServiceStatus(List<Integer> srvNums) {
+		String query = "UPDATE service SET deleted_yn = 'Y'"
+				+ "WHERE srvNum IN ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendLastValueQuery(srvNums.size());
+		
+		for(int i = 0; i < srvNums.size(); ++i) {
+			communicator.addParams(srvNums.get(i));
+		}
+		
+		return communicator.executeUpdate() != -1 ? true : false;
+	}
+	
+	private boolean setDbDetailStatus(List<Integer> srvNums) {
+		String query = "UPDATE detail SET deleted_yn = 'Y'"
+				+ "WHERE dtlSrvNum IN ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendLastValueQuery(srvNums.size());
+		
+		for(int i = 0; i < srvNums.size(); ++i) {
+			communicator.addParams(srvNums.get(i));
+		}
+		
+		return communicator.executeUpdate() != -1 ? true : false;
+	}
+	
 	private List<Integer> getDbServiceNumber(List<Integer> techNums, String srvName) {
 		List<Integer> list = new ArrayList<Integer>();
 		String query = "SELECT srvNum FROM service WHERE srvName = ? AND "
@@ -261,6 +291,16 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		setDbPriceInfo(srvNums, priceNumber);
 		
 		return true;
+	}
+	
+	private boolean editService(String srvName, List<String> techInfos) {
+		List<Integer> techNums = new ArrayList<Integer>();
+		for(int i = 0; i < techInfos.size(); ++i) {
+			techNums.add(Integer.parseInt(techInfos.get(i).split("\\.")[0]));
+		}
+		
+		List<Integer> srvNums = getDbServiceNumber(techNums, srvName);
+		
 	}
 	
 	private boolean isBlank() {
