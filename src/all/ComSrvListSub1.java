@@ -51,6 +51,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	private boolean comboBoxTechInitFlag = false; // 생성자 호출시 이벤트 발생해서 리스트에 값 들어가는거 방지
 	private LoginManager loginManager;
 	private ComSrvList parent;
+	private String seletedSrvName;
 	
 	public ComSrvListSub1 setFont() {
 		InputStream inputStream = null;
@@ -172,7 +173,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		return true;
 	}
 	
-	private void setDbService(List<Integer> techNums, String srvName) {
+	private boolean setDbService(List<Integer> techNums, String srvName) {
 		String query = "INSERT INTO service(srvTechNum, srvName) "
 				+ "VALUES";
 		
@@ -184,7 +185,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 			communicator.addParams(techNums.get(i), srvName.trim());
 		}
 		
-		communicator.executeUpdate();
+		return communicator.executeUpdate() != -1 ? true : false;
 	}
 	
 	private boolean setDbServiceStatus(List<Integer> srvNums) {
@@ -245,6 +246,29 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		return list;
 	}
 	
+	private List<Integer> getDbServiceNumber(String comId, String srvName) {
+		List<Integer> list = new ArrayList<Integer>();
+		String query = "SELECT ser.srvNum FROM service AS ser "
+				+ "INNER JOIN technician AS tech ON ser.srvTechNum = tech.techNum "
+				+ "WHERE ser.srvName = ? AND tech.techComNum = ? "
+				+ "AND ser.deleted_yn = 'N'";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, srvName, comId);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("srvNum");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String srvNum = row.get("srvNum");
+				list.add(Integer.parseInt(srvNum));
+			}
+		}
+		
+		return list;
+	}
+	
 	private String getDbPriceNumber(String priceName) {
 		String priceNumber = "";
 		String query = "SELECT unitNum FROM unit WHERE unitName = ? ";
@@ -261,7 +285,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		return priceNumber;
 	}
 	
-	private void setDbPriceInfo(List<Integer> srvNumbers, String priceNumber) {
+	private boolean setDbPriceInfo(List<Integer> srvNumbers, String priceNumber) {
 		String query = "INSERT INTO detail(dtlSrvNum, dtlUnitNum, dtlUnitQty) "
 				+ "VALUES";
 		QueryCommunicator communicator = new QueryCommunicator();
@@ -272,7 +296,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 			communicator.addParams(srvNumbers.get(i), priceNumber, 1);
 		}
 		
-		communicator.executeUpdate();
+		return communicator.executeUpdate() != -1 ? true : false;
 	}
 	
 	private boolean addNewService(String srvName, List<String> techInfos, String priceInfo) {
@@ -293,14 +317,29 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		return true;
 	}
 	
-	private boolean editService(String srvName, List<String> techInfos) {
+	private boolean editService(String comId, String srvName, String priceInfo, List<String> techInfos) {
+		if(seletedSrvName.equals(srvName)) {
+			// 서비스 이름이 변경되지 않았다면 아무것도 안함
+		} else if(isDbUsedService(loginManager.getLogComNum(), srvName)) {
+			return false;
+		}
+		
 		List<Integer> techNums = new ArrayList<Integer>();
+		
 		for(int i = 0; i < techInfos.size(); ++i) {
 			techNums.add(Integer.parseInt(techInfos.get(i).split("\\.")[0]));
 		}
 		
-		List<Integer> srvNums = getDbServiceNumber(techNums, srvName);
+		List<Integer> oldSrvNums = getDbServiceNumber(techNums, seletedSrvName);
+		boolean result1 = setDbServiceStatus(oldSrvNums);
+		boolean result2 = setDbDetailStatus(oldSrvNums);
+		String srvPriceNumber = getDbPriceNumber(priceInfo.split("\\(")[0]);
+		boolean result3 = setDbService(techNums, srvName);
+		List<Integer> newSrvNums = getDbServiceNumber(comId, srvName);
+		boolean result4 = setDbPriceInfo(newSrvNums, srvPriceNumber);
+		seletedSrvName = srvName;
 		
+		return result1 && result2 && result3 && result4;
 	}
 	
 	private boolean isBlank() {
@@ -357,7 +396,23 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 						"에러", JOptionPane.PLAIN_MESSAGE);
 			}
 		} else if(obj == btnSrvSave) { 
-			System.out.println("이벤트 작동함2");
+			if(isBlank()) {
+				DialogManager.createMsgDialog("서비스 명이나 정비사가 선택되지않았습니다.", "\\img\\information5.png",
+						"에러", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+			
+			String srvName = textFieldSrvName.getText().trim();
+			List<String> techList = getListData();
+			String priceInfo = comboBoxPrice.getSelectedItem().toString();
+			if(editService(loginManager.getLogComNum(), srvName, priceInfo, techList)) {
+				parent.requestRefreshAllDatas(parent);
+				DialogManager.createMsgDialog("정상적으로 처리되었습니다.", "\\img\\success1.png",
+						"알림", JOptionPane.PLAIN_MESSAGE);
+			} else {
+				DialogManager.createMsgDialog("이미 사용중인 서비스 이름이거나<br> 수정에 실패했습니다.", "\\img\\information5.png",
+						"에러", JOptionPane.PLAIN_MESSAGE);
+			}
 		} else if (obj == comboBoxTech) {
 			if(comboBoxTechInitFlag == false) {
 				comboBoxTechInitFlag = true;
@@ -418,6 +473,31 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		for(int i = 0; i < list.size(); ++i) {
 			comboBox.addItem(list.get(i));
 		}
+	}
+	
+	private List<String> getComboBoxData(JComboBox<String> comboBox) {
+		List<String> list = new ArrayList<String>();
+		
+		for(int i = 0; i < comboBox.getItemCount(); ++i) {
+			list.add(comboBox.getItemAt(i));
+		}
+		
+		return list;
+	}
+	
+	private List<String> reassembleTechNames(List<String> techAllName, List<String> regTechNames) {
+		List<String> list = new ArrayList<String>();
+		
+		for(int aCount = 0; aCount < techAllName.size(); ++aCount) {
+			for(int rCount = 0; rCount < regTechNames.size(); ++rCount) {
+				if(techAllName.get(aCount).split(" ")[1].equals(regTechNames.get(rCount))) {
+					list.add(techAllName.get(aCount));
+					break;
+				}
+			}
+		}
+		
+		return list;
 	}
 	
 	/**
@@ -519,7 +599,8 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		textFieldSrvName.setText(srvName);
 		comboBoxPrice.setSelectedItem(srvPrice);
 		btnSrvSave.setVisible(true);
-		addListData(srvTechList);
+		addListData(reassembleTechNames(getComboBoxData(comboBoxTech), srvTechList));
 		this.parent = parent;
+		seletedSrvName = srvName;
 	}
 }
