@@ -242,30 +242,30 @@ public class SalesMgr_day extends JFrame {
 					+ "	ON un.unitNum = dtl.dtlUnitNum "
 					+ " WHERE mainEndDay = ? and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
 			
-			sql2 = "SELECT un.unitPrice "
-					+ "FROM maintenance   "
-					+ "	JOIN service srv  "
-					+ "	ON mainSrvNum = srv.srvNum  "
-					+ "	JOIN technician tech  "
-					+ "	ON srv.srvTechNum = tech.techNum  "
-					+ "	JOIN customer cus "
-					+ "	ON cus.cusNum = mainCusNum "
-					+ "	JOIN detail dtl "
-					+ "	ON dtl.dtlSrvNum = srv.srvNum "
-					+ "	JOIN unit un "
-					+ "	ON un.unitNum = dtl.dtlUnitNum "
-					+ " WHERE mainEndDay = ? and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 's%' " ;
-					
+//			sql2 = "SELECT un.unitPrice "
+//					+ "FROM maintenance   "
+//					+ "	JOIN service srv  "
+//					+ "	ON mainSrvNum = srv.srvNum  "
+//					+ "	JOIN technician tech  "
+//					+ "	ON srv.srvTechNum = tech.techNum  "
+//					+ "	JOIN customer cus "
+//					+ "	ON cus.cusNum = mainCusNum "
+//					+ "	JOIN detail dtl "
+//					+ "	ON dtl.dtlSrvNum = srv.srvNum "
+//					+ "	JOIN unit un "
+//					+ "	ON un.unitNum = dtl.dtlUnitNum "
+//					+ " WHERE mainEndDay = ? and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 's%' " ;
+//					
 	
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 
 			pstmt.setString(2, "1112233333"); 
 			
-			pstmt2 =con.prepareStatement(sql2);
-			pstmt2.setString(1, boxTotalDay); 
-			pstmt2.setString(2, "1112233333"); 
-			rs2 = pstmt.executeQuery();
-			rs2.close();
+//			pstmt2 =con.prepareStatement(sql2);
+//			pstmt2.setString(1, boxTotalDay); 
+//			pstmt2.setString(2, "1112233333"); 
+//			rs2 = pstmt.executeQuery();
+//			
 	
 			rs = pstmt.executeQuery();
 				while(rs.next()){         
@@ -275,13 +275,14 @@ public class SalesMgr_day extends JFrame {
 	            		 rs.getString("srv.srvName"), 
 	            		 rs.getString("un.unitName"),
 	            		 rs.getInt("un.unitPrice"),
-	            		 rs2.getInt("un.unitPrice")
+	            		 rs.getInt(bean.getProIncome())
 	             	});
 	            }
 				
 			} catch (SQLException eq) {
 				eq.printStackTrace();
 			} finally {
+				
 		}
 			}
 	});
