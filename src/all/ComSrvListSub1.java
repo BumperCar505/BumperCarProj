@@ -263,6 +263,18 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		return true;
 	}
 	
+	private boolean isBlank() {
+		if(textFieldSrvName.getText().equals("")) {
+			return true;
+		}
+		
+		if(getListData().size() == 0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -287,6 +299,12 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		Object obj = e.getSource();
 		
 		if(obj == btnSrvReg) {
+			if(isBlank()) {
+				DialogManager.createMsgDialog("서비스 명이나 정비사가 선택되지않았습니다.", "\\img\\information5.png",
+						"에러", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+			
 			String srvName = textFieldSrvName.getText().trim();
 			List<String> techList = getListData();
 			String priceInfo = comboBoxPrice.getSelectedItem().toString();
