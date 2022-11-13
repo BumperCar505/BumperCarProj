@@ -1,6 +1,6 @@
 package all;
 
-public class ServiceBeans {
+public class ComSrvBeans {
 	private int srvNum;
 	private int unitPrice;
 	private String srvName;

@@ -111,8 +111,8 @@ public class ComSrvList extends JFrame implements ActionListener {
 		});
 	}
 	
-	private List<ServiceBeans> getDbService(String comId) {
-		List<ServiceBeans> list = new ArrayList<ServiceBeans>();
+	private List<ComSrvBeans> getDbService(String comId) {
+		List<ComSrvBeans> list = new ArrayList<ComSrvBeans>();
 		String query = "SELECT ser.srvNum, ser.srvName, tech.techName, u.unitName, u.unitPrice "
 				+ "FROM service AS ser "
 				+ "INNER JOIN technician AS tech ON ser.srvTechNum = tech.techNum "
@@ -131,7 +131,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 		} else {
 			for(int i = 0; i < result.size(); ++i) {
 				HashMap<String, String> row = result.get(i);
-				ServiceBeans beans = new ServiceBeans();
+				ComSrvBeans beans = new ComSrvBeans();
 				beans.setSrvNum(Integer.parseInt(row.get("srvNum")));
 				beans.setSrvName(row.get("srvName"));
 				beans.setTechName(row.get("techName"));
