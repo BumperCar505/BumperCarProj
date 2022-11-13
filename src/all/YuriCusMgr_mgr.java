@@ -148,9 +148,11 @@ public class YuriCusMgr_mgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update customer set cusName=?,cusCarNum=?,CusCarBrand=?,CusCarType=?"
-					+ " cusZip=?, cusAddr=?,cusTel=?,cusDate=?,cusKm=? "
-					+ "where cusNum=?";
+			sql = "update customer set cusName=?,cusCarNum=?,CusCarBrand=?,CusCarType=? "
+					+ " cusZip=?, cusAddr=?,cusTel=?,cusKm=? "
+					+ "where cusNum=? " ;
+			
+			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, bean.getCusName());
 			pstmt.setString(2, bean.getCusCarNum());
 			pstmt.setString(3, bean.getCusCarBrand());
@@ -158,9 +160,8 @@ public class YuriCusMgr_mgr {
 			pstmt.setInt(5, bean.getCusZip());
 			pstmt.setString(6, bean.getCusAddr());
 			pstmt.setString(7, bean.getCusTel());
-			pstmt.setString(8, bean.getCusDate());
-			pstmt.setInt(9, bean.getCusKm());
-			pstmt.setInt(10, index);
+			pstmt.setInt(8, bean.getCusKm());
+			pstmt.setInt(9, index);
 			int cnt = pstmt.executeUpdate();
 			if(cnt==1) flag = true; 
 		} catch (Exception e) {
