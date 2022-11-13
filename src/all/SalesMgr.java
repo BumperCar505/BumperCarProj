@@ -80,16 +80,17 @@ public class SalesMgr extends JFrame {
     int a = bean.getSrvIncome();
 	int b = bean.getProIncome();
 	int c = bean.getProOut();
+
 	
 	int result = a + b;
 
    
-   String year;
-   String month;
-   String day;
-   String dbDate = year + '-' + month + '-' + day;
+//   String year;
+//   String month;
+	
+//   String day;
+//   String dbDate = year + '-' + month + '-' + day;
 
-   int techNum;
   
 
    public void setFont() {
@@ -121,6 +122,7 @@ public class SalesMgr extends JFrame {
          public void run() {
             try {
                SalesMgr frame = new SalesMgr();
+            
 
             } catch (Exception e) {
                e.printStackTrace();
@@ -146,6 +148,7 @@ public class SalesMgr extends JFrame {
       setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
       this.setLocationRelativeTo(null);
       this.setResizable(false);
+      monthService();
 
 //       mgr = DBConnectionMgr.getInstance();
       
@@ -182,7 +185,7 @@ public class SalesMgr extends JFrame {
       cal.set(ComboSelectY,(ComboSelectM+1),1);
       int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-
+//      String endDate = stringYear + "-" + stringMonth + "-" ;
       
       for(int j = 1; j<=monthDay; j++) {
          model.addRow(new Object[] {j,"",""});
@@ -194,7 +197,7 @@ public class SalesMgr extends JFrame {
 
       table = new JTable(model);
       table.setDragEnabled(true);
-      table.setRowSelectionAllowed(false);
+      table.setRowSelectionAllowed(true);
       table.setRowHeight(40);
       table.setAlignmentY(5.0f);
       table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -213,7 +216,7 @@ public class SalesMgr extends JFrame {
       getContentPane.add(table);
       scSalesList = new JScrollPane(table);
       scSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
-      scSalesList.setBounds(82, 153, 1099, 392);
+      scSalesList.setBounds(82, 153, 1099, 346);
       scSalesList.setVisible(true);
       getContentPane.setLayout(null);
 
@@ -231,7 +234,7 @@ public class SalesMgr extends JFrame {
       scrollSingle.setPreferredSize(new Dimension(400, 200));
 
       btnBackSalesMain = new JButton("돌아가기");
-      btnBackSalesMain.setBounds(648, 555, 290, 65);
+      btnBackSalesMain.setBounds(679, 520, 290, 65);
       getContentPane.add(btnBackSalesMain);
 
       lblYellowCat = new JLabel("");
@@ -310,29 +313,33 @@ public class SalesMgr extends JFrame {
             String stringMonth = comboM.getSelectedItem().toString();
             int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
 
-
             Calendar cal = Calendar.getInstance();
             cal.set(ComboSelectY,(ComboSelectM-1),1);
             int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-
+            
+            String beanYear = bean.getEndDate().split("-")[0];
+            String beanMonth = bean.getEndDate().split("-")[1];
+            if (stringYear == beanYear && stringMonth == beanMonth) {
             for(int j = 1; j<=monthDay; j++) {
             
-               model.addRow(new Object[] {j, result,c } //돌면서 계산할 수있게
+               model.addRow(new Object[] {j, result,c } //돌면서 계산할 수 있게
                
               );
+            }
            }
          }
        });
       
       }
    //db연결
-   private void monthIncome() {
+   
+//   service 공임비 추출
+   public void monthService() {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = null;
+		String sql= null;
 		
 
 		try {
@@ -351,24 +358,63 @@ public class SalesMgr extends JFrame {
 					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
 					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N' " ;
 
+
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				model.addRow(new Object[] {
-						rs.getString("unitprice")
-				});
+//			
+//			while(rs.next()) {
+//				model.addRow(new Object[] {
+//						rs.getString("unitprice")
+//				});
 				
-			}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		finally {
 		
 		}
+	
 		}
-		   
+//   
+   
+   private YuriSalesMgrBean monthUnit(YuriSalesMgrBean bean) {
+	
 
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= null;
+		
+
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,"root","1234");
+			sql = "SELECT un.unitPrice "
+					+ "FROM maintenance main "
+					+ "JOIN detail dtl "
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum "
+					+ "JOIN unit un "
+					+ "ON un.unitNum = dtl.dtlUnitNum "
+					+ "JOIN service srv "
+					+ "ON srv.srvNum = dtl.dtlSrvNum "
+					+ "JOIN technician tech "
+					+ "ON tech.techNum = srv.srvTechNum "
+					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N' " ;
+
+
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+		
+		}
+		return bean;
+		}
    }
 
             

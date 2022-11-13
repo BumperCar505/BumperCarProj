@@ -1,266 +1,198 @@
 package all;
-
-// db연결...
-import java.awt.Color;
-import java.awt.Cursor;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.ScrollPane;
-import java.awt.TextField;
-import java.awt.event.ActionListener;
-import java.beans.Statement;
-import java.sql.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Vector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import javax.swing.JTextPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.accessibility.Accessible;
+import javax.swing.AbstractAction;
+import javax.swing.ComboBoxEditor;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollBar;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.ComboPopup;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
+import javax.swing.JTable;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.border.LineBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
-
-import java.util.ArrayList;
-import java.util.Vector;
-
-
+import java.awt.Color;
 
 public class RegTech extends JFrame {
-	private DBConnectionMgr pool;
+	
+//	헤더 출력, 디자인 수정
 
 	private JPanel contentPane;
-	private JTextField textField;
-
-	private JTextField techName;
-	private JTextField techTel;
-	private JTextField techLv;
-	private LineBorder LineBorderRegTec1;
-	private LineBorder LineBorderRegTec2;
 	private JTable table;
-	private JTable listTech;
-	private static int n;
-	private int flag = 0;
-	TextField tf = new TextField();
-	private JTextField textField_1;
 	
-	String header[]= {"정비사 이름", "정비사전화번호", "정비사 직급"};
-	DefaultTableModel model = new DefaultTableModel(header,0);
-	
-	int a = 0; 
-	
-//	여기서부터
-	 Connection conn = null;
-
-	 Statement stmt = null;
-	 
-	 PreparedStatement pstmt = null;
-
-	 ResultSet rs = null;
-
+	DefaultTableModel dtm;
+    Vector<String> list;
+    Vector<String> colName;
+    private JTextField techName;
+    private JTextField techLv;
+    private JTextField techTel;
+    
+ 
+	/**
+	 * Launch the application.
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					RegTech frame = new RegTech();
-//					frame.setVisible(true);
-				
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
 	
-	public RegTech() {
-		
-		
-		
-		
-		
-		setVisible(true);
-		pool = DBConnectionMgr.getInstance();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
-		
-		
-		
-		
-		  table = new JTable(model);
-	      table.setDragEnabled(true);
-	      table.setRowSelectionAllowed(false);
-	      table.setRowHeight(40);
-	      table.setAlignmentY(5.0f);
-	      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-	      table.setFont(new Font("나눔바른고딕", Font.PLAIN, 17));
-	      table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-	      table.setAlignmentX(10.0f);
-	      table.getTableHeader().setReorderingAllowed(false);
-	      table.getTableHeader().setResizingAllowed(false); 
-	      JTable tableSalesList = new JTable(model);
-		  contentPane = new JPanel();
-		  contentPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 32 ));
-		  
-
-		  setContentPane(contentPane);
-		
-		  
-		  JPanel jpList = new JPanel();
-	      jpList.setLayout(new GridBagLayout());
-	      JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-	            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-	      scrollSingle.setPreferredSize(new Dimension(400, 200));
-
-		
-		
-
-		
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-//		panel.setForeground(new Color(255, 0, 0));
-		panel.setBounds(220, 189, 535, 565);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(949, 139, 684, 745);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(64, 113, 564, 576);
-		panel_1.add(panel_2);
-		contentPane.setLayout(null);
-
 	
+
+
+	RegTech()
+    {
+		setVisible(true);   
+        setBounds(300, 300, Size.SCREEN_W, Size.SCREEN_H);
+		setLocationRelativeTo(null);
+
+        colName = new Vector<String>();
+        
+        colName.add("정비사 이름");
+        colName.add("정비사 전화번호");
+        colName.add("정비사 직급");
+        
+
+        dtm = new DefaultTableModel(colName ,0){        
+
+            @Override
+            public boolean isCellEditable(int row, int column)  
+            {
+                return false;       
+            }
+        };
+        
+        
+        table = new JTable(dtm);
+        table.getTableHeader().setFont(new Font("NanumBarunGothic", Font.PLAIN, 18));
+        
+        table.getColumnModel().getColumn(0).setMinWidth(240);
+        table.getColumnModel().getColumn(0).setMaxWidth(240);
+        table.getColumnModel().getColumn(2).setMinWidth(200);
+        table.getColumnModel().getColumn(2).setMaxWidth(200);
+        
+        
+        table.getTableHeader().setReorderingAllowed(false);    
+        table.getTableHeader().setResizingAllowed(false); 
+        getContentPane().setLayout(null);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(641, 234, 844, 579);
+        getContentPane().add(scrollPane);        
+        
+     
+                            
+        
+        table.setRowHeight(25);
+		table.setFont(new Font("NanumBarunGothic", Font.PLAIN, 18));
+
+        
+        JLabel lblNewLabel = new JLabel("");
+        lblNewLabel.setIcon(new ImageIcon(SrvReg.class.getResource("/img/YellowCat.png")));
+		lblNewLabel.setBounds(717, 57, 230, 94);
+        getContentPane().add(lblNewLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(218, 37, 266, 62);
-		textField.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		textField.setText("등록된 정비사 목록");
-		panel_1.add(textField);
-		textField.setColumns(10);
+		JLabel lblNewLabel_4 = new JLabel("등록된 정비사 목록");
+		lblNewLabel_4.setBounds(981, 184, 184, 40);
+		getContentPane().add(lblNewLabel_4);
+		lblNewLabel_4.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
-	
+		JButton btnTechNext = new JButton("다음");
+		btnTechNext.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+//		btnTechNext.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//			}
+//		});
+		btnTechNext.setBounds(687, 862, Size.BTN_B_W, Size.BTN_B_H);
+		getContentPane().add(btnTechNext);
 		
 		
-//		정보 입력하는 텍스트 필드 모음
+		JLabel lblNewLabel_1 = new JLabel("정비사이름");
+		lblNewLabel_1.setBounds(141, 259, 140, 55);
+		getContentPane().add(lblNewLabel_1);
+		lblNewLabel_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		
 		techName = new JTextField();
-		techName.setBounds(168, 158, 226, 49);
-		techName.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		panel.add(techName);
-		techName.setColumns(10);
+		techName.setBounds(141, 342, 274, 45);
+		getContentPane().add(techName);
+		techName.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
-		techLv = new JTextField();
-		techLv.setBounds(168, 392, 226, 49);
-		techLv.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		techLv.setColumns(10);
-		panel.add(techLv);
+		JLabel lblNewLabel_2 = new JLabel("정비사 전화번호");
+		lblNewLabel_2.setBounds(141, 424, 356, 55);
+		getContentPane().add(lblNewLabel_2);
+		lblNewLabel_2.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
+		JLabel lblNewLabel_3 = new JLabel("정비사 직급");
+		lblNewLabel_3.setBounds(141, 585, 259, 55);
+		getContentPane().add(lblNewLabel_3);
+		lblNewLabel_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		techTel = new JTextField();
-		techTel.setBounds(168, 281, 226, 43);
 		techTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		techTel.setColumns(10);
-		panel.add(techTel);
-		contentPane.add(panel);
+		techTel.setBounds(141, 507, 274, 45);
+		getContentPane().add(techTel);
 		
-		
-//		라벨 모음
-		
-		
-		JLabel lblNewLabel = new JLabel("정비사이름");
-		lblNewLabel.setBounds(216, 109, 116, 25);
-		lblNewLabel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		panel.add(lblNewLabel);
-		
-		
-		JLabel lblNewLabel_1 = new JLabel("정비사 전화번호");
-		lblNewLabel_1.setBounds(200, 234, 145, 25);
-		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		panel.add(lblNewLabel_1);
-		
-		
-		JLabel lblNewLabel_2 = new JLabel("정비사 직급");
-		lblNewLabel_2.setBounds(216, 354, 116, 25);
-		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		panel.add(lblNewLabel_2);
-		setLocationRelativeTo(null);
-		
-		
-//		우측 표 삽입
-	
-		DefaultTableModel model = new DefaultTableModel(header,0);
-		JTable listTech = new JTable(model);
-		listTech.setFont(new Font("나눔바른고딕", Font.PLAIN, 22));
-		listTech.setRowHeight(40);
-		JScrollPane scrollPane = new JScrollPane(table);
-//
-//		
-		JScrollPane scrollpane = new JScrollPane(table);
-		scrollpane.setAutoscrolls(true);
-//		
-		listTech.setBounds(867, 189, 548, 565);
-		contentPane.add(listTech);
-		JLabel lblRegTec = new JLabel("");
-		lblRegTec.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
-
-		
-//		고양이 이미지 삽입
-		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setBounds(655, 22, 357, 146);
-		lblNewLabel_3.setIcon(new ImageIcon(RegTech.class.getResource("/img/YellowCat.png")));
-		contentPane.add(lblNewLabel_3);
-	
-		
-		
-//		등록 버튼
-		JButton btnTechReg = new JButton("등록");
-		btnTechReg.setBounds(240, 483, 73, 33);
-		btnTechReg.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		panel.add(btnTechReg);
-		
-//		삭제버튼
-		JButton btnTechDel = new JButton("삭제");
-		btnTechDel.setBounds(1206, 151, 83, 35);
-		contentPane.add(btnTechDel);
+		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(new Color(128, 128, 128)));
+		panel.setBounds(44, 234, 562, 579);
+		getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		
+		JButton btnTechReg = new JButton("등록");
+		btnTechReg.setFont(new Font("나눔바른고딕", Font.BOLD, 17));
+		btnTechReg.setBounds(209, 504, Size.BTN_S_W, Size.BTN_S_H);
+		panel.add(btnTechReg);
+		//        srvName.setColumns(10);
 		
-//		다음버튼
-		JButton btnTechNext = new JButton("다음");
-		btnTechNext.setBounds(666, 837, Size.BTN_B_W , Size.BTN_B_H );
-		btnTechNext.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
-		contentPane.add(btnTechNext);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setAutoscrolls(true);
-		scrollBar.setBounds(1415, 189, 17, 565);
-		contentPane.add(scrollBar);
-		
-		JLabel lblNewLabel_4 = new JLabel("입력된 정비사");
-		lblNewLabel_4.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		lblNewLabel_4.setBounds(1054, 154, 140, 25);
-		contentPane.add(lblNewLabel_4);
-	
-		
-		
-	
+		techLv = new JTextField();
+		techLv.setBounds(98, 426, 274, 45);
+		panel.add(techLv);
+		techLv.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 
+		JButton btnTechDel = new JButton("삭제");
+		btnTechDel.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
+		btnTechDel.setBounds(1407, 191, 78, 33);
+		getContentPane().add(btnTechDel);
 		
-	
-
 //		저장 버튼 누르면 옆에 저장되게
 		btnTechReg.addActionListener(new ActionListener() {
 			
@@ -273,7 +205,7 @@ public class RegTech extends JFrame {
 				inputStr[2] = techLv.getText();
 				 
 				
-				model.addRow(inputStr);
+				dtm.addRow(inputStr);
 				
 //				등록하고 난 뒤 다시 칸 비워주기
 				
@@ -284,20 +216,17 @@ public class RegTech extends JFrame {
 			}
 		});
 		
-		
-		
-	
-//		삭제 버튼 작동하기
+		//		삭제 버튼 작동하기
 //		여기서는 삭제 하시겠습니까 알림창 뜨지 않는다.
 		btnTechDel.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(listTech.getSelectedRow() == -1) {
+				if(table.getSelectedRow() == -1) {
 					return;
 				}
 				else {
-					model.removeRow(listTech.getSelectedRow());
+					dtm.removeRow(table.getSelectedRow());
 				}
 			}
 		});
@@ -351,13 +280,14 @@ public class RegTech extends JFrame {
 			public void setTechLv(String techLv) {
 				this.techLv = techLv;
 			}
+
 		}
-
-}
-
-
-
-
+	}
+		
 	
 
-		
+
+
+
+
+	  

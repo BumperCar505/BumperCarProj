@@ -43,7 +43,7 @@ public class TechListEdit extends JFrame {
 	private JButton btnBackMain;
 	
 	private String driver  = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;

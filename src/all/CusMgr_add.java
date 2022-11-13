@@ -1,3 +1,4 @@
+
 package all;
 
 
@@ -121,16 +122,13 @@ public class CusMgr_add {
 		panel.add(cusAddr);
 		
 		cusTel = new JTextField();
+		cusTel.setEnabled(false);
 		cusTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		cusTel.setColumns(10);
 		cusTel.setBounds(304, 561, 365, 54);
 		panel.add(cusTel);
 		
-		cusDate = new JTextField();
-		cusDate.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		cusDate.setColumns(10);
-		cusDate.setBounds(304, 632, 365, 54);
-		panel.add(cusDate);
+
 		
 		JLabel lblCusName = new JLabel("고객이름");
 		lblCusName.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
@@ -172,10 +170,7 @@ public class CusMgr_add {
 		panel.add(lblCusTel);
 		lblCusTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		
-		JLabel lblCusDate = new JLabel("가입날짜");
-		lblCusDate.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		lblCusDate.setBounds(66, 622, 122, 72);
-		panel.add(lblCusDate);
+	
 		
 		JButton btnBackCusMain = new JButton("돌아가기");
 		btnBackCusMain.setBounds(831, 253, 290, 65);

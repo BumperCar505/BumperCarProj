@@ -164,6 +164,8 @@ public class CusMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int row = tableCusList.getSelectedRow();
+				int column = 0;
 				try {
 					int index = tableCusList.getSelectedRow();
 					if(index == -1) {
@@ -172,8 +174,10 @@ public class CusMgr extends JFrame {
 					}
 					int num = DialogManager.createMsgDialog("수정하시겠습니까","\\img\\question6.png", "수정",JOptionPane.YES_NO_OPTION);
 			    	if(num==0){		    		
-			    		setVisible(false); 
-//						new CusMgr_edit();
+			    		int editIndex = (int) tableCusList.getValueAt(row, column);	
+						CusMgr_edit edit = new CusMgr_edit(editIndex);
+						edit.setVisible(true);
+						setVisible(false); 
 			    	}
 			    	else if(num==1) {
 			    		

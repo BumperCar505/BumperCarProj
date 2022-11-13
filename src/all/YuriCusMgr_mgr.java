@@ -141,7 +141,7 @@ public class YuriCusMgr_mgr {
 	
 //	cusMgr 수정
 	
-	public boolean updateCusMgr(YuriCusMgrBean bean, int cusNum){
+	public boolean updateCusMgr(YuriCusMgrBean bean, int index){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
@@ -160,6 +160,7 @@ public class YuriCusMgr_mgr {
 			pstmt.setString(7, bean.getCusTel());
 			pstmt.setString(8, bean.getCusDate());
 			pstmt.setInt(9, bean.getCusKm());
+			pstmt.setInt(10, index);
 			int cnt = pstmt.executeUpdate();
 			if(cnt==1) flag = true; 
 		} catch (Exception e) {
@@ -179,13 +180,14 @@ public class YuriCusMgr_mgr {
 		YuriCusMgrBean bean = new YuriCusMgrBean();
 		try {
 			con = pool.getConnection();
-			sql = "select * from customer where cusNum=?";
+			sql = "select * from customer where cusNum=? " ;
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, cusNum);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				bean.setCusNum(rs.getInt("cusNum"));
 				bean.setCusName(rs.getString("cusName"));
+				bean.setCusComNum(rs.getString("cusComNum"));
 				bean.setCusCarNum(rs.getString("cusCarNum"));
 				bean.setCusCarBrand(rs.getString("cusCarBrand"));
 				bean.setCusCarType(rs.getString("cusCarType"));

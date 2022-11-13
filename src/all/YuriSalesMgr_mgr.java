@@ -17,13 +17,13 @@ public class YuriSalesMgr_mgr {
 	}
 
 	
-	public YuriSalesMgrBean monthService(String cumNum, String endDate, String mainStatus, int techNum ){
+	public YuriSalesMgrBean monthService(YuriSalesMgrBean bean){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
 
-		YuriSalesMgrBean bean = new YuriSalesMgrBean();
+//		YuriSalesMgrBean bean = new YuriSalesMgrBean();
 		try {
 			con = pool.getConnection();
 			sql  = "SELECT un.unitPrice "
@@ -36,15 +36,15 @@ public class YuriSalesMgr_mgr {
 					+ "ON srv.srvNum = dtl.dtlSrvNum "
 					+ "JOIN technician tech "
 					+ "ON tech.techNum = srv.srvTechNum "
-					+ "WHERE main.mainComNum=1112233333 AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
 					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N' " ;
 
 			pstmt = con.prepareStatement(sql);
 			
-			pstmt.setString(1, cumNum);
-			pstmt.setString(2, endDate);
-			pstmt.setString(3, mainStatus);
-			pstmt.setInt(4, techNum);
+			pstmt.setString(1, bean.getCumNum());
+			pstmt.setString(2, bean.getEndDate());
+			pstmt.setString(3, bean.getMainStatus());
+			pstmt.setInt(4, bean.getTechNum());
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				bean.setCumNum(rs.getString("mainComNum"));
@@ -63,13 +63,13 @@ public class YuriSalesMgr_mgr {
 	
 
 // 수입에 들어가는 부품비
-  public YuriSalesMgrBean monthProduct(String cumNum, String endDate, String mainStatus, int techNum ){
+  public YuriSalesMgrBean monthProduct(YuriSalesMgrBean bean ){
 	Connection con = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	String sql = null;
 
-	YuriSalesMgrBean bean = new YuriSalesMgrBean();
+//	YuriSalesMgrBean bean = new YuriSalesMgrBean();
 	try {
 		con = pool.getConnection();
 		sql  = "SELECT un.unitPrice "
@@ -87,17 +87,17 @@ public class YuriSalesMgr_mgr {
 
 		pstmt = con.prepareStatement(sql);
 		
-		pstmt.setString(1, cumNum);
-		pstmt.setString(2, endDate);
-		pstmt.setString(3, mainStatus);
-		pstmt.setInt(4, techNum);
+		pstmt.setString(1, bean.getCumNum());
+		pstmt.setString(2, bean.getEndDate());
+		pstmt.setString(3, bean.getMainStatus());
+		pstmt.setInt(4, bean.getTechNum());
 		rs = pstmt.executeQuery();
 		if(rs.next()){
-			bean.setCumNum(rs.getString("mainComNum"));
-			bean.setEndDate(rs.getString("mainEndDay"));
-			bean.setMainStatus(rs.getString("mainStatus"));
-			bean.setTechNum(rs.getInt("srvTechNum"));
-			bean.setProIncome(rs.getInt("unitprice"));
+			bean.setCumNum(rs.getString("main.mainComNum"));
+			bean.setEndDate(rs.getString("main.mainEndDay"));
+			bean.setMainStatus(rs.getString("main.mainStatus"));
+			bean.setTechNum(rs.getInt("srv.srvTechNum"));
+			bean.setProIncome(rs.getInt("un.unitprice"));
 		}
 	} catch (Exception e) {
 		e.printStackTrace();
@@ -130,7 +130,7 @@ public class YuriSalesMgr_mgr {
 		
 			rs = pstmt.executeQuery();
 			if(rs.next()){
-				bean.setBuyDate(rs.getString("stckBuyDate"));
+				bean.setBuyDate(rs.getString("st.stckBuyDate"));
 
 			}
 		} catch (Exception e) {
