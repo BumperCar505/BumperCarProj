@@ -414,37 +414,13 @@ public class ComSrvList extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		// Num, Service Name, Provide Technician, Service Price
-		Object[] columns = {"번호", "서비스 명", "제공 정비사", "서비스 가격"};
-		Object[][] rowNames = {
-				{"1", "타이어 교체", "김하하, 박나나", "공임비2(100000)"}, // 공임비 = 정비사 공임 + 부품가격
-				{"2", "엔진오일 교체", "김하하, 조마마", "공임비1(50000)"},
-		};
-		
-		// Text Align Center
-		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
-		render.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		tableSrvList = new JTable(rowNames, columns);
+		tableSrvList = new JTable();
 		tableSrvList.setAutoCreateRowSorter(true);
 		tableSrvList.setDefaultEditor(Object.class, null); // 테이블 수정 안되게
 		tableSrvList.getTableHeader().setResizingAllowed(false);
-		tableSrvList.getColumn("번호").setCellRenderer(render);
-		tableSrvList.getColumn("서비스 명").setCellRenderer(render);
-		tableSrvList.getColumn("제공 정비사").setCellRenderer(render);
-		tableSrvList.getColumn("서비스 가격").setCellRenderer(render);
 		
 		// Column Not Move
 		tableSrvList.getTableHeader().setReorderingAllowed(false);
-		
-		// Column Change Width
-		tableSrvList.getColumn("서비스 명").setPreferredWidth(200);
-		tableSrvList.getColumn("제공 정비사").setPreferredWidth(350);
-		
-		// Row Change Height 
-		tableSrvList.setRowHeight(50);
-		
-		setTableHeader(tableSrvList);
 		
 		// Table Set Area
 		scSrvList = new JScrollPane(tableSrvList);
