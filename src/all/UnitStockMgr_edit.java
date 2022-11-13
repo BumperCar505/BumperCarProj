@@ -41,7 +41,7 @@ public class UnitStockMgr_edit extends JFrame {
 	int stckNum1 = 0;
 	
 	/**
-	 * Launch the application.
+	 * Launch the application..
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

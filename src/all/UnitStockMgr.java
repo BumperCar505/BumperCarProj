@@ -44,7 +44,7 @@ public class UnitStockMgr extends JFrame {
 	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 
-	// Launch the application.
+	// Launch the application..
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -101,14 +101,14 @@ public class UnitStockMgr extends JFrame {
 		table.setRowHeight(40);
 
 		
-		JButton btnAddUnitStock = new JButton("부품 입고");
+		JButton btnAddUnitStock = new JButton("품목 추가");
 		btnAddUnitStock.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnAddUnitStock.setBounds(239, 174, Size.BTN_S_W, Size.BTN_S_H);
 		contentPane.add(btnAddUnitStock);
 		
-		btnDelUnitStock = new JButton("부품 삭제");
+		btnDelUnitStock = new JButton("품목 삭제");
 		btnDelUnitStock.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		btnDelUnitStock.setBounds(401, 174, 150, 50);
+		btnDelUnitStock.setBounds(563, 174, 150, 50);
 		contentPane.add(btnDelUnitStock);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -128,6 +128,11 @@ public class UnitStockMgr extends JFrame {
 		btnUnitBuyHistory.setBounds(1275, 174, 150, 50);
 		contentPane.add(btnUnitBuyHistory);
 		
+		JButton btnAddUnitStockHistory = new JButton("입고 등록");
+		btnAddUnitStockHistory.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
+		btnAddUnitStockHistory.setBounds(401, 174, 150, 50);
+		contentPane.add(btnAddUnitStockHistory);
+		
 		
 		// 구매 이력 버튼 누르면 실행 됨 -> 새 폼 띄우기
 		btnUnitBuyHistory.addActionListener(new ActionListener() {
@@ -136,16 +141,23 @@ public class UnitStockMgr extends JFrame {
 				int row = table.getSelectedRow();
 				int column1 = 0;
 				int column2 = 1;
-				int stckNum = (int) table.getValueAt(row, column1);
-				String unitNum = (String) table.getValueAt(row, column2);
 				
-				UnitBuyHistory history = new UnitBuyHistory(stckNum, unitNum);
-				
-				
-				history.setVisible(true);
-
+				if(row == -1) {
+					JOptionPane.showConfirmDialog(null, "셀을 선택하지 않으셨습니다.", "구매 이력", JOptionPane.DEFAULT_OPTION);
+				}
+				else {
+					int stckNum = (int) table.getValueAt(row, column1);
+					String unitNum = (String) table.getValueAt(row, column2);
+					UnitBuyHistory history = new UnitBuyHistory(stckNum, unitNum);
+					
+					
+					history.setVisible(true);
+					
+					
+				}
 			}
 		});
+		
 
 		// 삭제 버튼 누르면 실행됨
 				btnDelUnitStock.addActionListener(new ActionListener() {
@@ -186,17 +198,37 @@ public class UnitStockMgr extends JFrame {
 					});
 				
 				
-				// 입고버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
+				// 품목 등록 버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
 				btnAddUnitStock.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// 메인화면은 visible true, 현재화면은 false
-						UnitStockMgr_add history = new UnitStockMgr_add();
+						UnitStockMgr_addUnit history = new UnitStockMgr_addUnit();
 						
 						
 						history.setVisible(true);
+						
+						// 현재 메인창 닫기(업데이트를 위해)
+						dispose();
 
 					}
 				});
+				
+				
+				// 입고 추가 버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
+				btnAddUnitStockHistory.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// 메인화면은 visible true, 현재화면은 false
+						UnitStockMgr_addHistory history = new UnitStockMgr_addHistory();
+						
+						
+						history.setVisible(true);
+						
+						// 현재 메인창 닫기(업데이트를 위해)
+						dispose();
+
+					}
+				});
+				
 		
 		// 돌아가기 버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
 		btnBackUnitStockMain.addActionListener(new ActionListener() {
@@ -232,7 +264,8 @@ public class UnitStockMgr extends JFrame {
 							+ "inner join unit "
 							+ "on stock.stckUnitNum = unit.unitNum "
 							+ "WHERE stock.stckComNum = ? "
-							+ "group by stock.stckUnitNum ";
+							+ "group by stock.stckUnitNum "
+							+ "ORDER BY stock.stckUnitNum ";
 
 					pstmt = con.prepareStatement(sql);
 //	★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
@@ -253,10 +286,6 @@ public class UnitStockMgr extends JFrame {
 					
 					
 				}
-				
-				
-				
-				
 			}
 	
 	

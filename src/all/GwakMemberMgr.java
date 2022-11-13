@@ -4,6 +4,10 @@ package all;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class GwakMemberMgr {
@@ -11,7 +15,7 @@ public class GwakMemberMgr {
 	private DBConnectionMgr pool;
 	
 	public GwakMemberMgr() {
-		//DBConnection 객체 10개 미리 생성
+		//DBConnection 객체 10개 미리 생성.
 		pool = DBConnectionMgr.getInstance();
 	}
 
@@ -121,6 +125,35 @@ public class GwakMemberMgr {
 			return bean;
 		}
 		
+		
+		
+		// 콤보박스 값에 따라 텍스트필드 업데이트( UnitStockMgr_addUnit)
+	      public GwakMemberBean Select5(String item){
+	         Connection con = null;
+	         PreparedStatement pstmt = null;
+	         ResultSet rs = null;
+	         String sql = null;
+	         GwakMemberBean bean = new GwakMemberBean();
+	         try {
+	            con = pool.getConnection();
+	            sql = "select * from unit where unitName= ?";
+	                  
+	            pstmt = con.prepareStatement(sql);
+	            pstmt.setString(1, item);
+	            rs = pstmt.executeQuery();
+	            
+	            if(rs.next()){
+	               bean.setUnitPrice(rs.getInt("unitPrice"));
+	               bean.setUnitVendor(rs.getString("unitVendor"));
+	               
+	            }
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         } finally {
+	            pool.freeConnection(con, pstmt, rs);
+	         }
+	         return bean;
+	      }
 	
 	
 	
@@ -233,6 +266,65 @@ public class GwakMemberMgr {
 		return bean;
 	}
 	
+	
+	// 품목 추가 기능 - UnitStockMgr_addUnit
+		public GwakMemberBean addUnit(GwakMemberBean bean){
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			String sql = null;
+			
+			try {
+				con = pool.getConnection();
+				sql = "INSERT INTO stock (stckComNum, stckUnitNum, stckQty1, stckQty2, stckBuyDate) "
+						+ "SELECT ?, unit.unitNum, 0, 0, ? "
+						+ "FROM unit WHERE unit.unitName = ? ";
+				pstmt = con.prepareStatement(sql);
+
+				pstmt.setString(1, bean.getStckComNum());
+				pstmt.setString(2, bean.getStckBuyDate()); 
+				pstmt.setString(3, bean.getUnitName()); 
+				pstmt.executeUpdate();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt);
+			}
+			return bean;
+		}
+		
+		// 구매 이력 추가기능 -  UnitStockMgr_addHistory
+				public GwakMemberBean addHistoty(GwakMemberBean bean){
+					Connection con = null;
+					PreparedStatement pstmt = null;
+					String sql = null;
+					
+					try {
+						con = pool.getConnection();
+						sql = "INSERT INTO stock (stckNum, stckComNum, stckUnitNum, stckQty1, stckQty2, stckBuyDate) "
+								+ "SELECT NULL, ?, unit.unitNum, ?, ?, ? "
+								+ "FROM unit WHERE unit.unitName = ? ";
+						pstmt = con.prepareStatement(sql);
+
+						// 변경예정!
+						// pstmt.setString(1, bean.getStckComNum());
+						pstmt.setString(1, "1112233333");
+						pstmt.setInt(2, bean.getStckQty1());
+						pstmt.setInt(3, bean.getStckQty2());
+						pstmt.setString(4, bean.getStckBuyDate()); 
+						pstmt.setString(5, bean.getUnitName()); 
+						pstmt.executeUpdate();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+						pool.freeConnection(con, pstmt);
+					}
+					return bean;
+				}
+		
+		
+	
 	// DELETE FROM 테이블이름 WHERE 필드이름=데이터값
 	// DELETE FROM technician WHERE techNum=?
 	// 삭제 기능
@@ -278,6 +370,37 @@ public class GwakMemberMgr {
 		}
 		return bean;
 	}
+	
+	
+	// 품목 등록 - 콤보박스에 리스트 추가
+	public List<String> getEmpFirstName() {
+        List<String> list = new ArrayList();
+        Connection conn = null;
+
+        try {
+        	conn = pool.getConnection();
+            Statement stmt = conn.createStatement();
+            String query = "SELECT DISTINCT unitName "
+                            + "FROM unit "
+                            + "ORDER BY unitName ";
+            ResultSet results = stmt.executeQuery(query);
+
+            while (results.next()) {
+                list.add(results.getString("unitName"));
+            }
+        } catch (Exception e) {
+            System.out.println("Exception = " + e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }                    
+            }
+        }
+        return list;
+    }
 }
 
 

@@ -157,6 +157,8 @@ public class TechListEdit extends JFrame {
 				
 				TechListEdit_add add = new TechListEdit_add();
 				add.setVisible(true);
+				
+				dispose();
 			}
 		});
 		

@@ -3,7 +3,7 @@ package all;
 
 public class GwakMemberBean {
 
-	// technician 테이블 
+	// technician 테이블 .
 	private int techNum;
 	private String techName;
 	private String techTel;

@@ -30,7 +30,7 @@ public class UnitBuyHistory extends JFrame {
 	private String header[] = {"stckNum", "구입날짜","부품번호","부품명","벤더", "구입수량"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 	/**
-	 * Launch the application.
+	 * Launch the application..
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
