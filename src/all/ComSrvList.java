@@ -173,6 +173,60 @@ public class ComSrvList extends JFrame implements ActionListener {
 		return list;
 	}
 	
+	private boolean setDbDetailNumber(List<Integer> detailsrvNumbers) {
+		String query = "UPDATE detail SET deleted_yn = 'Y' "
+				+ "WHERE dtlSrvNum IN ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendLastValueQuery(detailsrvNumbers.size());
+		
+		for(int i = 0; i < detailsrvNumbers.size(); ++i) {
+			communicator.addParams(detailsrvNumbers.get(i));
+		}
+		
+		int result = communicator.executeUpdate();
+		
+		if(result != -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean setDbServiceNumber(List<Integer> srvNumbers) {
+		String query = "UPDATE service SET deleted_yn = 'Y'"
+				+ "WHERE srvNum IN ";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		communicator.appendLastValueQuery(srvNumbers.size());
+		
+		for(int i = 0; i < srvNumbers.size(); ++i) {
+			communicator.addParams(srvNumbers.get(i));
+		}
+		
+		int result = communicator.executeUpdate();
+		
+		if(result != -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean deleteService(String comId, String... srvNames) {
+		boolean result = false;
+		
+		for(int i = 0; i < srvNames.length; ++i) {
+			List<Integer> srvNumbers = getDbServiceNumber(comId, srvNames[i]);
+			result = setDbDetailNumber(srvNumbers);
+			result = setDbServiceNumber(srvNumbers);
+		}
+		
+		return result;
+	}
+	
 	private List<Vector<String>> reassembleData(List<ComSrvBeans> beans) {
 		List<Vector<String>> tableRows = new ArrayList<Vector<String>>();
 		HashMap<String, String> provideTechList = new HashMap<String, String>();
@@ -253,6 +307,28 @@ public class ComSrvList extends JFrame implements ActionListener {
 		}
 	}
 	
+	private int[] getSelectedNumbers(JTable table) {
+		int[] selectedRows = table.getSelectedRows();
+		int[] selectedNumbers = new int[selectedRows.length];
+		
+		for(int i = 0; i < selectedRows.length; ++i) {
+			selectedNumbers[i] = Integer.parseInt(table.getValueAt(selectedRows[i], 0).toString());
+		}
+		
+		return selectedNumbers;
+	}
+	
+	private String[] getSelectedSrvNames(JTable table) {
+		int[] selectedRows = table.getSelectedRows();
+		String[] selectedsrvNames = new String[selectedRows.length];
+		
+		for(int i = 0; i < selectedRows.length; ++i) {
+			selectedsrvNames[i] = table.getValueAt(selectedRows[i], 1).toString();
+		}
+		
+		return selectedsrvNames;
+	}
+	
 	public void requestRefreshAllDatas(ComSrvList comSrvList) {
 		if(comSrvList.equals(this)) {
 			refreshAllDatas();
@@ -291,9 +367,9 @@ public class ComSrvList extends JFrame implements ActionListener {
 			
 			new ComSrvListSub1(this, selectedSrvName, selectedSrvPrice, techList).setFont();
 		} else if(obj == btnDelSrv) { // 기존 서비스 삭제
-			int selectedRow = tableSrvList.getSelectedRow();
+			int[] selectedRows = getSelectedNumbers(tableSrvList);
 			
-			if(selectedRow == -1) {
+			if(selectedRows.length == 0) {
 				DialogManager.createMsgDialog("선택된 셀이 없습니다.", "\\img\\information5.png",
 						"에러", JOptionPane.PLAIN_MESSAGE);
 				return;
@@ -302,8 +378,14 @@ public class ComSrvList extends JFrame implements ActionListener {
 			int result = DialogManager.createMsgDialog("정말로 삭제 할까요?", "\\img\\question6.png",
 					"알림", JOptionPane.YES_NO_OPTION);
 			if(result == 0) {
-				DialogManager.createMsgDialog("삭제 되었습니다.", "\\img\\success1.png",
-						"알림", JOptionPane.PLAIN_MESSAGE);
+				if(deleteService(loginManager.getLogComNum(), getSelectedSrvNames(tableSrvList))) {
+					refreshAllDatas();
+					DialogManager.createMsgDialog("삭제 되었습니다.", "\\img\\success1.png",
+							"알림", JOptionPane.PLAIN_MESSAGE);
+				} else {
+					DialogManager.createMsgDialog("삭제가 실패했습니다.", "\\img\\information5.png",
+							"에러", JOptionPane.PLAIN_MESSAGE);
+				}
 			} else {
 				DialogManager.createMsgDialog("삭제가 취소되었습니다.", "\\img\\information5.png",
 						"알림", JOptionPane.PLAIN_MESSAGE);
