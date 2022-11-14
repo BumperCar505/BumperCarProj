@@ -43,13 +43,13 @@ public class TechListEdit extends JFrame {
 	private JButton btnBackMain;
 	
 	private String driver  = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 	private String header[] = {"techNum","정비사 이름","전화번호","직급"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
-	
+	private TechListEdit me;
 
 
 	
@@ -155,10 +155,10 @@ public class TechListEdit extends JFrame {
 		btnAddTech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				TechListEdit_add add = new TechListEdit_add();
+				TechListEdit_add add = new TechListEdit_add(me);
 				add.setVisible(true);
 				
-				dispose();
+				//dispose();
 			}
 		});
 		
@@ -238,7 +238,7 @@ public class TechListEdit extends JFrame {
 		});
 		
 		
-
+		me = this;
 	}
 		// select2 : DB에서 데이터 불러와서 테이블 채우기
 		private void Select2(){
@@ -262,6 +262,12 @@ public class TechListEdit extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
+			}
+		}
+		
+		public void requestSelect2(TechListEdit techListEdit) {
+			if(techListEdit.equals(this)) {
+				Select2();
 			}
 		}
 }

@@ -21,6 +21,7 @@ public class TechListEdit_add extends JFrame {
 	private JTextField techLv;
 	private JButton btnTechReg;
 	private JLabel lblNewLabel;
+	private TechListEdit parent;
 
 	/**
 	 * Launch the application.
@@ -107,13 +108,16 @@ public class TechListEdit_add extends JFrame {
 
 				
 				mgr.add(bean);
-				
-				TechListEdit a1 = new TechListEdit();
-				a1.setVisible(true);
+				parent.requestSelect2(parent);
 				
 				dispose();//--
 			}
 		});
+	}
+	
+	public TechListEdit_add(TechListEdit parent) {
+		this();
+		this.parent = parent;
 	}
 
 }
