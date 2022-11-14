@@ -59,57 +59,13 @@ public class DayDetail extends JLabel {
 
 		addMouseListener((MouseListener) new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				BookDetail detail = new BookDetail();
-				move(mainNum);
-				detail.setVisible(true);
+				BookDetail bookDetail = new BookDetail(); 
+				bookDetail.setVisible(true);		
+				bookDetail.getDetail(mainNum);
+		
 			}
 		});
 		
-		setPreferredSize(new Dimension(400, 21));
-	}
-
-	
-	// 상세 일정 보기
-	public void move(int mainNum) {
-		Connection conn = dbManager.getConn();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-
-		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusCarBrand, customer.cusCarType, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
-				+ "FROM maintenance "
-				+ "JOIN customer "
-				+ "ON customer.cusNum = maintenance.mainCusNum "
-				+ "JOIN service "
-				+ "ON service.srvNum = maintenance.mainSrvNum "
-				+ "WHERE maintenance.mainNum = ? ";
-		
-
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, get_maintenance_num);
-
-			rs = pstmt.executeQuery();
-			rs.next();
-			String cusName = rs.getString("cusName");
-			String cusCarNum = rs.getString("cusCarNum");
-			String cusCarBrand = rs.getString("cusCarBrand");
-			String cusCarType = rs.getString("cusCarType");
-			String cusTel = rs.getString("cusTel");
-			String srvName = rs.getString("srvName");
-			String mainStartDay = rs.getString("mainStartDay");
-			String mainStartTime = rs.getString("mainStartTime");
-			String mainEndDay = rs.getString("mainEndDay");
-			String mainEndTime = rs.getString("mainEndTime");
-			
-//			detail.setSchedule(mainNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusTel, srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbManager.closeDB(pstmt, rs);
-			dbManager.closeDB();
-		}
-
+		setPreferredSize(new Dimension(400, 30));
 	}
 }

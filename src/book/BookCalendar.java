@@ -143,7 +143,7 @@ public class BookCalendar extends JFrame {
 		JButton btnBackCusMain = new JButton("돌아가기");
 		btnBackCusMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				frame.setVisible(false);
+				setVisible(false);
 				new ComMyPage();
 			}
 		});

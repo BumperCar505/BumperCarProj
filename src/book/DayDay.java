@@ -83,6 +83,8 @@ public class DayDay extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				BookDetail detail = new BookDetail();
 				detail.setVisible(true);
+				detail.srvList();
+				detail.btnBook.setText("등록");
 			}
 		});
 	}
@@ -101,7 +103,8 @@ public class DayDay extends JFrame {
 				+ "ON service.srvNum = maintenance.mainSrvNum "
 				+ "JOIN technician "
 				+ "ON technician.techNum = mainTechNum "
-				+ "WHERE mainStartDay = ? ";
+				+ "WHERE mainStartDay = ? "
+				+ "ORDER BY mainStartTime ASC ";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
