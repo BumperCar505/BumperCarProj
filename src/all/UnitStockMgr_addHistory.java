@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.MaskFormatter;
@@ -40,6 +41,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
+
+import java.awt.Color;
 import java.awt.Cursor;
 
 public class UnitStockMgr_addHistory extends JFrame {
@@ -55,7 +58,7 @@ public class UnitStockMgr_addHistory extends JFrame {
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 	private static final DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
-	private JFormattedTextField unitBuyDate_1;
+
 
 	/**
 	 * Launch the application...
@@ -106,18 +109,22 @@ public class UnitStockMgr_addHistory extends JFrame {
 		unitQty1.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		unitQty1.setColumns(10);
 		unitQty1.setBounds(93, 351, 390, 39);
+		unitQty1.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(unitQty1);
 		
-		unitBuyDate = new JFormattedTextField();
 		
-		
-		MaskFormatter ssnFormatter  = null; 
-		JFormattedTextField unitBuyDate  = null; 
 		try  {
-		    ssnFormatter = new MaskFormatter("####-##-##");
-		    unitBuyDate_1 = new JFormattedTextField(ssnFormatter);
-		    unitBuyDate_1.setToolTipText("YYYY-MM-DD 형식으로 입력하세요.");
-		    unitBuyDate_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+			unitBuyDate = new JFormattedTextField();
+			MaskFormatter ssnFormatter = new MaskFormatter("####-##-##");
+			//JFormattedTextField unitBuyDate  = null; 
+		    //ssnFormatter = new MaskFormatter("####-##-##");
+		    unitBuyDate = new JFormattedTextField(ssnFormatter);
+		    unitBuyDate.setToolTipText("YYYY-MM-DD 형식으로 입력하세요.");
+		    unitBuyDate.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+			unitBuyDate.setColumns(10);
+			unitBuyDate.setBounds(93, 456, 390, 39);
+			unitBuyDate.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+			contentPane.add(unitBuyDate);
 		}
 		catch (ParseException e)  {
 		    e.printStackTrace();
@@ -125,13 +132,14 @@ public class UnitStockMgr_addHistory extends JFrame {
 		
 		
 		
-		unitBuyDate_1.setColumns(10);
-		unitBuyDate_1.setBounds(93, 456, 390, 39);
-		contentPane.add(unitBuyDate_1);
+
 		
 		btnUnitReg = new JButton("등록");
-		btnUnitReg.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+		btnUnitReg.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnUnitReg.setBounds(143, 619, Size.BTN_B_W, Size.BTN_B_H);
+		btnUnitReg.setBackground(new Color(244, 204, 204));
+		btnUnitReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+	            Color.red, Color.red));
 		contentPane.add(btnUnitReg);
 		
 		lblNewLabel = new JLabel("");
@@ -144,15 +152,10 @@ public class UnitStockMgr_addHistory extends JFrame {
 		unitNameCmb.setMaximumRowCount(10);
 		unitNameCmb.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		unitNameCmb.setBounds(93, 238, 390, 39);
+		unitNameCmb.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(unitNameCmb);
 			    
-		
-//		try {
-//            MaskFormatter dateMask = new MaskFormatter("####-##-##");
-//            dateMask.install(formatDate);
-//        } catch (ParseException ex) {
-//           
-//        }
+
 		
 		
 		

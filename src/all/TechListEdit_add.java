@@ -1,8 +1,10 @@
 package all;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -85,6 +87,8 @@ public class TechListEdit_add extends JFrame {
 		btnTechReg = new JButton("등록");
 		btnTechReg.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		btnTechReg.setBounds(165, 388, Size.BTN_B_W, Size.BTN_B_H);
+		btnTechReg.setBackground(new Color(244, 204, 204));
+		btnTechReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnTechReg);
 		
 		lblNewLabel = new JLabel("");

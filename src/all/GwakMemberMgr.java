@@ -2,6 +2,7 @@ package all;
 
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +10,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 
 public class GwakMemberMgr {
 	
@@ -50,6 +54,67 @@ public class GwakMemberMgr {
 	}
 	
 	
+	// select22 : DB에서 데이터 불러와서 테이블 채우기 ( TechListEdit)
+	public GwakMemberBean Select22(DefaultTableModel model){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		GwakMemberBean bean = new GwakMemberBean();
+
+				try {		
+					con = pool.getConnection();
+					sql = "select * from technician ";
+					pstmt = con.prepareStatement(sql);
+					rs = pstmt.executeQuery();
+						while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
+		                 model.addRow(new Object[]{rs.getInt("techNum"), rs.getString("techName"), rs.getString("techTel"),rs.getString("techLv")});
+		                }
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+				}
+				return bean;
+			}
+	
+	
+	
+	//  UnitStockMgr : DB에서 데이터 불러와서 테이블 채우기
+	public GwakMemberBean SelectUnitMgrTable(DefaultTableModel model, String id){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		GwakMemberBean bean = new GwakMemberBean();
+
+		try {
+			con = pool.getConnection();
+			// 재고는 stckQty2 (정비완료시 재고 빠진것 업데이트 된 열)
+			sql = "SELECT stock.stckNum, stock.stckUnitNum, unit.unitName, unit.unitVendor, sum(stock.stckQty2) "
+					+ "FROM stock " 
+					+ "inner join unit "
+					+ "on stock.stckUnitNum = unit.unitNum "
+					+ "WHERE stock.stckComNum = ? "
+					+ "group by stock.stckUnitNum "
+					+ "ORDER BY stock.stckUnitNum ";
+					pstmt = con.prepareStatement(sql);
+					pstmt.setString(1, id);
+	
+					rs = pstmt.executeQuery();
+					while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
+						model.addRow(new Object[]{rs.getInt("stock.stckNum"), rs.getString("stock.stckUnitNum"), rs.getString("unit.unitName"), rs.getString("unit.unitVendor"),rs.getInt("sum(stock.stckQty2)")});
+					}
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+					}
+					return bean;
+
+				}
+	
+	
+	
 	// UnitStockMgr 테이블 값 받아오기
 	public GwakMemberBean select2(String editIndex){
 		Connection con = null;
@@ -86,6 +151,37 @@ public class GwakMemberMgr {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return bean;
+	}
+	
+	public GwakMemberBean ComboUnit(JComboBox<String> unitNameCmb) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		GwakMemberBean bean = new GwakMemberBean();
+	try {
+		
+		sql="SELECT distinct unit.unitName from unit "
+				+ "inner join stock "
+				+ "on stock.stckUnitNum = unit.unitNum "
+				+ "WHERE stock.stckComNum = ? ";
+		
+		pstmt = con.prepareStatement(sql);
+//		★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
+		pstmt.setString(1, "1112233333"); // 테스트용
+		rs = pstmt.executeQuery();
+		
+		while(rs.next()){
+		String unitName = rs.getString("unitName");
+		unitNameCmb.addItem(unitName);
+		}
+		
+		}catch(SQLException e) {
+			
+		}finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+	return bean;
 	}
 	
 	

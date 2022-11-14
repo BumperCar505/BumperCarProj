@@ -1,5 +1,6 @@
 package all;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -9,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JList;
@@ -35,12 +37,7 @@ public class UnitStockMgr extends JFrame {
 	private JTable table;
 	private JButton btnDelUnitStock;
 	private JButton btnBackUnitStockMain;
-	
-	private String driver  = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
-	private Connection con = null;
-	private PreparedStatement pstmt = null;
-	private ResultSet rs = null;
+	private LoginManager loginManager;
 	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 
@@ -50,25 +47,29 @@ public class UnitStockMgr extends JFrame {
 			public void run() {
 				try {
 					UnitStockMgr frame = new UnitStockMgr();
-					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		
-		
 	}
 
 
 	// Create the frame.
 	public UnitStockMgr() {
+		loginManager.getInstance();
+		String id = loginManager.getLogComNum();
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
 		contentPane.setEnabled(false);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		Select3();
+		
+		// GwakMemberMgr에서 호출 -> 테이블 값 채워넣기
+		GwakMemberMgr mgr = new GwakMemberMgr();
+		GwakMemberBean bean = mgr.SelectUnitMgrTable(model, id);
 
 		// 폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null); //--
@@ -92,6 +93,7 @@ public class UnitStockMgr extends JFrame {
 		
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table); //
+		scrollPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		
 		scrollPane.setBounds(239, 236, 1186, 533);
 		scrollPane.setAutoscrolls(true);
@@ -100,15 +102,20 @@ public class UnitStockMgr extends JFrame {
 //		테이블 행 높이 조절
 		table.setRowHeight(40);
 
-		
+		// 품목 추가 버튼
 		JButton btnAddUnitStock = new JButton("품목 추가");
 		btnAddUnitStock.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnAddUnitStock.setBounds(239, 174, Size.BTN_S_W, Size.BTN_S_H);
+		btnAddUnitStock.setBackground(new Color(244, 204, 204));
+		btnAddUnitStock.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnAddUnitStock);
 		
+		// 품목 삭제 버튼
 		btnDelUnitStock = new JButton("품목 삭제");
 		btnDelUnitStock.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnDelUnitStock.setBounds(563, 174, 150, 50);
+		btnDelUnitStock.setBackground(new Color(244, 204, 204));
+		btnDelUnitStock.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnDelUnitStock);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -118,19 +125,26 @@ public class UnitStockMgr extends JFrame {
 		
 		// 돌아가기 버튼
 		btnBackUnitStockMain = new JButton("돌아가기");
-		btnBackUnitStockMain.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+		btnBackUnitStockMain.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnBackUnitStockMain.setBounds(687, 824, Size.BTN_B_W, Size.BTN_B_H);
+		btnBackUnitStockMain.setBackground(new Color(244, 204, 204));
+		btnBackUnitStockMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnBackUnitStockMain);
 		
 		// 구매 이력 버튼
 		JButton btnUnitBuyHistory = new JButton("구매 이력");
 		btnUnitBuyHistory.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnUnitBuyHistory.setBounds(1275, 174, 150, 50);
+		btnUnitBuyHistory.setBackground(new Color(244, 204, 204));
+		btnUnitBuyHistory.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnUnitBuyHistory);
 		
+		// 입고 등록 버튼
 		JButton btnAddUnitStockHistory = new JButton("입고 등록");
 		btnAddUnitStockHistory.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnAddUnitStockHistory.setBounds(401, 174, 150, 50);
+		btnAddUnitStockHistory.setBackground(new Color(244, 204, 204));
+		btnAddUnitStockHistory.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnAddUnitStockHistory);
 		
 		
@@ -152,8 +166,6 @@ public class UnitStockMgr extends JFrame {
 					
 					
 					history.setVisible(true);
-					
-					
 				}
 			}
 		});
@@ -237,55 +249,9 @@ public class UnitStockMgr extends JFrame {
 
 			}
 		});
-		
-		
-		
+
 		
 	}
-
-
-	//  : DB에서 데이터 불러와서 테이블 채우기
-			private void Select3(){
-					
-				Connection con = null;
-				PreparedStatement pstmt = null;
-				ResultSet rs = null;
-				String sql = null;
-				GwakMemberBean bean = new GwakMemberBean();
-
-				try {
-					Class.forName(driver);
-					con = DriverManager.getConnection(url, "root", "1234");
-					
-					// UnitStockMgr 메인화면 테이블 값 쿼리문
-					// 재고는 stckQty2 (정비완료시 재고 빠진것 업데이트 된 열)
-					sql = "SELECT stock.stckNum, stock.stckUnitNum, unit.unitName, unit.unitVendor, sum(stock.stckQty2) "
-							+ "FROM stock " 
-							+ "inner join unit "
-							+ "on stock.stckUnitNum = unit.unitNum "
-							+ "WHERE stock.stckComNum = ? "
-							+ "group by stock.stckUnitNum "
-							+ "ORDER BY stock.stckUnitNum ";
-
-					pstmt = con.prepareStatement(sql);
-//	★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
-					pstmt.setString(1, "1112233333"); // 테스트용
-			
-					rs = pstmt.executeQuery();
-						while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
-		                 model.addRow(new Object[]{rs.getInt("stock.stckNum"), rs.getString("stock.stckUnitNum"), rs.getString("unit.unitName"), rs.getString("unit.unitVendor"),rs.getInt("sum(stock.stckQty2)")});
-		                }
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-					} finally {
-				}
-				
-				
-				
-					
-					
-				}
 			}
 	
 	

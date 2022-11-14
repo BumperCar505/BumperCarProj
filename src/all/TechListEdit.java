@@ -1,5 +1,6 @@
 package all;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -9,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JList;
@@ -42,11 +44,7 @@ public class TechListEdit extends JFrame {
 	private JButton btnDelTech;
 	private JButton btnBackMain;
 	
-	private String driver  = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
-	private Connection con = null;
-	private PreparedStatement pstmt = null;
-	private ResultSet rs = null;
+
 	private String header[] = {"techNum","정비사 이름","전화번호","직급"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 	
@@ -60,7 +58,7 @@ public class TechListEdit extends JFrame {
 			public void run() {
 				try {
 					TechListEdit frame = new TechListEdit();
-					frame.setVisible(true);
+					
 					//frame.reload();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -80,15 +78,17 @@ public class TechListEdit extends JFrame {
 	}
 	
 	
-	
-	
 	public TechListEdit() {
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
 		contentPane.setEnabled(true);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		Select2();
+		
+		GwakMemberMgr mgr = new GwakMemberMgr();
+		GwakMemberBean bean =  mgr.Select22(model);
+		
 
 //		폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null); //--
@@ -96,10 +96,6 @@ public class TechListEdit extends JFrame {
 		
 		
 //		테이블 생성
-		
-		//db데이터 select, update 하는 클래스
-//		MemberMgr mgr = new MemberMgr(); 
-
 		table = new JTable(model);
 		
 
@@ -114,27 +110,35 @@ public class TechListEdit extends JFrame {
 		table.setBounds(247, 231, 1170, 671);
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		//--
 		scrollPane.setBounds(239, 236, 1186, 533);
 		scrollPane.setAutoscrolls(true);
 		contentPane.add (scrollPane) ; 
 //		테이블 행 높이 조절
 		table.setRowHeight(40);
+		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 
 		
 		JButton btnAddTech = new JButton("추가");
 		btnAddTech.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnAddTech.setBounds(239, 174, Size.BTN_S_W, Size.BTN_S_H);
+		btnAddTech.setBackground(new Color(244, 204, 204));
+		btnAddTech.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnAddTech);
 		
 		btnEditTech = new JButton("수정");
 		btnEditTech.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnEditTech.setBounds(401, 174, 150, 50);
+		btnEditTech.setBackground(new Color(244, 204, 204));
+		btnEditTech.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnEditTech);
 		
 		btnDelTech = new JButton("삭제");
 		btnDelTech.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnDelTech.setBounds(563, 174, 150, 50);
+		btnDelTech.setBackground(new Color(244, 204, 204));
+		btnDelTech.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnDelTech);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -146,6 +150,8 @@ public class TechListEdit extends JFrame {
 		btnBackMain = new JButton("돌아가기");
 		btnBackMain.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		btnBackMain.setBounds(687, 824, Size.BTN_B_W, Size.BTN_B_H);
+		btnBackMain.setBackground(new Color(244, 204, 204));
+		btnBackMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnBackMain);
 		
 		
@@ -226,8 +232,7 @@ public class TechListEdit extends JFrame {
 		       }
 			}
 		});
-		
-		
+
 		
 		// 돌아가기 버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
 		btnBackMain.addActionListener(new ActionListener() {
@@ -237,33 +242,8 @@ public class TechListEdit extends JFrame {
 			}
 		});
 		
-		
 
 	}
-		// select2 : DB에서 데이터 불러와서 테이블 채우기
-		private void Select2(){
-				
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			String sql = null;
-//			MemberBean bean = new MemberBean();
-			try {
-				Class.forName(driver);
-				con = DriverManager.getConnection(url, "root", "1234");
-				sql = "select * from technician ";
-				pstmt = con.prepareStatement(sql);
-				rs = pstmt.executeQuery();
-
-					while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
-	                 model.addRow(new Object[]{rs.getInt("techNum"), rs.getString("techName"), rs.getString("techTel"),rs.getString("techLv")});
-	                }
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-			}
-		}
 }
 
 
