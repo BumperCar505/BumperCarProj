@@ -238,7 +238,6 @@ public class RegTech extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 
-//				        데이터 techData에 넣어줌. 이렇게 하면 되겠지..??? 
 						RegTechData techData = new RegTechData();
 						techData.setTechName(techName.getText());
 						techData.setTechTel(techTel.getText());

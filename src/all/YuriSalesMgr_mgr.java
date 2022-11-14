@@ -23,7 +23,6 @@ public class YuriSalesMgr_mgr {
 		ResultSet rs = null;
 		String sql = null;
 
-//		YuriSalesMgrBean bean = new YuriSalesMgrBean();
 		try {
 			con = pool.getConnection();
 			sql  = "SELECT un.unitPrice "
@@ -36,15 +35,14 @@ public class YuriSalesMgr_mgr {
 					+ "ON srv.srvNum = dtl.dtlSrvNum "
 					+ "JOIN technician tech "
 					+ "ON tech.techNum = srv.srvTechNum "
-					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "WHERE main.mainComNum='1112233333' AND main.mainEndDay = ? and main.mainStatus=? "
 					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N' " ;
 
 			pstmt = con.prepareStatement(sql);
 			
-			pstmt.setString(1, bean.getCumNum());
-			pstmt.setString(2, bean.getEndDate());
-			pstmt.setString(3, bean.getMainStatus());
-			pstmt.setInt(4, bean.getTechNum());
+			pstmt.setString(1, bean.getEndDate());
+			pstmt.setString(2, bean.getMainStatus());
+			pstmt.setInt(3, bean.getTechNum());
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				bean.setCumNum(rs.getString("mainComNum"));
@@ -82,15 +80,15 @@ public class YuriSalesMgr_mgr {
 				+ "ON srv.srvNum = dtl.dtlSrvNum "
 				+ "JOIN technician tech "
 				+ "ON tech.techNum = srv.srvTechNum "
-				+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+				+ "WHERE main.mainComNum='1112233333' AND main.mainEndDay = ? and main.mainStatus=? "
 				+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N' " ;
 
 		pstmt = con.prepareStatement(sql);
 		
-		pstmt.setString(1, bean.getCumNum());
-		pstmt.setString(2, bean.getEndDate());
-		pstmt.setString(3, bean.getMainStatus());
-		pstmt.setInt(4, bean.getTechNum());
+//		pstmt.setString(1, bean.getCumNum());
+		pstmt.setString(1, bean.getEndDate());
+		pstmt.setString(2, bean.getMainStatus());
+		pstmt.setInt(3, bean.getTechNum());
 		rs = pstmt.executeQuery();
 		if(rs.next()){
 			bean.setCumNum(rs.getString("main.mainComNum"));
@@ -109,13 +107,13 @@ public class YuriSalesMgr_mgr {
   
   
   // 비용으로 나가는 부품
-  public YuriSalesMgrBean monthOutput(String buyDate){
+  public YuriSalesMgrBean monthOutput(YuriSalesMgrBean bean){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
 
-		YuriSalesMgrBean bean = new YuriSalesMgrBean();
+//		YuriSalesMgrBean bean = new YuriSalesMgrBean();
 		try {
 			con = pool.getConnection();
 			sql  = "SELECT un.unitprice * st.stckQty "
@@ -126,7 +124,7 @@ public class YuriSalesMgr_mgr {
 
 			pstmt = con.prepareStatement(sql);
 			
-			pstmt.setString(1, buyDate);
+			pstmt.setString(1, bean.getBuyDate());
 		
 			rs = pstmt.executeQuery();
 			if(rs.next()){

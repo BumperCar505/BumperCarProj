@@ -52,10 +52,10 @@ public class SalesMgr_day extends JFrame {
 	private JButton btnBackSales;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
-	String header[] = {"직원명", "고객명", "서비스명","부품명" ,"부품금액", "공임비"};
+	String header[] = {"날짜","직원명", "고객명", "서비스명","부품명" ,"금액"};
 	DefaultTableModel model = new DefaultTableModel(header, 0);
 	private String driver  = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
@@ -208,7 +208,7 @@ public class SalesMgr_day extends JFrame {
 				String boxMonth = month.getText();
 				String boxDay = day.getText();
 				
-				String boxTotalDay = boxYear + "-" + boxMonth + "-" + boxDay;
+				String boxTotalDay = boxYear + "-" + boxMonth ;
 				
 
 			Connection con = null;
@@ -228,7 +228,7 @@ public class SalesMgr_day extends JFrame {
 			con = DriverManager.getConnection(url, "root", "1234");
 			
 	
-			sql = "SELECT tech.techName, srv.srvName, cus.cusName, un.unitPrice, un.unitName "
+			sql = "SELECT mainEndDay, tech.techName, srv.srvName, cus.cusName, un.unitPrice, un.unitName "
 					+ "FROM maintenance   "
 					+ "	JOIN service srv  "
 					+ "	ON mainSrvNum = srv.srvNum  "
@@ -240,42 +240,24 @@ public class SalesMgr_day extends JFrame {
 					+ "	ON dtl.dtlSrvNum = srv.srvNum "
 					+ "	JOIN unit un "
 					+ "	ON un.unitNum = dtl.dtlUnitNum "
-					+ " WHERE mainEndDay = ? and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
-			
-//			sql2 = "SELECT un.unitPrice "
-//					+ "FROM maintenance   "
-//					+ "	JOIN service srv  "
-//					+ "	ON mainSrvNum = srv.srvNum  "
-//					+ "	JOIN technician tech  "
-//					+ "	ON srv.srvTechNum = tech.techNum  "
-//					+ "	JOIN customer cus "
-//					+ "	ON cus.cusNum = mainCusNum "
-//					+ "	JOIN detail dtl "
-//					+ "	ON dtl.dtlSrvNum = srv.srvNum "
-//					+ "	JOIN unit un "
-//					+ "	ON un.unitNum = dtl.dtlUnitNum "
-//					+ " WHERE mainEndDay = ? and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 's%' " ;
-//					
-	
+					+ " WHERE DATE_FORMAT(mainEndDay,'%Y-%m') = DATE_FORMAT(now(),?) and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
+
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 
 			pstmt.setString(2, "1112233333"); 
-			
-//			pstmt2 =con.prepareStatement(sql2);
-//			pstmt2.setString(1, boxTotalDay); 
-//			pstmt2.setString(2, "1112233333"); 
-//			rs2 = pstmt.executeQuery();
-//			
+
+		
 	
 			rs = pstmt.executeQuery();
 				while(rs.next()){         
 	             model.addRow(new Object[]{
+	            		 rs.getString("mainEndDay"), 
 	            		 rs.getString("tech.techName"), 
 	            		 rs.getString("cus.cusName"),
 	            		 rs.getString("srv.srvName"), 
 	            		 rs.getString("un.unitName"),
 	            		 rs.getInt("un.unitPrice")
-//	            		 rs.getInt(bean.getProIncome())
+
 	             	});
 	            }
 				

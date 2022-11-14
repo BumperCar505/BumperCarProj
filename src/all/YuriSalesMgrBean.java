@@ -31,6 +31,7 @@ public class YuriSalesMgrBean {
 		this.proIncome = proIncome;
 	}
 	
+	
 //	비용처리 되는 재료비
 	public int getProOut() {
 		return proOut;
@@ -78,5 +79,4 @@ public class YuriSalesMgrBean {
 		this.buyDate = buyDate;
 	}
 	
-
 }

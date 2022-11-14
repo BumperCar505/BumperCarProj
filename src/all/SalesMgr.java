@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -57,14 +58,12 @@ public class SalesMgr extends JFrame {
    private JButton btnBackSalesMain;
    private JLabel lblYellowCat;
    private final int FONT_SIZE = 21;
-
-
-
+   
    String[] header = {"일", "수입", "지출"};
    DefaultTableModel model = new DefaultTableModel(header,0);
    
     private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
@@ -75,22 +74,17 @@ public class SalesMgr extends JFrame {
    private JComboBox comboY;
    private JComboBox comboM;
    
-   YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
-   YuriSalesMgrBean bean = new YuriSalesMgrBean();
-    int a = bean.getSrvIncome();
-	int b = bean.getProIncome();
-	int c = bean.getProOut();
-
-	
-	int result = a + b;
 
    
-//   String year;
-//   String month;
-	
-//   String day;
-//   String dbDate = year + '-' + month + '-' + day;
-
+   YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
+   YuriSalesMgrBean bean = new YuriSalesMgrBean();
+   
+   
+   int a = bean.getSrvIncome();
+   int b = bean.getProIncome();
+   int c = bean.getProOut();
+   
+   int result = a + b;
   
 
    public void setFont() {
@@ -141,16 +135,19 @@ public class SalesMgr extends JFrame {
 
 
    public SalesMgr() {
-
+	   
+	   monthUnit(bean);
+	   monthService(bean);
+	   monthUnit(bean);
+	   int result1 = result;
       setVisible(true);
       setTitle("수입관리페이지");
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
       this.setLocationRelativeTo(null);
       this.setResizable(false);
-      monthService();
+//      monthService();
 
-//       mgr = DBConnectionMgr.getInstance();
       
       getContentPane = new JPanel();
       getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -164,6 +161,8 @@ public class SalesMgr extends JFrame {
       comboY.setModel(new DefaultComboBoxModel(new String[] {"2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012"}));
       comboY.setBounds(82, 107, 95, 36);
       
+    
+      
 //      매 달 콤보박스 넣기
       JComboBox comboM = new JComboBox();
       comboM.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
@@ -173,10 +172,11 @@ public class SalesMgr extends JFrame {
       getContentPane.add(comboM);
       getContentPane.add(comboY);
 
+      
+       //콤보박스에서 선택된 년,월 값.
+
       String stringYear = comboY.getSelectedItem().toString();
-      int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
-
-
+      int ComboSelectY = Integer.valueOf(stringYear);
       
       String stringMonth = comboM.getSelectedItem().toString();
       int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
@@ -184,13 +184,18 @@ public class SalesMgr extends JFrame {
       Calendar cal = Calendar.getInstance();
       cal.set(ComboSelectY,(ComboSelectM+1),1);
       int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-//      String endDate = stringYear + "-" + stringMonth + "-" ;
+      
+      System.out.println(stringMonth);
+      //콤보박스에서 선택된 년월일
+      String endDate = ComboSelectY + "-" + (ComboSelectM) + "-"  + "";
+      bean.setEndDate(endDate);
+      System.out.println(endDate);
+     
       
       for(int j = 1; j<=monthDay; j++) {
-         model.addRow(new Object[] {j,"",""});
+         model.addRow(new Object[] {j,result1,c});
       }
-
+    
 
       
       //테이블 생성
@@ -223,8 +228,6 @@ public class SalesMgr extends JFrame {
       getContentPane.add(scSalesList);
 
       JScrollPane scrollPane = new JScrollPane();
-//      scSalesList.setColumnHeaderView(scrollPane);
-//      model.addRow(new Object[] {"1", "김땡땡", "63하 2234"}); //열 잘 들어가는지 테스트
 
 
       JPanel jpList = new JPanel();
@@ -280,22 +283,6 @@ public class SalesMgr extends JFrame {
 
          }
       });
-
-
-
-      //더블클릭하면 화면 넘어가게(일일매출관리페이지로)
-//      tableSalesList.addMouseListener(new java.awt.event.MouseAdapter() {
-//          @Override
-//          public void mouseClicked(java.awt.event.MouseEvent evt) {
-//              int row = table.rowAtPoint(evt.getPoint());
-//              int col = table.columnAtPoint(evt.getPoint());
-//              if (evt.getClickCount() == 2) {
-//                 setVisible(false);
-//            new SalesMgr_day();
-//              }
-//          }
-//      });
-      
    
       
 //      드롭박스 바뀔 때마다 값 바뀌게
@@ -304,7 +291,7 @@ public class SalesMgr extends JFrame {
             
 //           콤보박스 값을 바꾸면 먼저 전체 열들을 다 삭제시켜준다.
             model.setNumRows(0);
-            
+            System.out.println(endDate);
             String stringYear = comboY.getSelectedItem().toString();
             int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
 
@@ -319,11 +306,12 @@ public class SalesMgr extends JFrame {
             
             String beanYear = bean.getEndDate().split("-")[0];
             String beanMonth = bean.getEndDate().split("-")[1];
+            
             if (stringYear == beanYear && stringMonth == beanMonth) {
             for(int j = 1; j<=monthDay; j++) {
             
-               model.addRow(new Object[] {j, result,c } //돌면서 계산할 수 있게
-               
+               model.addRow(new Object[] {j, result,c }
+              
               );
             }
            }
@@ -334,13 +322,13 @@ public class SalesMgr extends JFrame {
    //db연결
    
 //   service 공임비 추출
-   public void monthService() {
+   public Vector<Integer> monthService(YuriSalesMgrBean bean) {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql= null;
-		
+		Vector<Integer> vlist = new Vector<Integer>();
 
 		try {
 			Class.forName(driver);
@@ -355,37 +343,79 @@ public class SalesMgr extends JFrame {
 					+ "ON srv.srvNum = dtl.dtlSrvNum "
 					+ "JOIN technician tech "
 					+ "ON tech.techNum = srv.srvTechNum "
-					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "WHERE main.mainComNum=1112233333 AND main.mainEndDay = ? and main.mainStatus=? "
 					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N' " ;
 
 
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bean.getEndDate());
+			pstmt.setString(2, bean.getMainStatus());
+			pstmt.setInt(3, bean.getTechNum());
 			rs = pstmt.executeQuery();
-//			
-//			while(rs.next()) {
-//				model.addRow(new Object[] {
-//						rs.getString("unitprice")
-//				});
-				
-//			}
+			while(rs.next()) {
+				vlist.add(rs.getInt(1));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		finally {
 		
 		}
-	
-		}
-//   
+		return vlist;
+		}  
    
-   private YuriSalesMgrBean monthUnit(YuriSalesMgrBean bean) {
+   private Vector<Integer> monthUnit(YuriSalesMgrBean bean) {
 	
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql= null;
+		Vector<Integer> vlist = new Vector<Integer>();
+
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,"root","1234");
+			sql = "SELECT un.unitPrice "
+					+ "FROM maintenance main "
+					+ "JOIN detail dtl "
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum "
+					+ "JOIN unit un "
+					+ "ON un.unitNum = dtl.dtlUnitNum "
+					+ "JOIN service srv "
+					+ "ON srv.srvNum = dtl.dtlSrvNum "
+					+ "JOIN technician tech "
+					+ "ON tech.techNum = srv.srvTechNum "
+					+ "WHERE main.mainComNum=1112233333 AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N' " ;
+
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bean.getEndDate());
+			pstmt.setString(2, bean.getMainStatus());
+			pstmt.setInt(3, bean.getTechNum());
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vlist.add(rs.getInt(1));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
 		
+		}
+		return vlist;
+		}
+   
+   private Vector<Integer> monthOut(YuriSalesMgrBean bean) {
+		
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= null;
+		Vector<Integer> vlist = new Vector<Integer>();
 
 		try {
 			Class.forName(driver);
@@ -405,7 +435,14 @@ public class SalesMgr extends JFrame {
 
 
 			pstmt = conn.prepareStatement(sql);
+		
+			pstmt.setString(1, bean.getEndDate());
+			pstmt.setString(2, bean.getMainStatus());
+			pstmt.setInt(3, bean.getTechNum());
 			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vlist.add(rs.getInt(1));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -413,7 +450,7 @@ public class SalesMgr extends JFrame {
 		finally {
 		
 		}
-		return bean;
+		return vlist;
 		}
    }
 
