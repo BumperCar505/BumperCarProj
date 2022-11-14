@@ -12,9 +12,13 @@ import java.util.Vector;
 
 public class GwakMemberMgr {
 	
+	private LoginManager loginManager;
+	
+	
 	private DBConnectionMgr pool;
 	
 	public GwakMemberMgr() {
+		loginManager = LoginManager.getInstance();
 		//DBConnection 객체 10개 미리 생성.
 		pool = DBConnectionMgr.getInstance();
 	}
@@ -23,6 +27,7 @@ public class GwakMemberMgr {
 
 	// techListEdit
 	public GwakMemberBean select(int techNum){
+		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -52,6 +57,8 @@ public class GwakMemberMgr {
 	
 	// UnitStockMgr 테이블 값 받아오기
 	public GwakMemberBean select2(String editIndex){
+		
+		String ComNum = loginManager.getLogComNum();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -68,7 +75,7 @@ public class GwakMemberMgr {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, editIndex);
 //			pstmt.setString(2, "1112233333");
-			pstmt.setString(2, "1112233333");
+			pstmt.setString(2, ComNum);
 			
 			rs = pstmt.executeQuery();
 			if(rs.next()){

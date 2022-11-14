@@ -35,6 +35,8 @@ public class UnitStockMgr extends JFrame {
 	private JTable table;
 	private JButton btnDelUnitStock;
 	private JButton btnBackUnitStockMain;
+	private LoginManager loginManager;
+	
 	
 	private String driver  = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
@@ -50,7 +52,7 @@ public class UnitStockMgr extends JFrame {
 			public void run() {
 				try {
 					UnitStockMgr frame = new UnitStockMgr();
-					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,6 +65,8 @@ public class UnitStockMgr extends JFrame {
 
 	// Create the frame.
 	public UnitStockMgr() {
+		loginManager = loginManager.getInstance();
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
@@ -133,6 +137,8 @@ public class UnitStockMgr extends JFrame {
 		btnAddUnitStockHistory.setBounds(401, 174, 150, 50);
 		contentPane.add(btnAddUnitStockHistory);
 		
+		
+		loginManager = LoginManager.getInstance();
 		
 		// 구매 이력 버튼 누르면 실행 됨 -> 새 폼 띄우기
 		btnUnitBuyHistory.addActionListener(new ActionListener() {
@@ -243,10 +249,10 @@ public class UnitStockMgr extends JFrame {
 		
 	}
 
-
+	
 	//  : DB에서 데이터 불러와서 테이블 채우기
 			private void Select3(){
-					
+				
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
@@ -256,7 +262,7 @@ public class UnitStockMgr extends JFrame {
 				try {
 					Class.forName(driver);
 					con = DriverManager.getConnection(url, "root", "1234");
-					
+					String id = loginManager.getLogComNum();
 					// UnitStockMgr 메인화면 테이블 값 쿼리문
 					// 재고는 stckQty2 (정비완료시 재고 빠진것 업데이트 된 열)
 					sql = "SELECT stock.stckNum, stock.stckUnitNum, unit.unitName, unit.unitVendor, sum(stock.stckQty2) "
@@ -269,7 +275,7 @@ public class UnitStockMgr extends JFrame {
 
 					pstmt = con.prepareStatement(sql);
 //	★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
-					pstmt.setString(1, "1112233333"); // 테스트용
+					pstmt.setString(1, id); // 테스트용
 			
 					rs = pstmt.executeQuery();
 						while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
