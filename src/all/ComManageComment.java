@@ -683,6 +683,7 @@ public class ComManageComment extends JFrame implements ActionListener {
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
+		this.setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -780,6 +781,8 @@ public class ComManageComment extends JFrame implements ActionListener {
 		btnShowComment.setBounds(262, 70, 150, 50);
 		btnShowComment.addActionListener(this);
 		contentPane.add(btnShowComment);
+		
+		this.setFont();
 	}
 }
 
