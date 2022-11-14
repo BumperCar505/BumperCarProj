@@ -89,6 +89,7 @@ public class RegTech extends JFrame {
 		setVisible(true);   
         setBounds(300, 300, Size.SCREEN_W, Size.SCREEN_H);
 		setLocationRelativeTo(null);
+		setTitle("다고쳐카센터 - 기술자 등록");
 
         colName = new Vector<String>();
         
