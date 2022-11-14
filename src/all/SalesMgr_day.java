@@ -274,8 +274,8 @@ public class SalesMgr_day extends JFrame {
 	            		 rs.getString("cus.cusName"),
 	            		 rs.getString("srv.srvName"), 
 	            		 rs.getString("un.unitName"),
-	            		 rs.getInt("un.unitPrice"),
-	            		 rs.getInt(bean.getProIncome())
+	            		 rs.getInt("un.unitPrice")
+//	            		 rs.getInt(bean.getProIncome())
 	             	});
 	            }
 				
