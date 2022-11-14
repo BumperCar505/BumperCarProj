@@ -274,10 +274,10 @@ public class RegTech extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 
 //				        데이터 techData에 넣어줌. 이렇게 하면 되겠지..??? 
-						RegTechData techData = new RegTechData();
-						techData.setTechName(techName.getText());
-						techData.setTechTel(techTel.getText());
-						techData.setTechLv(techLv.getText());
+						//RegTechData techData = new RegTechData();
+						//techData.setTechName(techName.getText());
+						//techData.setTechTel(techTel.getText());
+						//techData.setTechLv(techLv.getText());
 						
 						setVisible(false); 
 						new SrvReg();
@@ -287,37 +287,11 @@ public class RegTech extends JFrame {
 			}
 		});
 	}
-
+	
+	public RegTech(GwakMemberBean comJoinInfo) {	
 		
-//		데이터 넘겨주기
-		class RegTechData {
-			private String techName;
-			private String techTel;
-			private String techLv;
-			
-			public String getTechName() {
-				return techName;
-			}
-			public void setTechName(String techName) {
-				this.techName = techName;
-			}
-			
-			public String getTechTel() {
-				return techTel;
-			}
-			public void setTechTel(String techTel) {
-				this.techTel = techTel;
-			}
-			
-			public String getTechLv() {
-				return techLv;
-			}
-			public void setTechLv(String techLv) {
-				this.techLv = techLv;
-			}
-
-		}
 	}
+}
 		
 	
 
