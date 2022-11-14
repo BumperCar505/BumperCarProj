@@ -10,6 +10,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Vector;
@@ -28,6 +31,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.DefaultTableModel;
@@ -38,6 +42,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -136,7 +141,10 @@ public class RegTech extends JFrame {
 		lblNewLabel_4.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		JButton btnTechNext = new JButton("다음");
+		btnTechNext.setBackground(new Color(244, 204, 204));
 		btnTechNext.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		btnTechNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
 //		btnTechNext.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent e) {
 //			}
@@ -144,30 +152,16 @@ public class RegTech extends JFrame {
 		btnTechNext.setBounds(687, 862, Size.BTN_B_W, Size.BTN_B_H);
 		getContentPane().add(btnTechNext);
 		
-		
-		JLabel lblNewLabel_1 = new JLabel("정비사이름");
-		lblNewLabel_1.setBounds(141, 259, 140, 55);
-		getContentPane().add(lblNewLabel_1);
-		lblNewLabel_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		
 		techName = new JTextField();
-		techName.setBounds(141, 342, 274, 45);
+		techName.setBounds(190, 342, 274, 45);
+		techName.setHorizontalAlignment(SwingConstants.CENTER);
 		getContentPane().add(techName);
 		techName.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
-		JLabel lblNewLabel_2 = new JLabel("정비사 전화번호");
-		lblNewLabel_2.setBounds(141, 424, 356, 55);
-		getContentPane().add(lblNewLabel_2);
-		lblNewLabel_2.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		
-		JLabel lblNewLabel_3 = new JLabel("정비사 직급");
-		lblNewLabel_3.setBounds(141, 585, 259, 55);
-		getContentPane().add(lblNewLabel_3);
-		lblNewLabel_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		
 		techTel = new JTextField();
 		techTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		techTel.setBounds(141, 507, 274, 45);
+		techTel.setHorizontalAlignment(SwingConstants.CENTER);
+		techTel.setBounds(190, 485, 274, 45);
 		getContentPane().add(techTel);
 		
 		JPanel panel = new JPanel();
@@ -179,19 +173,59 @@ public class RegTech extends JFrame {
 		
 		JButton btnTechReg = new JButton("등록");
 		btnTechReg.setFont(new Font("나눔바른고딕", Font.BOLD, 17));
-		btnTechReg.setBounds(209, 504, Size.BTN_S_W, Size.BTN_S_H);
+		btnTechReg.setBackground(new Color(244, 204, 204));
+		btnTechReg.setBounds(200, 482, Size.BTN_S_W, Size.BTN_S_H);
+		btnTechReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
 		panel.add(btnTechReg);
 		//        srvName.setColumns(10);
 		
 		techLv = new JTextField();
-		techLv.setBounds(98, 426, 274, 45);
+		techLv.setBounds(148, 399, 274, 45);
+		techLv.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(techLv);
 		techLv.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
+		
+		
+		JLabel lblNewLabel_1 = new JLabel("정비사이름");
+		lblNewLabel_1.setBounds(145, 51, 140, 55);
+		panel.add(lblNewLabel_1);
+		lblNewLabel_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		
+		JLabel lblNewLabel_2 = new JLabel("정비사 전화번호");
+		lblNewLabel_2.setBounds(145, 195, 356, 55);
+		panel.add(lblNewLabel_2);
+		lblNewLabel_2.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		
+		JLabel lblNewLabel_3 = new JLabel("정비사 직급");
+		lblNewLabel_3.setBounds(145, 341, 259, 55);
+		panel.add(lblNewLabel_3);
+		lblNewLabel_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 
 		JButton btnTechDel = new JButton("삭제");
 		btnTechDel.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-		btnTechDel.setBounds(1407, 191, 78, 33);
+		btnTechDel.setBackground(new Color(244, 204, 204));
+		btnTechDel.setBounds(1334, 170, Size.BTN_S_W, Size.BTN_S_H);
+		btnTechDel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
 		getContentPane().add(btnTechDel);
+		
+		// 테이블 디자인 설정
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("정비사 이름");
+        columnNames.add("정비사 전화번호");
+        columnNames.add("정비사 직급");
+		HashMap<String, Integer> columnWidthValues = new HashMap<>();
+		columnWidthValues.put("정비사 이름", 100);
+		columnWidthValues.put("정비사 전화번호", 100);
+		columnWidthValues.put("정비사 직급", 100);
+		
+		TableDesigner.setFont(table, "NanumBarunGothic", 21);
+		TableDesigner.setTableColumn(table, columnNames);
+		TableDesigner.setTableTextCenter(table, columnNames);
+		TableDesigner.resizeTableRow(table, 50);
+		TableDesigner.resizeTableColumn(table, columnWidthValues);
+		TableDesigner.resizeTableHeader(table);
 		
 //		저장 버튼 누르면 옆에 저장되게
 		btnTechReg.addActionListener(new ActionListener() {
@@ -203,8 +237,8 @@ public class RegTech extends JFrame {
 				inputStr[0] = techName.getText();
 				inputStr[1] = techTel.getText();
 				inputStr[2] = techLv.getText();
-				 
-				
+			
+				dtm = (DefaultTableModel)table.getModel();
 				dtm.addRow(inputStr);
 				
 //				등록하고 난 뒤 다시 칸 비워주기
