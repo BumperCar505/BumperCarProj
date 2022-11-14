@@ -408,6 +408,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
+		this.setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -466,6 +467,8 @@ public class ComSrvList extends JFrame implements ActionListener {
 		lblYellowCat.setIcon(new ImageIcon(ComSrvList.class.getResource("/img/YellowCat.png")));
 		lblYellowCat.setBounds(710, 50, 230, 80);
 		contentPane.add(lblYellowCat);
+		
+		this.setFont();
 		
 		refreshAllDatas();
 	}
