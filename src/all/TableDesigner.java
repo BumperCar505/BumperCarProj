@@ -1,10 +1,19 @@
 package all;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -15,17 +24,55 @@ import javax.swing.table.TableColumnModel;
 public class TableDesigner {
 	
     /**
-     * 테이블의 제목 컬럼을 설정합니다.
+     * 테이블에 사용할 폰트를 설정합니다.(사용순서 0번)
+     * @param table 대상 테이블
+     * @param fontFullName 테이블에서 사용할 폰트를 넣어주세요(확장자 넣지마세요).
+     * @param FONT_SIZE 폰트 크기
+     */
+	public static void setFont(JTable table, String fontFullName, final int FONT_SIZE) {
+		InputStream inputStream = null;
+		
+		try {
+	        String classPath = ComManageComment.class.getResource("").getPath();
+	        String path = URLDecoder.decode(classPath, "UTF-8");
+	        path = path.split("all")[0];
+	        inputStream = new BufferedInputStream(
+	                new FileInputStream(path + "/font/" + fontFullName + ".ttf"));
+
+	        Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+	        table.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE));
+	        table.getTableHeader().setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
+		} catch(FileNotFoundException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, ex.getMessage());
+		} catch(IOException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, ex.getMessage());
+		} catch(FontFormatException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, ex.getMessage());
+		} finally {
+			try {
+				if(inputStream != null) { inputStream.close(); }
+			} catch(IOException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(null, ex.getMessage());
+			}
+		}
+	}
+	
+    /**
+     * 테이블의 제목 컬럼을 설정합니다.(사용순서 1번)
      * @param table 대상 테이블
      * @param headerNames 테이블에서 사용할 제목 컬럼을 입력하세요.
      */
-	public static void setTableColumn(JTable table, Vector<String> headerNames) {
+	public static void setTableColumn(JTable table, Vector<String> headerNames) {	
 		DefaultTableModel model = new DefaultTableModel(headerNames, 0);
 		table.setModel(model);
 	}
 	
     /**
-     * 테이블의 값을 가운데 정렬합니다.
+     * 테이블의 값을 가운데 정렬합니다.(사용순서 2번)
      * @param table 대상 테이블
      * @param columnNames 테이블에서 사용되는 컬럼의 이름 순서대로
      */
@@ -39,7 +86,7 @@ public class TableDesigner {
 	}
 	
     /**
-     * 테이블의 행의 높이를 설정합니다.
+     * 테이블의 행의 높이를 설정합니다.(사용순서 3번)
      * @param table 대상 테이블
      * @param height 행의 높이
      */
@@ -48,7 +95,7 @@ public class TableDesigner {
 	}
 	
     /**
-     * 테이블의 열의 길이를 설정합니다.<br>
+     * 테이블의 열의 길이를 설정합니다.(사용순서 4번)<br>
      * columnWidths의 값을 HashMap으로 전달하세요<br>
      * <b>key 값은 컬럼의 이름 value 값은 해당 컬럼의 가로 길이입니다.</b>
      * @param table 대상 테이블
@@ -62,7 +109,7 @@ public class TableDesigner {
 	}
 	
     /**
-     * 테이블의 행의 레이아웃을 조절합니다.<br>
+     * 테이블의 행의 레이아웃을 조절합니다.(사용순서 5번)<br>
      * @param table 대상 테이블
      */
 	public static void resizeTableHeader(JTable table) {
