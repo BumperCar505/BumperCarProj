@@ -81,7 +81,7 @@ public class GwakMemberMgr {
 	
 	
 	//  UnitStockMgr : DB에서 데이터 불러와서 테이블 채우기
-	public GwakMemberBean SelectUnitMgrTable(DefaultTableModel model){
+	public GwakMemberBean SelectUnitMgrTable(DefaultTableModel model, String id){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -99,8 +99,7 @@ public class GwakMemberMgr {
 					+ "group by stock.stckUnitNum "
 					+ "ORDER BY stock.stckUnitNum ";
 					pstmt = con.prepareStatement(sql);
-//★★★★★★★★★★     	pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
-					pstmt.setString(1, "1112233333"); // 테스트용
+					pstmt.setString(1, id);
 	
 					rs = pstmt.executeQuery();
 					while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가

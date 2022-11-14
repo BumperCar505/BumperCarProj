@@ -57,7 +57,7 @@ public class TechListEdit extends JFrame {
 			public void run() {
 				try {
 					TechListEdit frame = new TechListEdit();
-					frame.setVisible(true);
+					
 					//frame.reload();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -78,6 +78,7 @@ public class TechListEdit extends JFrame {
 	
 	
 	public TechListEdit() {
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();

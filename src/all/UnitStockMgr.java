@@ -37,6 +37,7 @@ public class UnitStockMgr extends JFrame {
 	private JTable table;
 	private JButton btnDelUnitStock;
 	private JButton btnBackUnitStockMain;
+	private LoginManager loginManager;
 	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 
@@ -46,7 +47,7 @@ public class UnitStockMgr extends JFrame {
 			public void run() {
 				try {
 					UnitStockMgr frame = new UnitStockMgr();
-					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -57,6 +58,9 @@ public class UnitStockMgr extends JFrame {
 
 	// Create the frame.
 	public UnitStockMgr() {
+		loginManager.getInstance();
+		String id = loginManager.getLogComNum();
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
@@ -65,7 +69,7 @@ public class UnitStockMgr extends JFrame {
 		
 		// GwakMemberMgr에서 호출 -> 테이블 값 채워넣기
 		GwakMemberMgr mgr = new GwakMemberMgr();
-		GwakMemberBean bean = mgr.SelectUnitMgrTable(model);
+		GwakMemberBean bean = mgr.SelectUnitMgrTable(model, id);
 
 		// 폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null); //--
