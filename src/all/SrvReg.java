@@ -1,5 +1,6 @@
 package all;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -10,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Vector;
@@ -28,6 +31,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.DefaultTableModel;
@@ -38,6 +42,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -108,12 +113,27 @@ public class SrvReg extends JFrame {
         
         
         table = new JTable(dtm);
-        table.getTableHeader().setFont(new Font("NanumBarunGothic", Font.PLAIN, 18));
         
-        table.getColumnModel().getColumn(0).setMinWidth(240);
-        table.getColumnModel().getColumn(0).setMaxWidth(240);
-        table.getColumnModel().getColumn(2).setMinWidth(200);
-        table.getColumnModel().getColumn(2).setMaxWidth(200);
+        // 코드 중첩되므로 주석처리 
+        // table.getTableHeader().setFont(new Font("NanumBarunGothic", Font.PLAIN, 18));
+        
+        // table.getColumnModel().getColumn(0).setMinWidth(240);
+        // table.getColumnModel().getColumn(0).setMaxWidth(240);
+        // table.getColumnModel().getColumn(2).setMinWidth(200);
+        // table.getColumnModel().getColumn(2).setMaxWidth(200);
+        
+		// 테이블 설정값 조절
+        HashMap<String, Integer> columnWidthValues = new HashMap<>();
+        columnWidthValues.put("서비스명", 240);
+        columnWidthValues.put("서비스제공 정비사", 200);
+        columnWidthValues.put("서비스 가격", 200);
+        
+		TableDesigner.setFont(table, "NanumBarunGothic", 18);
+		TableDesigner.setTableColumn(table, colName);
+		TableDesigner.setTableTextCenter(table, colName);
+		TableDesigner.resizeTableRow(table, 50);
+		TableDesigner.resizeTableColumn(table, columnWidthValues);
+		TableDesigner.resizeTableHeader(table);
         
         
         table.getTableHeader().setReorderingAllowed(false);     // JTable의 헤더를 고정시킨다. (true는 고정해제)
@@ -125,10 +145,7 @@ public class SrvReg extends JFrame {
         
      
         setVisible(true);                       // table을 단순히 JFrame에 부착시 헤더가 나오지 않는다
-        
-        table.setRowHeight(25);
-		table.setFont(new Font("NanumBarunGothic", Font.PLAIN, 18));
-        
+		
         //////////////////////////////////////////
         
         JLabel lblNewLabel = new JLabel("");
@@ -143,25 +160,33 @@ public class SrvReg extends JFrame {
 		
 		JButton btnComSignUp = new JButton("회원가입 완료");
 		btnComSignUp.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		btnComSignUp.setBackground(new Color(244, 204, 204));
+		btnComSignUp.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+	            Color.red, Color.red));
 		btnComSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		btnComSignUp.setBounds(687, 862, Size.BTN_B_W, Size.BTN_B_H);
 		getContentPane().add(btnComSignUp);
 		
 		JButton btnSrvDel = new JButton("삭제");
-		btnSrvDel.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-		btnSrvDel.setBounds(1407, 191, 78, 33);
+		btnSrvDel.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		btnSrvDel.setBounds(1334, 175, Size.BTN_S_W, Size.BTN_S_H);
+		btnSrvDel.setBackground(new Color(244, 204, 204));
+		btnSrvDel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+	            Color.red, Color.red));
 		getContentPane().add(btnSrvDel);
 		
 		JLabel lblNewLabel_1 = new JLabel("서비스명");
-		lblNewLabel_1.setBounds(141, 259, 140, 55);
+		lblNewLabel_1.setBounds(141, 277, 140, 55);
 		getContentPane().add(lblNewLabel_1);
 		lblNewLabel_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		srvName = new JTextField();
 		srvName.setBounds(141, 342, 274, 45);
+		srvName.setHorizontalAlignment(SwingConstants.CENTER);
 		getContentPane().add(srvName);
 		srvName.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
@@ -171,7 +196,7 @@ public class SrvReg extends JFrame {
 		lblNewLabel_2.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		JLabel lblNewLabel_3 = new JLabel("서비스 가격 (공임비)");
-		lblNewLabel_3.setBounds(141, 585, 259, 55);
+		lblNewLabel_3.setBounds(141, 600, 259, 55);
 		getContentPane().add(lblNewLabel_3);
 		lblNewLabel_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		//        srvName.setColumns(10);
@@ -183,8 +208,11 @@ public class SrvReg extends JFrame {
 		
 		JButton btnSrvReg = new JButton("등록");
 		btnSrvReg.setBounds(275, 763, 150, 50);
-		getContentPane().add(btnSrvReg);
 		btnSrvReg.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		btnSrvReg.setBackground(new Color(244, 204, 204));
+		btnSrvReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+	            Color.red, Color.red));
+		getContentPane().add(btnSrvReg);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(141, 489, 398, 65);
@@ -209,6 +237,7 @@ public class SrvReg extends JFrame {
 				list.add(srvName.getText());
 				list.add(selectedSrvTech.getCheckedItemString(model));
 				list.add(srvPrice.getText());
+				dtm = (DefaultTableModel)table.getModel();
 				dtm.addRow(list);
 				
 
@@ -246,6 +275,10 @@ public class SrvReg extends JFrame {
 		});
 		
     }
+	
+	public SrvReg(GwakMemberBean comJoinInfo, List<TechBeans> techList) {
+		
+	}
 }
 
 

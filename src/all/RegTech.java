@@ -63,7 +63,7 @@ public class RegTech extends JFrame {
     private JTextField techName;
     private JTextField techLv;
     private JTextField techTel;
-    
+    private GwakMemberBean comJoinInfo;
  
 	/**
 	 * Launch the application.
@@ -267,25 +267,31 @@ public class RegTech extends JFrame {
 		});
 		
 //		다음 버튼 누르면 서비스 등록페이지로 이동
-		
 		btnTechNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-							
-				//데이터 techData에 넣어줌. 이렇게 하면 되겠지..??? 
-				//RegTechData techData = new RegTechData();
-				//techData.setTechName(techName.getText());
-				//techData.setTechTel(techTel.getText());
-				//techData.setTechLv(techLv.getText());
-							
-				setVisible(false); 
-				new SrvReg();		
+				dispose();
+				new SrvReg(comJoinInfo, createTechBeans());	
 			}
 		});
 	}
 	
-	public RegTech(GwakMemberBean comJoinInfo) {	
+	private List<TechBeans> createTechBeans() {
+		List<TechBeans> techBeansList = new ArrayList<>();
 		
+		for(int i = 0; i < table.getRowCount(); ++i) {
+			String techName = table.getValueAt(i, 0).toString();
+			String techTel = table.getValueAt(i, 1).toString();
+			String techLv = table.getValueAt(i, 2).toString();
+			techBeansList.add(new TechBeans(techName, techTel, techLv));
+		}
+		
+		return techBeansList;
+	}
+	
+	public RegTech(GwakMemberBean comJoinInfo) {	
+		this();
+		this.comJoinInfo = comJoinInfo;
 	}
 }
 		
