@@ -9,6 +9,7 @@ import java.util.Vector;
 public class YuriCusMgr_mgr {
 	
 	private DBConnectionMgr pool;
+	private LoginManager loginManager;
 	
 	public YuriCusMgr_mgr() {
 		//DBConnection 객체 10개 미리 생성
@@ -22,6 +23,8 @@ public class YuriCusMgr_mgr {
 		ResultSet rs = null;
 		String sql = null;
 		YuriCusMgrBean bean = new YuriCusMgrBean();
+		
+		
 		try {
 			con = pool.getConnection();
 			sql = "select * from tblMember where id=?";
@@ -106,6 +109,8 @@ public class YuriCusMgr_mgr {
 //	cusMgr 추가
 	
 	public YuriCusMgrBean insertCusMgr(YuriCusMgrBean bean){
+		loginManager = loginManager.getInstance();
+	      String id = loginManager.getLogComNum();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -113,19 +118,20 @@ public class YuriCusMgr_mgr {
 //		MemberBean bean = new MemberBean();
 		try {
 			con = pool.getConnection();
-			sql = "insert into customer(cusComNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusZip, cusAddr, cusTel,cusKm,cusDate) values('1112233333',?,?,?,?,?,?,?,?,now()) " ;
+			sql = "insert into customer(cusComNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusZip, cusAddr, cusTel,cusKm,cusDate) values(?,?,?,?,?,?,?,?,?,now()) " ;
 			pstmt = con.prepareStatement(sql);
 
 //			데이터베이스에 값을 넣어줘야 하니까.set을 사용해야 한다.
 			
-			pstmt.setString(1, bean.getCusName());
-			pstmt.setString(2, bean.getCusCarNum());
-			pstmt.setString(3, bean.getCusCarBrand());
-			pstmt.setString(4, bean.getCusCarType());
-			pstmt.setInt(5, bean.getCusZip());
-			pstmt.setString(6, bean.getCusAddr());
-			pstmt.setString(7, bean.getCusTel());
-			pstmt.setInt(8, bean.getCusKm());
+			pstmt.setString(1, id);
+			pstmt.setString(2, bean.getCusName());
+			pstmt.setString(3, bean.getCusCarNum());
+			pstmt.setString(4, bean.getCusCarBrand());
+			pstmt.setString(5, bean.getCusCarType());
+			pstmt.setInt(6, bean.getCusZip());
+			pstmt.setString(7, bean.getCusAddr());
+			pstmt.setString(8, bean.getCusTel());
+			pstmt.setInt(9, bean.getCusKm());
 //			pstmt.setString(9, bean.getCusDate());
 
 			pstmt.executeUpdate();

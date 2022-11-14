@@ -9,6 +9,7 @@ import java.util.Vector;
 public class YuriSalesMgr_mgr {
 	
 	private DBConnectionMgr pool;
+	private LoginManager loginManager;
 	
 // 공임비
 	public YuriSalesMgr_mgr() {
@@ -22,6 +23,8 @@ public class YuriSalesMgr_mgr {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
+		loginManager = loginManager.getInstance();
+	      String id = loginManager.getLogComNum();
 
 		try {
 			con = pool.getConnection();
@@ -66,6 +69,8 @@ public class YuriSalesMgr_mgr {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	String sql = null;
+	loginManager = loginManager.getInstance();
+    String id = loginManager.getLogComNum();
 
 //	YuriSalesMgrBean bean = new YuriSalesMgrBean();
 	try {
@@ -80,15 +85,16 @@ public class YuriSalesMgr_mgr {
 				+ "ON srv.srvNum = dtl.dtlSrvNum "
 				+ "JOIN technician tech "
 				+ "ON tech.techNum = srv.srvTechNum "
-				+ "WHERE main.mainComNum='1112233333' AND main.mainEndDay = ? and main.mainStatus=? "
+				+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
 				+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N' " ;
 
 		pstmt = con.prepareStatement(sql);
 		
-//		pstmt.setString(1, bean.getCumNum());
-		pstmt.setString(1, bean.getEndDate());
-		pstmt.setString(2, bean.getMainStatus());
-		pstmt.setInt(3, bean.getTechNum());
+		pstmt.setString(1, id);
+		pstmt.setString(2, bean.getCumNum());
+		pstmt.setString(3, bean.getEndDate());
+		pstmt.setString(4, bean.getMainStatus());
+//		pstmt.setInt(5, bean.getTechNum());
 		rs = pstmt.executeQuery();
 		if(rs.next()){
 			bean.setCumNum(rs.getString("main.mainComNum"));

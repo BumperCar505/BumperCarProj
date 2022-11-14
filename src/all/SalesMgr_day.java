@@ -52,7 +52,7 @@ public class SalesMgr_day extends JFrame {
 	private JButton btnBackSales;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
-	String header[] = {"날짜","직원명", "고객명", "서비스명","부품명" ,"금액"};
+	String header[] = {"날짜","부품번호", "부품이름", "수량","부품단가" ,"총비용"};
 	DefaultTableModel model = new DefaultTableModel(header, 0);
 	private String driver  = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
@@ -61,9 +61,8 @@ public class SalesMgr_day extends JFrame {
 	private ResultSet rs = null;
 	private JTextField year;
 	private JTextField month;
-	private JTextField day;
+	private LoginManager loginManager;
 	
-
 	/**
 	 * Launch the application.
 	 */
@@ -91,8 +90,11 @@ public class SalesMgr_day extends JFrame {
 	
 	
 	public SalesMgr_day() {
+		
 		setVisible(true);
-		setTitle("일일 매출관리페이지");
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
+		setTitle("비용관리페이지");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
@@ -149,39 +151,36 @@ public class SalesMgr_day extends JFrame {
 		getContentPane.add(scrollBar);
 		
 		year = new JTextField();
-		year.setBounds(110, 97, 106, 33);
+		year.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+		year.setBounds(1219, 102, 106, 33);
 		getContentPane.add(year);
 		year.setColumns(10);
 		
 		month = new JTextField();
+		month.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
 		month.setColumns(10);
-		month.setBounds(245, 97, 76, 33);
+		month.setBounds(1354, 102, 76, 33);
 		getContentPane.add(month);
-		
-		day = new JTextField();
-		day.setColumns(10);
-		day.setBounds(353, 97, 67, 33);
-		getContentPane.add(day);
 		
 		JLabel lblNewLabel = new JLabel("년");
 		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
-		lblNewLabel.setBounds(218, 100, 29, 24);
+		lblNewLabel.setBounds(1327, 105, 29, 24);
 		getContentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("월");
 		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(325, 100, 29, 24);
+		lblNewLabel_1.setBounds(1434, 105, 29, 24);
 		getContentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("일");
-		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
-		lblNewLabel_2.setBounds(426, 100, 29, 24);
-		getContentPane.add(lblNewLabel_2);
 		
 		JButton btnSearch = new JButton("검색");
 		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
-		btnSearch.setBounds(458, 97, 87, 33);
+		btnSearch.setBounds(1475, 101, 87, 33);
 		getContentPane.add(btnSearch);
+		
+		JLabel lblNewLabel_2 = new JLabel("비용관리페이지");
+		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
+		lblNewLabel_2.setBounds(104, 102, 146, 28);
+		getContentPane.add(lblNewLabel_2);
 		
 		
 		
@@ -206,7 +205,7 @@ public class SalesMgr_day extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String boxYear = year.getText();
 				String boxMonth = month.getText();
-				String boxDay = day.getText();
+
 				
 				String boxTotalDay = boxYear + "-" + boxMonth ;
 				
@@ -228,35 +227,27 @@ public class SalesMgr_day extends JFrame {
 			con = DriverManager.getConnection(url, "root", "1234");
 			
 	
-			sql = "SELECT mainEndDay, tech.techName, srv.srvName, cus.cusName, un.unitPrice, un.unitName "
-					+ "FROM maintenance   "
-					+ "	JOIN service srv  "
-					+ "	ON mainSrvNum = srv.srvNum  "
-					+ "	JOIN technician tech  "
-					+ "	ON srv.srvTechNum = tech.techNum  "
-					+ "	JOIN customer cus "
-					+ "	ON cus.cusNum = mainCusNum "
-					+ "	JOIN detail dtl "
-					+ "	ON dtl.dtlSrvNum = srv.srvNum "
-					+ "	JOIN unit un "
-					+ "	ON un.unitNum = dtl.dtlUnitNum "
-					+ " WHERE DATE_FORMAT(mainEndDay,'%Y-%m') = DATE_FORMAT(now(),?) and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
+			sql = "SELECT st.stckBuyDate,st.stckUnitNum , un.unitName, st.stckQty, un.unitPrice , st.stckQty*un.unitPrice "
+					+ "FROM stock st "
+					+ "JOIN unit un "
+					+ "ON st.stckUnitNum = un.unitNum "
+					+ "WHERE DATE_FORMAT(st.stckBuyDate,'%Y-%m') = DATE_FORMAT(now(),?) and un.unitNum LIKE 'p%' and stckComNum = ?  " ;
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 
-			pstmt.setString(2, "1112233333"); 
+			pstmt.setString(2, id); 
 
 		
 	
 			rs = pstmt.executeQuery();
 				while(rs.next()){         
 	             model.addRow(new Object[]{
-	            		 rs.getString("mainEndDay"), 
-	            		 rs.getString("tech.techName"), 
-	            		 rs.getString("cus.cusName"),
-	            		 rs.getString("srv.srvName"), 
+	            		 rs.getString("st.stckBuyDate"), 
+	            		 rs.getString("st.stckUnitNum"), 
 	            		 rs.getString("un.unitName"),
-	            		 rs.getInt("un.unitPrice")
+	            		 rs.getInt("st.stckQty"), 
+	            		 rs.getInt("un.unitPrice"),
+	            		 rs.getInt("st.stckQty*un.unitPrice")
 
 	             	});
 	            }
