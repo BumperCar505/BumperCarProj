@@ -94,6 +94,9 @@ public class CusMgr extends JFrame {
 		tableCusList.setRowMargin(4);
 		tableCusList.setRowHeight(30);
 		tableCusList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+		tableCusList.setDefaultEditor(Object.class, null); // 테이블 값 수정 안되게
+		tableCusList.getTableHeader().setResizingAllowed(false);
+		tableCusList.getTableHeader().setReorderingAllowed(false);
 		
 		Vector<String> columnHeaders = new Vector<>();
 		columnHeaders.add("번호");
@@ -107,15 +110,15 @@ public class CusMgr extends JFrame {
 		columnHeaders.add("전화번호");
 		columnHeaders.add("가입날짜");
 		HashMap<String, Integer> columnWidthValues = new HashMap<>();
-		columnWidthValues.put("번호", 10);
-		columnWidthValues.put("고객이름", 50);
+		columnWidthValues.put("번호", 20);
+		columnWidthValues.put("고객이름", 80);
 		columnWidthValues.put("차번호", 75);
 		columnWidthValues.put("브랜드", 50);
 		columnWidthValues.put("차종", 50);
-		columnWidthValues.put("주행거리", 50);
-		columnWidthValues.put("우편번호", 50);
+		columnWidthValues.put("주행거리", 80);
+		columnWidthValues.put("우편번호", 80);
 		columnWidthValues.put("주소", 300);
-		columnWidthValues.put("전화번호", 125);
+		columnWidthValues.put("전화번호", 150);
 		columnWidthValues.put("가입날짜", 200);
 		
 		TableDesigner.setFont(tableCusList, "NanumBarunGothic", FONT_SIZE);
@@ -204,9 +207,7 @@ public class CusMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
 				new CusMgr_add();
-				
 			}
 		});
 		
@@ -227,9 +228,7 @@ public class CusMgr extends JFrame {
 					int num = DialogManager.createMsgDialog("수정하시겠습니까","\\img\\question6.png", "수정",JOptionPane.YES_NO_OPTION);
 			    	if(num==0){		    		
 			    		int editIndex = (int) tableCusList.getValueAt(row, column);	
-						CusMgr_edit edit = new CusMgr_edit(editIndex);
-						edit.setVisible(true);
-						setVisible(false); 
+						CusMgr_edit edit = new CusMgr_edit(editIndex); 
 			    	}
 			    	else if(num==1) {
 			    		
@@ -243,7 +242,7 @@ public class CusMgr extends JFrame {
 	});
 	}
 
-		private void getInfo() {
+	private void getInfo() {
 
 			
 			Connection conn = null;
