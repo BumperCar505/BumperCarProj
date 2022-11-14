@@ -1,3 +1,4 @@
+
 package all;
 
 
@@ -36,7 +37,7 @@ public class CusMgr_add {
 	private JLabel lblCusTel;
 	private JLabel lblNewLabel_2;
 	
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -73,14 +74,9 @@ public class CusMgr_add {
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(680, 0, 822, 1007);
+		panel.setBounds(82, 43, 762, 845);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
-		// 저장버튼
-		JButton btnCusSave = new JButton("저장");
-		btnCusSave.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
-		btnCusSave.setBounds(248, 743, 162, 61);
-		panel.add(btnCusSave);
 		
 		//텍스트필드
 		cusName = new JTextField();
@@ -131,11 +127,7 @@ public class CusMgr_add {
 		cusTel.setBounds(304, 561, 365, 54);
 		panel.add(cusTel);
 		
-		cusDate = new JTextField();
-		cusDate.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		cusDate.setColumns(10);
-		cusDate.setBounds(304, 632, 365, 54);
-		panel.add(cusDate);
+
 		
 		JLabel lblCusName = new JLabel("고객이름");
 		lblCusName.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
@@ -177,13 +169,10 @@ public class CusMgr_add {
 		panel.add(lblCusTel);
 		lblCusTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		
-		JLabel lblCusDate = new JLabel("가입날짜");
-		lblCusDate.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		lblCusDate.setBounds(66, 622, 122, 72);
-		panel.add(lblCusDate);
+	
 		
 		JButton btnBackCusMain = new JButton("돌아가기");
-		btnBackCusMain.setBounds(274, 940, 290, 65);
+		btnBackCusMain.setBounds(831, 253, 290, 65);
 		btnBackCusMain.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
 		frame.getContentPane().add(btnBackCusMain);
 		
@@ -191,18 +180,16 @@ public class CusMgr_add {
 		lblNewLabel_2.setIcon(new ImageIcon(CusMgr_add.class.getResource("/img/YellowCat.png")));
 		lblNewLabel_2.setBounds(231, 38, 235, 80);
 		frame.getContentPane().add(lblNewLabel_2);
+		// 저장버튼
+		JButton btnCusSave = new JButton("저장");
+		btnCusSave.setBounds(838, 148, 162, 61);
+		frame.getContentPane().add(btnCusSave);
+		btnCusSave.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
 		
 
 		
-		btnCusSave.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			frame.setVisible(false); 
-			new CusMgr();
 
-		}
-	});
+	
 		
 //		저장 버튼을 눌렀을 때
 		btnCusSave.addActionListener(new ActionListener() {
@@ -219,13 +206,28 @@ public class CusMgr_add {
 	            	bean.setCusZip (Integer.parseInt(cusZip.getText().toString()));
 	            	bean.setCusAddr(cusAddr.getText());
 	            	bean.setCusTel(cusTel.getText());
-	            	bean.setCusDate(cusDate.getText());
+
 	            	
 	            	mgr.insertCusMgr(bean);
+	            	
+	            	frame.setVisible(false); 
+	    			new CusMgr();
 	            	
 	            }
 	           
 	            
 	        });
+		
+//		돌아가기 버튼 눌렀을 때
+		btnBackCusMain.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				new CusMgr();
+				
+				
+			}
+		});
 	}
 }

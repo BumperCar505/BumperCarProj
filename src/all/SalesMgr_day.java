@@ -10,6 +10,11 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.management.modelmbean.ModelMBean;
 import javax.swing.ImageIcon;
@@ -31,6 +36,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Dimension;
+import javax.swing.JPasswordField;
+import javax.swing.JComboBox;
+import java.awt.Button;
 
 // ComServiceList
 public class SalesMgr_day extends JFrame {
@@ -44,40 +52,18 @@ public class SalesMgr_day extends JFrame {
 	private JButton btnBackSales;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
+	String header[] = {"직원명", "고객명", "서비스명","부품명" ,"부품금액", "공임비"};
+	DefaultTableModel model = new DefaultTableModel(header, 0);
+	private String driver  = "com.mysql.cj.jdbc.Driver";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	private JTextField year;
+	private JTextField month;
+	private JTextField day;
 	
-	public void setFont() {
-		InputStream inputStream = null;
-		
-		// Font Setting
-		try {
-            String classPath = SalesMgr_day.class.getResource("").getPath();
-            String path = URLDecoder.decode(classPath, "UTF-8");
-            inputStream = new BufferedInputStream(
-                    new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
 
-            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-            
-            btnAddSalesD.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-            btnEditSalesD.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-            btnDelSalesD.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-            btnBackSales.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-//            
-//    		// Table Font
-////            tableSalesD.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE));
-//
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        	if(inputStream != null) {
-        		try {
-            		inputStream.close();
-        		} catch(Exception e2) { 
-        			e2.printStackTrace();
-        		}
-        	}
-        }
-	}
-//	
 	/**
 	 * Launch the application.
 	 */
@@ -121,16 +107,7 @@ public class SalesMgr_day extends JFrame {
 //		TextField tf = new TextField();
 		
 //		테이블
-		String header[] = {"Num", "직원명", "고객명", "서비스명", "건수", "총 금액", "내용","금액"};
-//		String contents[][] = {
-//				{"1", "김가나", "이나라", "타이어교체", "2건","50000","볼트구입","30000"},
-//				{"2", "김가나", "이나라", "타이어교체", "2건","50000","볼트구입","30000"},
-//				{"3", "김가나", "이나라", "타이어교체", "2건","50000","볼트구입","30000"}
-//
-//		};
-
 		
-		DefaultTableModel model = new DefaultTableModel(header, 0);
 		JTable table = new JTable(model);
 		table.setFont(new Font("나눔바른고딕", Font.PLAIN,20));
 		
@@ -139,7 +116,7 @@ public class SalesMgr_day extends JFrame {
 		JScrollPane scrollpane = new JScrollPane(table);
 		scrollpane.setBounds(239, 236, 1186, 533);
 		scrollpane.setAutoscrolls(true);
-//		scrollpane.add (scrollpane) ; 이건 하면 안된다.
+
 		
 		table.getColumnModel().getColumn(0).setPreferredWidth(39);
 		table.getColumnModel().getColumn(0).setMinWidth(20);
@@ -147,9 +124,6 @@ public class SalesMgr_day extends JFrame {
 		table.setRowHeight(40);
 		scrollpane.setLayout(null);
 		
-//		 Text Align Center
-//		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
-//		render.setHorizontalAlignment(SwingConstants.CENTER);
 	
 	
 		scSalesDList = new JScrollPane(table);
@@ -160,19 +134,6 @@ public class SalesMgr_day extends JFrame {
 		
 
 		getContentPane.add(scSalesDList);//외곽 라인
-		
-		// 버튼모음
-//		btnAddSalesD = new JButton("추가");
-//		btnAddSalesD.setBounds(100, 70, Size.BTN_S_W, Size.BTN_S_H);
-//		getContentPane.add(btnAddSalesD);
-//		
-//		btnEditSalesD = new JButton("수정");
-//		btnEditSalesD.setBounds(275, 70, Size.BTN_S_W, Size.BTN_S_H);
-//		getContentPane.add(btnEditSalesD);
-//		
-//		btnDelSalesD = new JButton("삭제");
-//		btnDelSalesD.setBounds(450, 70, Size.BTN_S_W, Size.BTN_S_H);
-//		getContentPane.add(btnDelSalesD);
 		
 		btnBackSales = new JButton("돌아가기");
 		btnBackSales.setBounds(648, 635, Size.BTN_B_W, Size.BTN_B_H);
@@ -186,52 +147,46 @@ public class SalesMgr_day extends JFrame {
 		JScrollBar scrollBar = new JScrollBar();
 		scrollBar.setBounds(1558, 145, 17, 463);
 		getContentPane.add(scrollBar);
-//		JFrame.getContentPanel().add(addPanel);
+		
+		year = new JTextField();
+		year.setBounds(110, 97, 106, 33);
+		getContentPane.add(year);
+		year.setColumns(10);
+		
+		month = new JTextField();
+		month.setColumns(10);
+		month.setBounds(245, 97, 76, 33);
+		getContentPane.add(month);
+		
+		day = new JTextField();
+		day.setColumns(10);
+		day.setBounds(353, 97, 67, 33);
+		getContentPane.add(day);
+		
+		JLabel lblNewLabel = new JLabel("년");
+		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
+		lblNewLabel.setBounds(218, 100, 29, 24);
+		getContentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("월");
+		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
+		lblNewLabel_1.setBounds(325, 100, 29, 24);
+		getContentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("일");
+		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
+		lblNewLabel_2.setBounds(426, 100, 29, 24);
+		getContentPane.add(lblNewLabel_2);
+		
+		JButton btnSearch = new JButton("검색");
+		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
+		btnSearch.setBounds(458, 97, 87, 33);
+		getContentPane.add(btnSearch);
 		
 		
-//   	 * 매개변수 : 레이블의 내용, 레이블의 아이콘, 다이얼로그 제목, 다이얼로그 옵션
-//   	 * 반환값1 : -2(비정상적으로 작동했을때 반환하는 값)
-//   	 * 반환값2 : -1(확인 버튼만 있는 다이얼로그 클릭시 반환값, 예 & 아니오 다이얼로그에서 X 버튼 클릭시 반환값)
-//   	 * 반환값3 : 0(예, 아니오 다이얼로그에서 예 클릭시 반환값)
-//   	 * 반환값4 : 1(예, 아니오 다이얼로그에서 아니오 클릭시 반환값)
-//   	DialogManager.createMsgDialog("삭제하시겠습니까","\\img\\YellowCat.png", "삭제",JOptionPane.YES_NO_OPTION);
-		  
 		
 	
-		
-		
-
-		
-//		삭제 버튼눌렀을 때
-//		 btnDelSalesD.addActionListener(new ActionListener() {
-//				
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					
-//				   try {
-//					    int index = table.getSelectedRow();
-//					    //만약 열을 선택하지 않았다면 
-//				    	if(index == -1) {
-//				    	 DialogManager.createMsgDialog("셀을 선택하지 않았습니다.","\\img\\information5.png", "오류",JOptionPane.PLAIN_MESSAGE);
-//				    	 return;
-//						} 
-//				    	
-////				    	열을 선택하였다면
-//				    	int num = DialogManager.createMsgDialog("삭제하시겠습니까","\\img\\question6.png", "삭제",JOptionPane.YES_NO_OPTION);
-//				    	if(num==0){
-//				    		model.removeRow(table.getSelectedRow());
-////				    		model.removeRow(index);
-//				    		DialogManager.createMsgDialog("삭제 성공하였습니다.","\\img\\success1.png", "완료",JOptionPane.PLAIN_MESSAGE);
-//				    	}
-//				    	else if(num==1) {
-//				    		
-//				    	}
-//				    	
-//			            } catch(Exception ex) {
-//			            	ex.printStackTrace();
-//			            }
-//					
-//			}); 
+	
 		
 		// 돌아가기 버튼 눌렀을 때 월 매출관리 페이지로 이동
 		btnBackSales.addActionListener(new ActionListener() {
@@ -245,8 +200,93 @@ public class SalesMgr_day extends JFrame {
 		});
 		
 		
-//		db연결
-//		String query = "select "
+		btnSearch.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String boxYear = year.getText();
+				String boxMonth = month.getText();
+				String boxDay = day.getText();
+				
+				String boxTotalDay = boxYear + "-" + boxMonth + "-" + boxDay;
+				
+
+			Connection con = null;
+			PreparedStatement pstmt, pstmt2 = null;
+			ResultSet rs , rs2 = null;
+			String sql, sql2 = null;
+			YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
+			YuriSalesMgrBean bean = new YuriSalesMgrBean();
+			System.out.println(boxTotalDay);
+	
+		try {
+			try {
+				Class.forName(driver);
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			}
+			con = DriverManager.getConnection(url, "root", "1234");
+			
+	
+			sql = "SELECT tech.techName, srv.srvName, cus.cusName, un.unitPrice, un.unitName "
+					+ "FROM maintenance   "
+					+ "	JOIN service srv  "
+					+ "	ON mainSrvNum = srv.srvNum  "
+					+ "	JOIN technician tech  "
+					+ "	ON srv.srvTechNum = tech.techNum  "
+					+ "	JOIN customer cus "
+					+ "	ON cus.cusNum = mainCusNum "
+					+ "	JOIN detail dtl "
+					+ "	ON dtl.dtlSrvNum = srv.srvNum "
+					+ "	JOIN unit un "
+					+ "	ON un.unitNum = dtl.dtlUnitNum "
+					+ " WHERE mainEndDay = ? and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
+			
+//			sql2 = "SELECT un.unitPrice "
+//					+ "FROM maintenance   "
+//					+ "	JOIN service srv  "
+//					+ "	ON mainSrvNum = srv.srvNum  "
+//					+ "	JOIN technician tech  "
+//					+ "	ON srv.srvTechNum = tech.techNum  "
+//					+ "	JOIN customer cus "
+//					+ "	ON cus.cusNum = mainCusNum "
+//					+ "	JOIN detail dtl "
+//					+ "	ON dtl.dtlSrvNum = srv.srvNum "
+//					+ "	JOIN unit un "
+//					+ "	ON un.unitNum = dtl.dtlUnitNum "
+//					+ " WHERE mainEndDay = ? and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 's%' " ;
+//					
+	
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, boxTotalDay); 
+			pstmt.setString(2, "1112233333"); 
+			
+//			pstmt2 =con.prepareStatement(sql2);
+//			pstmt2.setString(1, boxTotalDay); 
+//			pstmt2.setString(2, "1112233333"); 
+//			rs2 = pstmt.executeQuery();
+//			
+	
+			rs = pstmt.executeQuery();
+				while(rs.next()){         
+	             model.addRow(new Object[]{
+	            		 rs.getString("tech.techName"), 
+	            		 rs.getString("cus.cusName"),
+	            		 rs.getString("srv.srvName"), 
+	            		 rs.getString("un.unitName"),
+	            		 rs.getInt("un.unitPrice")
+//	            		 rs.getInt(bean.getProIncome())
+	             	});
+	            }
+				
+			} catch (SQLException eq) {
+				eq.printStackTrace();
+			} finally {
+				
+		}
+			}
+	});
+		
 			
 			
 	}

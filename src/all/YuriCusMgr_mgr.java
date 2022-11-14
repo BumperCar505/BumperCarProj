@@ -113,7 +113,7 @@ public class YuriCusMgr_mgr {
 //		MemberBean bean = new MemberBean();
 		try {
 			con = pool.getConnection();
-			sql = "insert into customer(cusComNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusZip, cusAddr, cusTel,cusKm,cusDate) values(1112233333,?,?,?,?,?,?,?,?,?) " ;
+			sql = "insert into customer(cusComNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusZip, cusAddr, cusTel,cusKm,cusDate) values('1112233333',?,?,?,?,?,?,?,?,now()) " ;
 			pstmt = con.prepareStatement(sql);
 
 //			데이터베이스에 값을 넣어줘야 하니까.set을 사용해야 한다.
@@ -126,10 +126,9 @@ public class YuriCusMgr_mgr {
 			pstmt.setString(6, bean.getCusAddr());
 			pstmt.setString(7, bean.getCusTel());
 			pstmt.setInt(8, bean.getCusKm());
-			pstmt.setString(9, bean.getCusDate());
-			
-			
-			pstmt.execute();
+//			pstmt.setString(9, bean.getCusDate());
+
+			pstmt.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,16 +141,18 @@ public class YuriCusMgr_mgr {
 	
 //	cusMgr 수정
 	
-	public boolean updateCusMgr(YuriCusMgrBean bean, int cusNum){
+	public boolean updateCusMgr(YuriCusMgrBean bean, int index){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update customer set cusName=?,cusCarNum=?,CusCarBrand=?,CusCarType=?"
-					+ " cusZip=?, cusAddr=?,cusTel=?,cusDate=?,cusKm=? "
-					+ "where cusNum=?";
+			sql = " update customer  "
+					+ "set cusName=?,cusCarNum=?,CusCarBrand=?,CusCarType=?, cusZip=?, cusAddr=?,cusTel=?,cusKm=?  "
+					+ "where cusNum=? " ;
+			
+			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, bean.getCusName());
 			pstmt.setString(2, bean.getCusCarNum());
 			pstmt.setString(3, bean.getCusCarBrand());
@@ -159,8 +160,8 @@ public class YuriCusMgr_mgr {
 			pstmt.setInt(5, bean.getCusZip());
 			pstmt.setString(6, bean.getCusAddr());
 			pstmt.setString(7, bean.getCusTel());
-			pstmt.setString(8, bean.getCusDate());
-			pstmt.setInt(9, bean.getCusKm());
+			pstmt.setInt(8, bean.getCusKm());
+			pstmt.setInt(9, index);
 			int cnt = pstmt.executeUpdate();
 			if(cnt==1) flag = true; 
 		} catch (Exception e) {
@@ -180,13 +181,14 @@ public class YuriCusMgr_mgr {
 		YuriCusMgrBean bean = new YuriCusMgrBean();
 		try {
 			con = pool.getConnection();
-			sql = "select * from customer where cusNum=?";
+			sql = "select * from customer where cusNum=? " ;
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, cusNum);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				bean.setCusNum(rs.getInt("cusNum"));
 				bean.setCusName(rs.getString("cusName"));
+				bean.setCusComNum(rs.getString("cusComNum"));
 				bean.setCusCarNum(rs.getString("cusCarNum"));
 				bean.setCusCarBrand(rs.getString("cusCarBrand"));
 				bean.setCusCarType(rs.getString("cusCarType"));
@@ -203,37 +205,6 @@ public class YuriCusMgr_mgr {
 		}
 		return bean;
 	}
-	
-//	cusMgr 삭제
-//	public MemberBean deleteCusMgr(MemberBean bean){
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		String sql = null;
-//		
-//		try {
-//			con = pool.getConnection();
-////			프로시저 명령어
-////			프로시저 날려야 
-////			지금 maintenance테이블과 pk,fk로 묶여있어서 이렇게 안하면 데이터 삭제가 안됨.
-////			pstmt.execute("SET foreign_key_checks =0");
-//			sql =  "SET foreign_key_checks =0 DELETE from customer WHERE cusNum = ? SET foreign_key_checks = 1 ";
-//			pstmt = con.prepareStatement(sql);
-//
-//			
-//			
-//			
-//			pstmt.setInt(1, bean.getCusNum());
-//			pstmt.executeUpdate();
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			pool.freeConnection(con, pstmt);
-//		}
-//
-//		return bean;
-//	}
-	
 	
 	
 }

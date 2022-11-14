@@ -13,6 +13,11 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 
@@ -44,285 +49,241 @@ import javax.swing.DefaultComboBoxModel;
 
 // ComServiceList
 public class SalesMgr extends JFrame {
-	private JTable table;
-	private JPanel getContentPane;
-	private JPanel addPanel;
-	private JTable tableSalesList;
-	private JScrollPane scSalesList;
-	//   private JButton btnAddCus;
-//   private JButton btnEditCus;
-//   private JButton btnDelCus;
-	private JButton btnBackSalesMain;
-	private JLabel lblYellowCat;
-	private final int FONT_SIZE = 21;
-
-//   이 페이지 해야 할 것들.
-//   1. 각 달의 마지막 날 가져와 달마다 다르게 생성되게(ex.31일, 29일)
-//   2. 데이터가 있는 날, 없는 날 받아와서 그에 맞는 수입, 지출 보여주기(SalesMgr_day)
-//   3. 달 옆에 페이지 넘길 수 있게 넣어서 넘겨 볼 수 있도록
-//   4. 옆에 스크롤바 삽입
-//   5. 총수입 총지출 확인할 수 있게(옆에 따로 만들면 좋을 듯)
-//   6. 기간 설정하기
-//   7. 덧셈 sql 쿼리
+   private JTable table;
+   private JPanel getContentPane;
+   private JPanel addPanel;
+   private JTable tableSalesList;
+   private JScrollPane scSalesList;
+   private JButton btnBackSalesMain;
+   private JLabel lblYellowCat;
+   private final int FONT_SIZE = 21;
 
 
 
-	String[] header = {"일", "수입", "지출"};
-	DefaultTableModel model = new DefaultTableModel(header,0);
-	private JTextField totalIncom;
-	private JTextField totalCost;
-	private JComboBox comboY;
+   String[] header = {"일", "수입", "지출"};
+   DefaultTableModel model = new DefaultTableModel(header,0);
+   
+    private String driver = "com.mysql.cj.jdbc.Driver";
+	private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+   
+//   DefaultTableModel에 넣는 방법을 찾아
+   private JTextField totalIncom;
+   private JTextField totalCost;
+   private JComboBox comboY;
+   private JComboBox comboM;
+   
+   YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
+   YuriSalesMgrBean bean = new YuriSalesMgrBean();
+    int a = bean.getSrvIncome();
+	int b = bean.getProIncome();
+	int c = bean.getProOut();
+
+	
+	int result = a + b;
+
+   
+//   String year;
+//   String month;
+	
+//   String day;
+//   String dbDate = year + '-' + month + '-' + day;
+
+  
+
+   public void setFont() {
+      InputStream inputStream = null;
+
+      // Font Setting
+      try {
+         String classPath = SalesMgr.class.getResource("").getPath();
+         String path = URLDecoder.decode(classPath, "UTF-8");
+
+      } catch (Exception e) {
+         e.printStackTrace();
+      } finally {
+         if(inputStream != null) {
+            try {
+               inputStream.close();
+            } catch(Exception e2) {
+               e2.printStackTrace();
+            }
+         }
+      }
+   }
+
+   /**
+    * Launch the application.
+    */
+   public static void main(String[] args) {
+      EventQueue.invokeLater(new Runnable() {
+         public void run() {
+            try {
+               SalesMgr frame = new SalesMgr();
+            
+
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+         }
+      });
+   }
 
 
 
-//   앞으로 추가할 기능.
-//   1. 여기있는 데이터 엑셀로 내보내는 기능
-//   2. 프린트 연결
-//   3. 화살표로 다른 달 넘길 수 있는 기능
-//   일단 말이다...
-
-
-
-
-
-	public void setFont() {
-		InputStream inputStream = null;
-
-		// Font Setting
-		try {
-			String classPath = SalesMgr.class.getResource("").getPath();
-			String path = URLDecoder.decode(classPath, "UTF-8");
-//            inputStream = new BufferedInputStream(
-//                    new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
-
-//            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-
-
-//            btnBackSalesMain.setFont(font.deriveFont(Font.BOLD, FONT_SIZE));
-
-			// Table Font
-//            tableCusList.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(inputStream != null) {
-				try {
-					inputStream.close();
-				} catch(Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SalesMgr frame = new SalesMgr();
-//               frame.setVisible(true);
-					frame.setFont();
-
-
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-
-
-	/**
-	 * Create the frame.
-	 */
+   /**
+    * Create the frame.
+    */
 
 
 
 
-	public SalesMgr() {
+   public SalesMgr() {
 
-//      SalesMgr.addMouseListener(new MouseAdapter() {
-//      @Override
-//      public addMouseListener(MouseEvent e) {
-//         if (e.getClickCount() == 2) {
-//            setVisible(false);
-//            new SalesMgr_day();
-//         }
-//      }
-//      });
+      setVisible(true);
+      setTitle("수입관리페이지");
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+      this.setLocationRelativeTo(null);
+      this.setResizable(false);
+      monthService();
 
-		setVisible(true);
-		setTitle("수입관리페이지");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
+//       mgr = DBConnectionMgr.getInstance();
+      
+      getContentPane = new JPanel();
+      getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-
-		getContentPane = new JPanel();
-		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(getContentPane);
-		TextField tf = new TextField();
-
-//      addPanel = new JPanel();
+      setContentPane(getContentPane);
+      TextField tf = new TextField();
 
 //      년도 선택 콤보박스 넣기
-		comboY = new JComboBox();
-		comboY.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		comboY.setModel(new DefaultComboBoxModel(new String[] {"2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"}));
-		comboY.setBounds(82, 107, 95, 36);
-
-//      기본적으로 현재 년도 출력되게 잠시보류..
-		LocalDate now = LocalDate.now();
-		String year = Integer.toString(now.getYear());
-		getContentPane.add(comboY);
-		comboY.setSelectedItem("year");
-		System.out.print(year);
-
+      comboY = new JComboBox();
+      comboY.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+      comboY.setModel(new DefaultComboBoxModel(new String[] {"2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012"}));
+      comboY.setBounds(82, 107, 95, 36);
+      
 //      매 달 콤보박스 넣기
-		JComboBox comboM = new JComboBox();
-		comboM.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		comboM.setModel(new DefaultComboBoxModel(new String[] {"1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"}));
-		comboM.setBounds(189, 107, 87, 36);
+      JComboBox comboM = new JComboBox();
+      comboM.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+      comboM.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
+      comboM.setBounds(189, 107, 87, 36);
 
-//      화면에 들어가면 기본적으로 현재 달이 출력될 수 있게.
+      getContentPane.add(comboM);
+      getContentPane.add(comboY);
 
-		int dayOfMonth = now.getDayOfMonth();
-		comboM.setSelectedIndex(dayOfMonth);
-		getContentPane.add(comboM);
-
-		//테이블 생성
-
-		table = new JTable(model);
-		table.setDragEnabled(true);
-		table.setRowSelectionAllowed(false);
-		table.setRowHeight(40);
-		table.setAlignmentY(5.0f);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 17));
-		table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		table.setAlignmentX(10.0f);
-		table.getTableHeader().setReorderingAllowed(false); //컬럼 이동 불가
-		table.getTableHeader().setResizingAllowed(false); //컬럼 크기 조절 불가
+      String stringYear = comboY.getSelectedItem().toString();
+      int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
 
 
+      
+      String stringMonth = comboM.getSelectedItem().toString();
+      int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
+
+      Calendar cal = Calendar.getInstance();
+      cal.set(ComboSelectY,(ComboSelectM+1),1);
+      int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+//      String endDate = stringYear + "-" + stringMonth + "-" ;
+      
+      for(int j = 1; j<=monthDay; j++) {
+         model.addRow(new Object[] {j,"",""});
+      }
+
+
+      
+      //테이블 생성
+
+      table = new JTable(model);
+      table.setDragEnabled(true);
+      table.setRowSelectionAllowed(true);
+      table.setRowHeight(40);
+      table.setAlignmentY(5.0f);
+      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+      table.setFont(new Font("나눔바른고딕", Font.PLAIN, 17));
+      table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+      table.setAlignmentX(10.0f);
+      table.getTableHeader().setReorderingAllowed(false); //컬럼 이동 불가
+      table.getTableHeader().setResizingAllowed(false); //컬럼 크기 조절 불가
 
 
 
-		JTable tableSalesList = new JTable(model);
+
+
+      JTable tableSalesList = new JTable(model);
 //      JScrollPane scrollpane = new JScrollPane(tableSalesList);
-		getContentPane.add(table);
-		scSalesList = new JScrollPane(table);
-		scSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
-		scSalesList.setBounds(82, 153, 1099, 392);
-		scSalesList.setVisible(true);
-		getContentPane.setLayout(null);
+      getContentPane.add(table);
+      scSalesList = new JScrollPane(table);
+      scSalesList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+      scSalesList.setBounds(82, 153, 1099, 346);
+      scSalesList.setVisible(true);
+      getContentPane.setLayout(null);
 
-		getContentPane.add(scSalesList);
+      getContentPane.add(scSalesList);
 
-		JScrollPane scrollPane = new JScrollPane();
+      JScrollPane scrollPane = new JScrollPane();
 //      scSalesList.setColumnHeaderView(scrollPane);
 //      model.addRow(new Object[] {"1", "김땡땡", "63하 2234"}); //열 잘 들어가는지 테스트
 
 
-//      콤보박스에서 해당 값 가져오기.
-		String str1 = comboM.getSelectedItem().toString();
+      JPanel jpList = new JPanel();
+      jpList.setLayout(new GridBagLayout());
+      JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      scrollSingle.setPreferredSize(new Dimension(400, 200));
 
-		char str2 = str1.charAt(0);
-//       첫 글자 숫자만 가져옴.(문자형으로)
+      btnBackSalesMain = new JButton("돌아가기");
+      btnBackSalesMain.setBounds(679, 520, 290, 65);
+      getContentPane.add(btnBackSalesMain);
 
-		int comboMonth = Character.getNumericValue(str2);
-//       받아온 문자를 int형으로 변환
+      lblYellowCat = new JLabel("");
+      lblYellowCat.setBounds(710, 50, 230, 80);
+      lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
+      getContentPane.add(lblYellowCat);
 
-		Calendar cal = Calendar.getInstance();
-		//  1월이 0으로 인식되기 때문에 month+1을 해줘야 한다.
+      JLabel lblNewLabel = new JLabel("총 수입");
+      lblNewLabel.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
+      lblNewLabel.setBounds(1264, 209, 95, 73);
+      getContentPane.add(lblNewLabel);
 
+      totalIncom = new JTextField();
+      totalIncom.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
+      totalIncom.setBounds(1381, 211, 166, 59);
+      getContentPane.add(totalIncom);
+      totalIncom.setColumns(10);
 
+      JPanel panel = new JPanel();
+      panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+      panel.setBounds(1223, 154, 387, 297);
+      getContentPane.add(panel);
+      panel.setLayout(null);
 
-		cal.set(2022,comboMonth+1,1);
+      JLabel lblNewLabel_1 = new JLabel("총 지출");
+      lblNewLabel_1.setBounds(46, 165, 83, 26);
+      lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
+      panel.add(lblNewLabel_1);
 
-
-//       System.out.println(comboMonth + comboMonth); int가 되었는지 확인
-		int comboMonth = Integer.parseInt(str2);
-		int comboMm = comboMonth.getSelectedItem();
-		System.out.println(comboMonth);
-
-		int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-		for(int i = 1; i<=monthDay; i++) {
-			model.addRow(new Object[] {i,"",""});
-		}
-		JPanel jpList = new JPanel();
-		jpList.setLayout(new GridBagLayout());
-		JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollSingle.setPreferredSize(new Dimension(400, 200));
-
-		btnBackSalesMain = new JButton("돌아가기");
-		btnBackSalesMain.setBounds(648, 555, 290, 65);
-		getContentPane.add(btnBackSalesMain);
-
-		lblYellowCat = new JLabel("");
-		lblYellowCat.setBounds(710, 50, 230, 80);
-		lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
-		getContentPane.add(lblYellowCat);
-
-		JLabel lblNewLabel = new JLabel("총 수입");
-		lblNewLabel.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
-		lblNewLabel.setBounds(1264, 209, 95, 73);
-		getContentPane.add(lblNewLabel);
-
-		totalIncom = new JTextField();
-		totalIncom.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
-		totalIncom.setBounds(1381, 211, 166, 59);
-		getContentPane.add(totalIncom);
-		totalIncom.setColumns(10);
-
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel.setBounds(1223, 154, 387, 297);
-		getContentPane.add(panel);
-		panel.setLayout(null);
-
-		JLabel lblNewLabel_1 = new JLabel("총 지출");
-		lblNewLabel_1.setBounds(46, 165, 83, 26);
-		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.BOLD, 22));
-		panel.add(lblNewLabel_1);
-
-		totalCost = new JTextField();
-		totalCost.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
-		totalCost.setColumns(10);
-		totalCost.setBounds(159, 149, 166, 59);
-		panel.add(totalCost);
-
-
-
-
-
-
-
+      totalCost = new JTextField();
+      totalCost.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
+      totalCost.setColumns(10);
+      totalCost.setBounds(159, 149, 166, 59);
+      panel.add(totalCost);
 
 //      돌아가기 버튼 누르면 main으로 이동
-		btnBackSalesMain.addActionListener(new ActionListener() {
+      btnBackSalesMain.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				new ComMyPage();
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            setVisible(false);
+            new ComMyPage();
 
-			}
-		});
+         }
+      });
 
 
 
-		//더블클릭하면 화면 넘어가게(일일매출관리페이지로)
+      //더블클릭하면 화면 넘어가게(일일매출관리페이지로)
 //      tableSalesList.addMouseListener(new java.awt.event.MouseAdapter() {
 //          @Override
 //          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -334,29 +295,130 @@ public class SalesMgr extends JFrame {
 //              }
 //          }
 //      });
-
+      
+   
+      
 //      드롭박스 바뀔 때마다 값 바뀌게
-		comboM.addActionListener (new ActionListener () {
-			public void actionPerformed(ActionEvent e) {
-//              String str1 = comboM.getSelectedItem().toString();
-//
-//             char str2 = str1.charAt(0);
-//
-//             int comboMonth = Character.getNumericValue(str2);
-//
-//            Calendar cal = Calendar.getInstance();
-//         //  1월이 0으로 인식되기 때문에 month+1을 해줘야 한다.
-//
-//            cal.set(2022,comboMonth,1);
-//
-//            int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-//
-//            for(int i = 1; i<=monthDay; i++) {
-//               model.addRow(new Object[] {i,"",""});
-//            }
+      comboM.addActionListener (new ActionListener () {
+         public void actionPerformed(ActionEvent e) {
+            
+//           콤보박스 값을 바꾸면 먼저 전체 열들을 다 삭제시켜준다.
+            model.setNumRows(0);
+            
+            String stringYear = comboY.getSelectedItem().toString();
+            int ComboSelectY = Integer.valueOf(stringYear); //콤보박스에서 선택된 년도 값.
 
-			}
-		});
 
-	}
-}
+            
+            String stringMonth = comboM.getSelectedItem().toString();
+            int ComboSelectM = Integer.valueOf(stringMonth); //콤보박스에서 선택된 달의 값
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(ComboSelectY,(ComboSelectM-1),1);
+            int monthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+            
+            String beanYear = bean.getEndDate().split("-")[0];
+            String beanMonth = bean.getEndDate().split("-")[1];
+            if (stringYear == beanYear && stringMonth == beanMonth) {
+            for(int j = 1; j<=monthDay; j++) {
+            
+               model.addRow(new Object[] {j, result,c } //돌면서 계산할 수 있게
+               
+              );
+            }
+           }
+         }
+       });
+      
+      }
+   //db연결
+   
+//   service 공임비 추출
+   public void monthService() {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= null;
+		
+
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,"root","1234");
+			sql = "SELECT un.unitPrice "
+					+ "FROM maintenance main "
+					+ "JOIN detail dtl "
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum "
+					+ "JOIN unit un "
+					+ "ON un.unitNum = dtl.dtlUnitNum "
+					+ "JOIN service srv "
+					+ "ON srv.srvNum = dtl.dtlSrvNum "
+					+ "JOIN technician tech "
+					+ "ON tech.techNum = srv.srvTechNum "
+					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 's%' AND dtl.dtlDeleted_yn='N' " ;
+
+
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+//			
+//			while(rs.next()) {
+//				model.addRow(new Object[] {
+//						rs.getString("unitprice")
+//				});
+				
+//			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+		
+		}
+	
+		}
+//   
+   
+   private YuriSalesMgrBean monthUnit(YuriSalesMgrBean bean) {
+	
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= null;
+		
+
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,"root","1234");
+			sql = "SELECT un.unitPrice "
+					+ "FROM maintenance main "
+					+ "JOIN detail dtl "
+					+ "ON dtl.dtlSrvNum = main.mainSrvNum "
+					+ "JOIN unit un "
+					+ "ON un.unitNum = dtl.dtlUnitNum "
+					+ "JOIN service srv "
+					+ "ON srv.srvNum = dtl.dtlSrvNum "
+					+ "JOIN technician tech "
+					+ "ON tech.techNum = srv.srvTechNum "
+					+ "WHERE main.mainComNum=? AND main.mainEndDay = ? and main.mainStatus=? "
+					+ "AND srv.srvTechNum = ? AND un.unitNum LIKE 'p%' AND dtl.dtlDeleted_yn='N' " ;
+
+
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+		
+		}
+		return bean;
+		}
+   }
+
+            
+
+
+   
+      
