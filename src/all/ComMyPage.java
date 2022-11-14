@@ -48,7 +48,7 @@ public class ComMyPage {
       initialize();
       frame.setVisible(true); 
       frame.setLocationRelativeTo(null); //화면 가운데에 뜨기
-//      main();
+
    
    }
 
