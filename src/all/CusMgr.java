@@ -10,7 +10,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Vector;
+
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
@@ -38,13 +42,12 @@ public class CusMgr extends JFrame {
 	
 
 	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://127.0.0.1:3306/cardb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-	String[] header = {"Num", "고객이름", "차번호", "브랜드", "차종", "주행거리","우편번호","주소","전화번호", "가입날짜"};
-	DefaultTableModel model = new DefaultTableModel(header,0);
-
+	// String[] header = {"Num", "고객이름", "차번호", "브랜드", "차종", "주행거리","우편번호","주소","전화번호", "가입날짜"};
+	// DefaultTableModel model = new DefaultTableModel(header,0);
 //	
 	/**
 	 * Launch the application.
@@ -79,20 +82,48 @@ public class CusMgr extends JFrame {
 		
 		getContentPane = new JPanel();
 		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getInfo();
-
 
 		setContentPane(getContentPane);
 		TextField tf = new TextField();
 		
-
+		DefaultTableModel model = new DefaultTableModel();
 		table = new JTable(model);
 		
-		JTable tableCusList = new JTable(model);
+		tableCusList = new JTable(model);
 		tableCusList.setAutoCreateRowSorter(true);
 		tableCusList.setRowMargin(4);
 		tableCusList.setRowHeight(30);
 		tableCusList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+		
+		Vector<String> columnHeaders = new Vector<>();
+		columnHeaders.add("번호");
+		columnHeaders.add("고객이름");
+		columnHeaders.add("차번호");
+		columnHeaders.add("브랜드");
+		columnHeaders.add("차종");
+		columnHeaders.add("주행거리");
+		columnHeaders.add("우편번호");
+		columnHeaders.add("주소");
+		columnHeaders.add("전화번호");
+		columnHeaders.add("가입날짜");
+		HashMap<String, Integer> columnWidthValues = new HashMap<>();
+		columnWidthValues.put("번호", 10);
+		columnWidthValues.put("고객이름", 50);
+		columnWidthValues.put("차번호", 75);
+		columnWidthValues.put("브랜드", 50);
+		columnWidthValues.put("차종", 50);
+		columnWidthValues.put("주행거리", 50);
+		columnWidthValues.put("우편번호", 50);
+		columnWidthValues.put("주소", 300);
+		columnWidthValues.put("전화번호", 125);
+		columnWidthValues.put("가입날짜", 200);
+		
+		TableDesigner.setFont(tableCusList, "NanumBarunGothic", FONT_SIZE);
+		TableDesigner.setTableColumn(tableCusList, columnHeaders);
+		TableDesigner.setTableTextCenter(tableCusList, columnHeaders);
+		TableDesigner.resizeTableRow(tableCusList, 50);
+		TableDesigner.resizeTableColumn(tableCusList, columnWidthValues);
+		TableDesigner.resizeTableHeader(tableCusList);
 		
 		JScrollPane scrollpane = new JScrollPane(table);
 		getContentPane.add(tableCusList);
@@ -110,16 +141,28 @@ public class CusMgr extends JFrame {
 		
 		// Button Create
 		btnAddCus = new JButton("추가");
+		btnAddCus.setBackground(new Color(244, 204, 204));
+		btnAddCus.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
 		btnAddCus.setBounds(100, 70, 150, 50);
+		btnAddCus.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 
 		getContentPane.add(btnAddCus);
 		
 		btnEditCus = new JButton("수정");
+		btnEditCus.setBackground(new Color(244, 204, 204));
 		btnEditCus.setBounds(275, 70, 150, 50);
+		btnEditCus.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		btnEditCus.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		getContentPane.add(btnEditCus);
 		
 		btnBackCusMain = new JButton("돌아가기");
+		btnBackCusMain.setBackground(new Color(244, 204, 204));
 		btnBackCusMain.setBounds(690, 918, 290, 65);
+		btnBackCusMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		btnBackCusMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		getContentPane.add(btnBackCusMain);
 		
 		lblYellowCat = new JLabel("");
@@ -141,9 +184,9 @@ public class CusMgr extends JFrame {
 		JScrollPane scrollSingle = new JScrollPane(jpList, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollSingle.setPreferredSize(new Dimension(400, 200));
-	
-
-
+		
+		// DB에서 테이블 가져오기
+		getInfo();
 		
 		//돌아가기 버튼 누르면 메인화면으로 간다.
 		btnBackCusMain.addActionListener(new ActionListener() {
@@ -155,9 +198,6 @@ public class CusMgr extends JFrame {
 
 			}
 		});
-		
-		
-	
 		
 //		추가부분 누르면 페이지 넘어가게 ok!
 		btnAddCus.addActionListener(new ActionListener() {
@@ -219,6 +259,8 @@ public class CusMgr extends JFrame {
 		pstmt = conn.prepareStatement(sql);
 		rs = pstmt.executeQuery();
 		
+		
+		DefaultTableModel model = (DefaultTableModel)tableCusList.getModel();
 		while(rs.next()) {
 			model.addRow(new Object[] {
 				rs.getInt("cusNum"),
