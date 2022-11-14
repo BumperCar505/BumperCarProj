@@ -162,5 +162,7 @@ public class ComJoin extends JFrame {
 //		폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null);
 		
+		
+		
 	}
 }

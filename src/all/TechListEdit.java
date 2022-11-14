@@ -36,13 +36,12 @@ import javax.swing.ImageIcon;
 
 public class TechListEdit extends JFrame {
 
-	
-	
 	private JPanel contentPane;
 	private JTable table;
 	private JButton btnEditTech;
 	private JButton btnDelTech;
 	private JButton btnBackMain;
+	private LoginManager loginManager;
 	
 
 	private String header[] = {"techNum","정비사 이름","전화번호","직급"};  // 테이블 컬럼 값들
@@ -79,6 +78,8 @@ public class TechListEdit extends JFrame {
 	
 	
 	public TechListEdit() {
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
@@ -87,7 +88,7 @@ public class TechListEdit extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		GwakMemberMgr mgr = new GwakMemberMgr();
-		GwakMemberBean bean =  mgr.Select22(model);
+		GwakMemberBean bean =  mgr.Select22(model, id);
 		
 
 //		폼 창이 화면 가운데서 뜨게 하는 기능

@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 public class GwakMemberMgr {
 	
 	private DBConnectionMgr pool;
+	private LoginManager loginManager;
 	
 	public GwakMemberMgr() {
 		//DBConnection 객체 10개 미리 생성.
@@ -55,18 +56,19 @@ public class GwakMemberMgr {
 	
 	
 	// select22 : DB에서 데이터 불러와서 테이블 채우기 ( TechListEdit)
-	public GwakMemberBean Select22(DefaultTableModel model){
+	public GwakMemberBean Select22(DefaultTableModel model, String id){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
 		GwakMemberBean bean = new GwakMemberBean();
-
+		
 				try {		
 					con = pool.getConnection();
-					sql = "select * from technician ";
+					sql = "select * from technician WHERE techComNum = ? ";
 					pstmt = con.prepareStatement(sql);
 					rs = pstmt.executeQuery();
+					pstmt.setString(1, id);
 						while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
 		                 model.addRow(new Object[]{rs.getInt("techNum"), rs.getString("techName"), rs.getString("techTel"),rs.getString("techLv")});
 		                }

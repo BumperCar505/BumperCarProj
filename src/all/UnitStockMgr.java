@@ -58,7 +58,7 @@ public class UnitStockMgr extends JFrame {
 
 	// Create the frame.
 	public UnitStockMgr() {
-		loginManager.getInstance();
+		loginManager = loginManager.getInstance();
 		String id = loginManager.getLogComNum();
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
