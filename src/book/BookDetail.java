@@ -334,7 +334,7 @@ public class BookDetail extends JFrame {
 				this.statusBox.setSelectedItem(rs.getString("mainStatus"));
 				
 				btnBook.setText("저장");
-				
+//				updateDetail(mainNum);
 			}
 
 			
@@ -347,5 +347,73 @@ public class BookDetail extends JFrame {
 		}
 
 	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void insertDetail(int mainNum) {
+		Connection conn = dbManager.getConn();
+		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+		
+		try {
+			String sql = "UPDATE maintenance, customer, technician, service SET customer.cusName = ?, customer.cusCarNum = ?, customer.cusCarBrand = ?, customer.cusCarType = ?, customer.cusTel = ?, service.srvName = ?, technician.techName = ?, mainStatus = ?, mainStartDay = ?, mainStartTime = ?, mainEndDay = ?, mainEndTime = ? "
+					+ "WHERE customer.cusNum = maintenance.mainCusNum AND service.srvNum = maintenance.mainSrvNum AND technician.techNum = maintenance.mainTechNum "
+					+ "AND maintenance.mainNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, this.cusName.getText());
+			pstmt.setString(2, this.cusCarNum.getText());
+			pstmt.setString(3, this.cusCarBrand.getText());
+			pstmt.setString(4, this.cusCarType.getText());
+//			pstmt.setInt(4, Integer.parseInt(this.comZip.getText()));
+			pstmt.setString(5, this.cusTel.getText());
+			pstmt.setString(6, this.srvName.getText());
+			pstmt.setString(8, this.techName.getText());
+			pstmt.setString(9, this.mainStatus.getText());
+//			String mainStartDay = rs.getString(getText());
+			pstmt.setString(10, this.mainStartDay.getText());
+			pstmt.setString(11, this.mainStartTime.getText());
+			pstmt.setString(12, this.mainEndDay.getText());
+			pstmt.setString(13, this.mainEndTime.getText());
+			pstmt.setInt(14, mainNum);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e3) {
+			e3.printStackTrace();
+		}
 	}
+	
+	public void updateDetail(int mainNum) {
+		Connection conn = dbManager.getConn();
+		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+		
+		try {
+			String sql = "UPDATE maintenance, customer, technician, service SET customer.cusName = ?, customer.cusCarNum = ?, customer.cusCarBrand = ?, customer.cusCarType = ?, customer.cusTel = ?, service.srvName = ?, technician.techName = ?, mainStatus = ?, mainStartDay = ?, mainStartTime = ?, mainEndDay = ?, mainEndTime = ? "
+					+ "WHERE customer.cusNum = maintenance.mainCusNum AND service.srvNum = maintenance.mainSrvNum AND technician.techNum = maintenance.mainTechNum "
+					+ "AND maintenance.mainNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, this.cusName.getText());
+			pstmt.setString(2, this.cusCarNum.getText());
+			pstmt.setString(3, this.cusCarBrand.getText());
+			pstmt.setString(4, this.cusCarType.getText());
+//			pstmt.setInt(4, Integer.parseInt(this.comZip.getText()));
+			pstmt.setString(5, this.cusTel.getText());
+			pstmt.setString(6, this.srvName.getText());
+			pstmt.setString(8, this.techName.getText());
+			pstmt.setString(9, this.mainStatus.getText());
+//			String mainStartDay = rs.getString(getText());
+			pstmt.setString(10, this.mainStartDay.getText());
+			pstmt.setString(11, this.mainStartTime.getText());
+			pstmt.setString(12, this.mainEndDay.getText());
+			pstmt.setString(13, this.mainEndTime.getText());
+			pstmt.setInt(14, mainNum);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e3) {
+			e3.printStackTrace();
+		}
+	}
+	
+}
 //}
