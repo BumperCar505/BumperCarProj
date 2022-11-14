@@ -1,6 +1,7 @@
 package all;
 
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,8 +10,6 @@ import javax.swing.border.EmptyBorder;
 
 import book.DBManager;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
@@ -24,17 +23,21 @@ import java.awt.event.ActionEvent;
 
 public class EditComInfo extends JFrame {
 
-	private final DBManager dbManager = new DBManager();
+	private final DBManager dbManager = new DBManager();	
 	
 	private JPanel contentPane;
 	private JTextField comNum;
 	private JTextField comPw;
-	private JTextField comPwCheck;
+	private JTextField newComPw;
 	private JTextField comName;
 	private JTextField comEmail;
 	private JTextField comZip;
 	private JTextField comAddr;
 	private JTextField comTel;
+	
+	JLabel password;
+	JLabel newPassword;
+	private JTextField newComPwCheck;
 
 
 	public static void main(String[] args) {
@@ -69,38 +72,38 @@ public class EditComInfo extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(438, 177, 803, 701);
+		panel.setBounds(438, 177, 1010, 649);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("비밀번호");
+		JLabel lblNewLabel_1_1 = new JLabel("기존 비밀번호");
 		lblNewLabel_1_1.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_1.setBounds(158, 139, 136, 41);
+		lblNewLabel_1_1.setBounds(99, 141, 136, 41);
 		panel.add(lblNewLabel_1_1);
 		
-		JLabel lblNewLabel_1_2 = new JLabel("비밀번호 재확인");
+		JLabel lblNewLabel_1_2 = new JLabel("새로운 비밀번호");
 		lblNewLabel_1_2.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_2.setBounds(132, 204, 162, 41);
+		lblNewLabel_1_2.setBounds(99, 204, 162, 41);
 		panel.add(lblNewLabel_1_2);
 		
 		JLabel lblNewLabel_1_3 = new JLabel("업체명");
 		lblNewLabel_1_3.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_3.setBounds(158, 267, 136, 41);
+		lblNewLabel_1_3.setBounds(99, 327, 136, 41);
 		panel.add(lblNewLabel_1_3);
 		
 		JLabel lblNewLabel_1_5 = new JLabel("우편번호");
 		lblNewLabel_1_5.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_5.setBounds(158, 395, 136, 41);
+		lblNewLabel_1_5.setBounds(99, 455, 136, 41);
 		panel.add(lblNewLabel_1_5);
 		
 		JLabel lblNewLabel_1_6 = new JLabel("주소");
 		lblNewLabel_1_6.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_6.setBounds(158, 460, 136, 41);
+		lblNewLabel_1_6.setBounds(99, 520, 136, 41);
 		panel.add(lblNewLabel_1_6);
 		
 		JLabel lblNewLabel_1_7 = new JLabel("전화번호");
 		lblNewLabel_1_7.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_7.setBounds(158, 524, 136, 41);
+		lblNewLabel_1_7.setBounds(99, 584, 136, 41);
 		panel.add(lblNewLabel_1_7);
 		
 		this.comNum = new JTextField();
@@ -115,62 +118,83 @@ public class EditComInfo extends JFrame {
 		comPw.setBounds(304, 140, 384, 42);
 		panel.add(comPw);
 		
-		comPwCheck = new JTextField();
-		comPwCheck.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		comPwCheck.setColumns(10);
-		comPwCheck.setBounds(304, 204, 384, 42);
-		panel.add(comPwCheck);
+		newComPw = new JTextField();
+		newComPw.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		newComPw.setColumns(10);
+		newComPw.setBounds(304, 204, 384, 42);
+		panel.add(newComPw);
 		
 		comName = new JTextField();
 		comName.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 		comName.setColumns(10);
-		comName.setBounds(304, 268, 384, 42);
+		comName.setBounds(305, 328, 384, 42);
 		panel.add(comName);
 		
 		comEmail = new JTextField();
 		comEmail.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 		comEmail.setColumns(10);
-		comEmail.setBounds(304, 332, 384, 42);
+		comEmail.setBounds(305, 392, 384, 42);
 		panel.add(comEmail);
 		
 		comZip = new JTextField();
 		comZip.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 		comZip.setColumns(10);
-		comZip.setBounds(304, 396, 169, 42);
+		comZip.setBounds(305, 456, 169, 42);
 		panel.add(comZip);
 		
 		comAddr = new JTextField();
 		comAddr.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 		comAddr.setColumns(10);
-		comAddr.setBounds(304, 460, 384, 42);
+		comAddr.setBounds(305, 520, 384, 42);
 		panel.add(comAddr);
 		
 		comTel = new JTextField();
 		comTel.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 		comTel.setColumns(10);
-		comTel.setBounds(304, 524, 384, 42);
+		comTel.setBounds(305, 584, 384, 42);
 		panel.add(comTel);
-		
-		JButton btnFixedComInfo = new JButton("수정 완료");
-		btnFixedComInfo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				EditComInfo editComInfo = new EditComInfo();
-				editComInfo.updateComInfo("1112233333");
-			}
-		});
-		btnFixedComInfo.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		btnFixedComInfo.setBounds(281, 622, Size.BTN_B_W, Size.BTN_B_H);
-		panel.add(btnFixedComInfo);
 		
 		JLabel lblNewLabel_1_4 = new JLabel("사업자등록번호");
 		lblNewLabel_1_4.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_4.setBounds(128, 76, 166, 41);
+		lblNewLabel_1_4.setBounds(99, 76, 166, 41);
 		panel.add(lblNewLabel_1_4);
 		
 		JLabel lblNewLabel_1_3_1 = new JLabel("이메일");
 		lblNewLabel_1_3_1.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
-		lblNewLabel_1_3_1.setBounds(158, 332, 136, 41);
+		lblNewLabel_1_3_1.setBounds(99, 392, 136, 41);
 		panel.add(lblNewLabel_1_3_1);
+		
+		password = new JLabel("");
+		password.setFont(new Font("굴림", Font.PLAIN, 21));
+		password.setBounds(716, 141, 238, 41);
+		panel.add(password);
+		
+		JLabel lblNewLabel_1_2_1 = new JLabel("새로운 비밀번호 확인");
+		lblNewLabel_1_2_1.setFont(new Font("Dialog", Font.PLAIN, 21));
+		lblNewLabel_1_2_1.setBounds(99, 263, 192, 41);
+		panel.add(lblNewLabel_1_2_1);
+		
+		newComPwCheck = new JTextField();
+		newComPwCheck.setFont(new Font("Dialog", Font.PLAIN, 21));
+		newComPwCheck.setColumns(10);
+		newComPwCheck.setBounds(304, 263, 384, 42);
+		panel.add(newComPwCheck);
+		
+		newPassword = new JLabel("");
+		newPassword.setFont(new Font("굴림", Font.PLAIN, 21));
+		newPassword.setBounds(716, 263, 282, 41);
+		panel.add(newPassword);
+		
+		JButton btnFixedComInfo = new JButton("수정 완료");
+		btnFixedComInfo.setBounds(687, 867, 290, 65);
+		contentPane.add(btnFixedComInfo);
+		btnFixedComInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateComInfo("1112233333");
+
+			}
+		});
+		btnFixedComInfo.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 	}
 
 	public void updateComInfo(String comNum) {
@@ -178,26 +202,77 @@ public class EditComInfo extends JFrame {
 //		Connection conn = null;
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
+		ResultSet rs = null;
 		
-		String sql = "UPDATE company, login SET login.pw = ?, comName = ?, comEmail = ?, comZip = ?, comAddr = ?, comTel = ? "
-				+ "WHERE company.comNum = login.logComNum AND comNum = ? ";
+		password.setText("");
+//		newPassword.setText("");
+		
 		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, this.comPw.getText());
-			pstmt.setString(2, this.comName.getText());
-			pstmt.setString(3, this.comEmail.getText());
-			pstmt.setString(4, this.comZip.getText());
-			pstmt.setString(5, this.comAddr.getText());
-			pstmt.setString(6, this.comTel.getText());
-			pstmt.setString(7, comNum);
-			pstmt.executeUpdate();
+			String sql1 = "SELECT pw FROM login "
+					+ "WHERE logComNum = ? ";
+			
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, comNum);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				String rpw = rs.getString("pw");
+				if (newComPw.getText().equals("")) {
+					if (comPw.getText().equals(rpw)) {
+						String sql2 = "UPDATE company, login SET login.pw = ?, comName = ?, comEmail = ?, comZip = ?, comAddr = ?, comTel = ? "
+								+ "WHERE company.comNum = login.logComNum AND comNum = ? ";
+						pstmt = conn.prepareStatement(sql2);
+						
+						pstmt.setString(1, this.comPw.getText());
+						pstmt.setString(2, this.comName.getText());
+						pstmt.setString(3, this.comEmail.getText());
+						pstmt.setInt(4, Integer.parseInt(this.comZip.getText()));
+						pstmt.setString(5, this.comAddr.getText());
+						pstmt.setString(6, this.comTel.getText());
+						pstmt.setString(7, comNum);
+						pstmt.executeUpdate();
+						
+						setVisible(false);
+						new ComMyPage();
+					} else {
+						password.setText("비밀번호가 틀립니다.");
+						password.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+						password.setForeground(Color.RED);
+					}
+				} else {
+					if (comPw.getText().equals(rpw) && newComPw.getText().equals(newComPwCheck.getText())) {
+						String sql2 = "UPDATE company, login SET login.pw = ?, comName = ?, comEmail = ?, comZip = ?, comAddr = ?, comTel = ? "
+								+ "WHERE company.comNum = login.logComNum AND comNum = ? ";
+						pstmt = conn.prepareStatement(sql2);
+						
+						pstmt.setString(1, this.newComPw.getText());
+						pstmt.setString(2, this.comName.getText());
+						pstmt.setString(3, this.comEmail.getText());
+						pstmt.setInt(4, Integer.parseInt(this.comZip.getText()));
+						pstmt.setString(5, this.comAddr.getText());
+						pstmt.setString(6, this.comTel.getText());
+						pstmt.setString(7, comNum);
+						pstmt.executeUpdate();
+						
+						setVisible(false);
+						new ComMyPage();
+						
+						}
+						else {
+							newPassword.setText("비밀번호가 일치하지 않습니다.");
+							newPassword.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+							newPassword.setForeground(Color.RED);
+						}
+				
+					}
+				
+				}
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
-			dbManager.closeDB(pstmt);
-			dbManager.closeDB();
+//		} finally {
+//			dbManager.closeDB(pstmt);
+//			dbManager.closeDB();
 		}
 	}
 	
@@ -229,11 +304,9 @@ public class EditComInfo extends JFrame {
 			}
 		} catch (Exception e2) {
 			e2.printStackTrace();
-		} finally {
-			dbManager.closeDB(pstmt, rs);
-			dbManager.closeDB();
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
 		}
 	}
-	
-	
 }
