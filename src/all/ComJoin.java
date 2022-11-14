@@ -8,6 +8,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -25,6 +28,7 @@ public class ComJoin extends JFrame {
 	private JTextField comTel;
 	private JPasswordField comPw;
 	private JPasswordField comPwCheck;
+	private GwakMemberBean comJoinInfo;
 
 
 	// Launch the application.
@@ -93,6 +97,8 @@ public class ComJoin extends JFrame {
 		comTellb.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		contentPane.add(comTellb);
 		
+		
+		// 다음
 		JButton btnComNext = new JButton("다음");
 		btnComNext.setBounds(695, 913, 290, 65);
 		btnComNext.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
@@ -162,7 +168,31 @@ public class ComJoin extends JFrame {
 //		폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null);
 		
+		comJoinInfo.setComNum(comNum.getText());
+		comJoinInfo.setComName(comName.getText());
+		comJoinInfo.setComEmail(comEmail.getText());
+		comJoinInfo.setComZip(comZip.getText());
+		comJoinInfo.setComAddr(comAddr.getText());
+		comJoinInfo.setComTel(comTel.getText());
+		comJoinInfo.setComPw(String.valueOf(comPw.getPassword()));
+		comJoinInfo.setComPwCheck(String.valueOf(comPwCheck.getPassword()));
 		
+	}
+		private List<TechBeans> createTechBeans() {
+			List<TechBeans> techBeansList = new ArrayList<>();
+			
+			
+				String comNum = comJoinInfo.getComNum();
+				String comName = comJoinInfo.getComNum();
+				String comEmail = comJoinInfo.getComNum();
+				String comZip = comJoinInfo.getComNum();
+				String comAddr = comJoinInfo.getComNum();
+				String comTel = comJoinInfo.getComNum();
+				String comPw = comJoinInfo.getComNum();
+				String comPwCheck = comJoinInfo.getComNum();
+				
+				techBeansList.add(new TechBeans(comNum, comName, comEmail));
+			return createTechBeans();
 		
 	}
 }

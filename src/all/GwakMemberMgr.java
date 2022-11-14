@@ -67,8 +67,8 @@ public class GwakMemberMgr {
 					con = pool.getConnection();
 					sql = "select * from technician WHERE techComNum = ? ";
 					pstmt = con.prepareStatement(sql);
-					rs = pstmt.executeQuery();
 					pstmt.setString(1, id);
+					rs = pstmt.executeQuery();
 						while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
 		                 model.addRow(new Object[]{rs.getInt("techNum"), rs.getString("techName"), rs.getString("techTel"),rs.getString("techLv")});
 		                }
