@@ -10,20 +10,34 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JButton;
 
 public class UnitBuyHistory extends JFrame {
 
+	private JTable table;
 	private JPanel contentPane;
-
+	private String driver  = "com.mysql.cj.jdbc.Driver";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	private String header[] = {"stckNum", "구입날짜","부품번호","부품명","벤더", "구입수량"};  // 테이블 컬럼 값들
+	private DefaultTableModel model = new DefaultTableModel(header, 0);
 	/**
-	 * Launch the application.
+	 * Launch the application..
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UnitBuyHistory frame = new UnitBuyHistory();
-					frame.setVisible(true);
+//					UnitBuyHistory frame = new UnitBuyHistory();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -34,11 +48,12 @@ public class UnitBuyHistory extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public UnitBuyHistory() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public UnitBuyHistory(int stckNum, String unitNum) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 895, 730);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		Select5(stckNum, unitNum);
 		
 
 //		폼 창이 화면 가운데서 뜨게 하는 기능
@@ -47,18 +62,7 @@ public class UnitBuyHistory extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		String header[] = {"구입날짜","부품번호","부품명", "벤더", "구입수량"};
-		String contents[][] = {
-				{"2022-10-10","hh111","타이어","한국타이어", "20"},
-				{"2022-09-09","hh111","타이어","한국타이어", "24"},
-				{"2022-08-08","hh111","타이어","한국타이어", "11"},
-				{"2022-07-07","hh111","타이어","한국타이어", "2"},
-				{"2022-06-06","hh111","타이어","한국타이어", "8"},
-		};
-
-		
-		DefaultTableModel model = new DefaultTableModel(contents, header);
-		JTable table = new JTable(model);
+		table = new JTable(model);
 		table.setAutoCreateRowSorter(true);
 		
 		table.getColumnModel().getColumn(0).setPreferredWidth(39);
@@ -67,6 +71,11 @@ public class UnitBuyHistory extends JFrame {
 		contentPane.setLayout(null);
 
 		table.setBounds(247, 231, 1170, 671);
+		
+		table.getColumn("stckNum").setWidth(0);
+		table.getColumn("stckNum").setMinWidth(0);
+		table.getColumn("stckNum").setMaxWidth(0);
+		
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table);
 		//--
@@ -83,8 +92,89 @@ public class UnitBuyHistory extends JFrame {
 		
 		JLabel lblNewLabel_1 = new JLabel("구매내역 조회");
 		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		lblNewLabel_1.setBounds(54, 113, 133, 48);
+		lblNewLabel_1.setBounds(54, 111, Size.BTN_S_W, Size.BTN_S_H);
 		contentPane.add(lblNewLabel_1);
+		
+		JButton btnEdit = new JButton("내역 수정");
+		btnEdit.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+		btnEdit.setBounds(512, 111, Size.BTN_S_W, Size.BTN_S_H);
+		contentPane.add(btnEdit);
+		
+		JButton btnDelete = new JButton("내역 삭제");
+		btnDelete.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+		btnDelete.setBounds(674, 111, Size.BTN_S_W, Size.BTN_S_H);
+		contentPane.add(btnDelete);
+		
+		
+		// 수정 버튼
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int row = table.getSelectedRow();
+				int column = 0;
+				int stckNum = (int) table.getValueAt(row, column);
+				
+				
+				UnitStockMgr_edit history = new UnitStockMgr_edit(stckNum);
+				history.setVisible(true);
+			}
+		});
+		
+		// 삭제 버튼
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int row = table.getSelectedRow();
+				int column = 0;
+				// String unitName = (String) table.getValueAt(row, column);
+				
+
+			}
+		});
+		
+
 
 	}
+	
+	
+	//  : DB에서 데이터 불러와서 테이블 채우기(제품 구매 이력)
+	private void Select5(int stckNum, String unitNum){
+			
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		GwakMemberBean bean = new GwakMemberBean();
+
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, "root", "1234");
+			
+			// UnitStockMgr 메인화면 테이블 값 쿼리문
+			// 재고는 stckQty2 (정비완료시 재고 빠진것 업데이트 된 열)
+			sql = "SELECT stock.stckNum, stock.stckBuyDate, unit.unitNum, unit.unitName, unit.unitVendor, stock.stckQty1 "
+					+ "FROM stock "
+					+ "inner join unit "
+					+ "on stock.stckUnitNum = unit.unitNum "
+					+ "WHERE stock.stckComNum = ? AND unit.unitNum = ? "
+					+ "ORDER BY stock.stckBuyDate DESC ";
+
+			pstmt = con.prepareStatement(sql);
+//★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
+			pstmt.setString(1, "1112233333"); // 테스트용
+			pstmt.setString(2, unitNum); // p001
+
+
+	
+			rs = pstmt.executeQuery();
+				while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
+                 model.addRow(new Object[]{rs.getInt("stock.stckNum"), rs.getString("stock.stckBuyDate"), rs.getString("unit.unitNum"), rs.getString("unit.unitName"), rs.getString("unit.unitVendor"),rs.getInt("stock.stckQty1")});
+                }
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+		}
+
+		}
 }

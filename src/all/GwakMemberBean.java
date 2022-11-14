@@ -3,7 +3,7 @@ package all;
 
 public class GwakMemberBean {
 
-	// technician 테이블 
+	// technician 테이블 .
 	private int techNum;
 	private String techName;
 	private String techTel;
@@ -15,7 +15,8 @@ public class GwakMemberBean {
 	private String stckComNum;	
 
 	private String stckUnitNum;
-	private int stckQty;
+	private int stckQty1;
+	private int stckQty2;
 	private String stckBuyDate;
 	
 	// unit 테이블
@@ -87,13 +88,22 @@ public class GwakMemberBean {
 		this.stckUnitNum = stckUnitNum;
 	}
 	
-	public int getStckQty() {
-		return stckQty;
+	public int getStckQty1() {
+		return stckQty1;
 	}
 	
-	public void setStckQty(int stckQty) {
-		this.stckQty = stckQty;
+	public void setStckQty1(int stckQty1) {
+		this.stckQty1 = stckQty1;
 	}
+	
+	public int getStckQty2() {
+		return stckQty2;
+	}
+
+	public void setStckQty2(int stckQty2) {
+		this.stckQty2 = stckQty2;
+	}
+	
 	
 	public String getStckBuyDate() {
 		return stckBuyDate;
@@ -145,7 +155,8 @@ public class GwakMemberBean {
 	public void setTechLv(String techLv) {
 		this.techLv = techLv;
 	}
-	
+
+
 
 	
 }
