@@ -1,8 +1,10 @@
 package all;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
@@ -95,20 +97,26 @@ public class UnitStockMgr_addUnit extends JFrame {
 		contentPane.add(unitVendorlbl);
 		
 		unitPrice = new JTextField();
+		unitPrice.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		unitPrice.setEditable(false);
 		unitPrice.setColumns(10);
 		unitPrice.setBounds(93, 351, 390, 39);
+		unitPrice.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(unitPrice);
 		
 		unitVendor = new JTextField();
+		unitVendor.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		unitVendor.setEditable(false);
 		unitVendor.setColumns(10);
 		unitVendor.setBounds(93, 456, 390, 39);
+		unitVendor.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(unitVendor);
 		
 		btnUnitReg = new JButton("등록");
-		btnUnitReg.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+		btnUnitReg.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnUnitReg.setBounds(143, 619, Size.BTN_B_W, Size.BTN_B_H);
+		btnUnitReg.setBackground(new Color(244, 204, 204));
+		btnUnitReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnUnitReg);
 		
 		lblNewLabel = new JLabel("");
@@ -121,6 +129,7 @@ public class UnitStockMgr_addUnit extends JFrame {
 		unitNameCmb.setMaximumRowCount(10);
 		unitNameCmb.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		unitNameCmb.setBounds(93, 238, 390, 39);
+		unitNameCmb.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(unitNameCmb);
 		
 		
@@ -150,6 +159,7 @@ public class UnitStockMgr_addUnit extends JFrame {
 	      unitNameCmb.addActionListener(new ActionListener() {
 	             public void actionPerformed(ActionEvent e) {
 	                  JComboBox cb = (JComboBox) e.getSource(); // 콤보박스 알아내기
+	                  cb.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
    
 	                  	String item = cb.getSelectedItem().toString();
 	                        
@@ -163,12 +173,16 @@ public class UnitStockMgr_addUnit extends JFrame {
 	                    unitPrice.setColumns(10);
 	                    unitPrice.setEditable(false);
 	                    unitPrice.setBounds(93, 351, 390, 39);
+	                    unitPrice.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+	                    unitPrice.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 	                    contentPane.add(unitPrice);
 	                        
 	                    unitVendor = new JTextField(bean.getUnitVendor());
 	                    unitVendor.setColumns(10);
 	                    unitVendor.setEditable(false);
 	                    unitVendor.setBounds(93, 456, 390, 39);
+	                    unitVendor.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+	                    unitVendor.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 	                    contentPane.add(unitVendor);            
 	             }
 	        });

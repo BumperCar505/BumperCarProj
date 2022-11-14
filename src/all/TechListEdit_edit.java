@@ -1,8 +1,10 @@
 package all;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import javax.swing.JLabel;
@@ -98,6 +100,8 @@ public class TechListEdit_edit extends JFrame{
 		btnTechSave = new JButton("저장");
 		btnTechSave.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		btnTechSave.setBounds(165, 388, Size.BTN_B_W, Size.BTN_B_H);
+		btnTechSave.setBackground(new Color(244, 204, 204));
+		btnTechSave.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnTechSave);
 		
 		
@@ -126,7 +130,6 @@ public class TechListEdit_edit extends JFrame{
 				
 				GwakMemberMgr mgr = new GwakMemberMgr();
 				GwakMemberBean bean =  new GwakMemberBean();
-				
 				bean.setTechName(techName.getText());
 				bean.setTechTel(techTel.getText());
 				bean.setTechLv(techLv.getText());

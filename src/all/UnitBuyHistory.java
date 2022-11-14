@@ -52,6 +52,7 @@ public class UnitBuyHistory extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 895, 730);
 		contentPane = new JPanel();
+		contentPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		Select5(stckNum, unitNum);
 		
@@ -71,6 +72,7 @@ public class UnitBuyHistory extends JFrame {
 		contentPane.setLayout(null);
 
 		table.setBounds(247, 231, 1170, 671);
+		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		
 		table.getColumn("stckNum").setWidth(0);
 		table.getColumn("stckNum").setMinWidth(0);
@@ -78,6 +80,7 @@ public class UnitBuyHistory extends JFrame {
 		
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		//--
 		scrollPane.setBounds(54, 171, 770, 477);
 		scrollPane.setAutoscrolls(true);
@@ -92,45 +95,45 @@ public class UnitBuyHistory extends JFrame {
 		
 		JLabel lblNewLabel_1 = new JLabel("구매내역 조회");
 		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		lblNewLabel_1.setBounds(54, 111, Size.BTN_S_W, Size.BTN_S_H);
+		lblNewLabel_1.setBounds(85, 111, Size.BTN_S_W, Size.BTN_S_H);
 		contentPane.add(lblNewLabel_1);
 		
-		JButton btnEdit = new JButton("내역 수정");
-		btnEdit.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		btnEdit.setBounds(512, 111, Size.BTN_S_W, Size.BTN_S_H);
-		contentPane.add(btnEdit);
-		
-		JButton btnDelete = new JButton("내역 삭제");
-		btnDelete.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		btnDelete.setBounds(674, 111, Size.BTN_S_W, Size.BTN_S_H);
-		contentPane.add(btnDelete);
+//		JButton btnEdit = new JButton("내역 수정");
+//		btnEdit.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+//		btnEdit.setBounds(512, 111, Size.BTN_S_W, Size.BTN_S_H);
+//		contentPane.add(btnEdit);
+//		
+//		JButton btnDelete = new JButton("내역 삭제");
+//		btnDelete.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
+//		btnDelete.setBounds(674, 111, Size.BTN_S_W, Size.BTN_S_H);
+//		contentPane.add(btnDelete);
 		
 		
 		// 수정 버튼
-		btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				int row = table.getSelectedRow();
-				int column = 0;
-				int stckNum = (int) table.getValueAt(row, column);
-				
-				
-				UnitStockMgr_edit history = new UnitStockMgr_edit(stckNum);
-				history.setVisible(true);
-			}
-		});
+//		btnEdit.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				int row = table.getSelectedRow();
+//				int column = 0;
+//				int stckNum = (int) table.getValueAt(row, column);
+//				
+//				
+//				UnitStockMgr_edit history = new UnitStockMgr_edit(stckNum);
+//				history.setVisible(true);
+//			}
+//		});
 		
 		// 삭제 버튼
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				int row = table.getSelectedRow();
-				int column = 0;
-				// String unitName = (String) table.getValueAt(row, column);
-				
-
-			}
-		});
+//		btnDelete.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				int row = table.getSelectedRow();
+//				int column = 0;
+//				// String unitName = (String) table.getValueAt(row, column);
+//				
+//
+//			}
+//		});
 		
 
 
