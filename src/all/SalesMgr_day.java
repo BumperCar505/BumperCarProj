@@ -66,6 +66,7 @@ public class SalesMgr_day extends JFrame {
 	private JTextField month;
 	private LoginManager loginManager;
 	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -100,6 +101,9 @@ public class SalesMgr_day extends JFrame {
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
+		
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
 		
 
 		
@@ -275,7 +279,7 @@ public class SalesMgr_day extends JFrame {
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 
-//			pstmt.setString(2, '1112233333'); 
+			pstmt.setString(2, id); 
 			rs = pstmt.executeQuery();
 		
 			DefaultTableModel model = (DefaultTableModel)tableSalesDay.getModel();

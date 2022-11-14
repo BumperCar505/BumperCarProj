@@ -102,6 +102,8 @@ public class SalesMgr extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
 
 		
 		getContentPane = new JPanel();
@@ -278,9 +280,9 @@ public class SalesMgr extends JFrame {
 				
 
 			Connection con = null;
-			PreparedStatement pstmt, pstmt2 = null;
-			ResultSet rs , rs2 = null;
-			String sql, sql2 = null;
+			PreparedStatement pstmt= null;
+			ResultSet rs = null;
+			String sql = null;
 			YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
 			YuriSalesMgrBean bean = new YuriSalesMgrBean();
 			System.out.println(boxTotalDay);
@@ -306,11 +308,11 @@ public class SalesMgr extends JFrame {
 					+ "	ON dtl.dtlSrvNum = srv.srvNum "
 					+ "	JOIN unit un "
 					+ "	ON un.unitNum = dtl.dtlUnitNum "
-					+ " WHERE DATE_FORMAT(mainEndDay,'%Y-%m') = DATE_FORMAT(now(),?) and mainStatus='정비완료' AND tech.techComNum='1112233333' AND un.unitNum LIKE 'p%' " ;
+					+ " WHERE DATE_FORMAT(mainEndDay,'%Y-%m') = DATE_FORMAT(now(),?) and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 
-//			pstmt.setString(2, id); 
+			pstmt.setString(2, id); 
 
 		
 			DefaultTableModel model = (DefaultTableModel)tableSalesD.getModel();
