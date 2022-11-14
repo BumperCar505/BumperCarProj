@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Vector;
@@ -246,6 +247,10 @@ public class SrvReg extends JFrame {
 		});
 		
     }
+	
+	public SrvReg(GwakMemberBean comJoinInfo, List<TechBeans> techList) {
+		
+	}
 }
 
 
