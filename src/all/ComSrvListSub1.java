@@ -511,7 +511,6 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 	 */
 	public ComSrvListSub1() {
 		loginManager = LoginManager.getInstance();
-		loginManager.login("com", "1112233333");
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 466, 518);

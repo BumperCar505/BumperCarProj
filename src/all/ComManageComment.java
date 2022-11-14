@@ -676,7 +676,6 @@ public class ComManageComment extends JFrame implements ActionListener {
 	 */
 	public ComManageComment() {
 		loginManager = LoginManager.getInstance();
-		loginManager.login("com", "1112233333"); // 가상 로그인 추후 삭제바람
 		
 		setTitle("다고쳐카센터 - 코멘트관리");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

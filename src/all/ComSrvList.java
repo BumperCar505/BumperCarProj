@@ -401,7 +401,6 @@ public class ComSrvList extends JFrame implements ActionListener {
 	 */
 	public ComSrvList() {
 		loginManager = LoginManager.getInstance();
-		loginManager.login("com", "1112233333"); // 가상 로그인
 		
 		setTitle("다고쳐카센터 - 서비스 목록");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
