@@ -15,6 +15,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Vector;
 
 import javax.management.modelmbean.ModelMBean;
 import javax.swing.ImageIcon;
@@ -27,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
@@ -43,7 +46,7 @@ import java.awt.Button;
 // ComServiceList
 public class SalesMgr_day extends JFrame {
 	private JPanel getContentPane;
-	private JTable tableSalesD;
+	private JTable tableSalesDay;
 	private JTable table;
 	private JScrollPane scSalesDList;
 	private JButton btnAddSalesD;
@@ -52,8 +55,8 @@ public class SalesMgr_day extends JFrame {
 	private JButton btnBackSales;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
-	String header[] = {"날짜","부품번호", "부품이름", "수량","부품단가" ,"총비용"};
-	DefaultTableModel model = new DefaultTableModel(header, 0);
+//	String header[] = {"날짜","부품번호", "부품이름", "수량","부품단가" ,"총비용"};
+//	DefaultTableModel model = new DefaultTableModel(header, 0);
 	private String driver  = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
@@ -92,95 +95,69 @@ public class SalesMgr_day extends JFrame {
 	public SalesMgr_day() {
 		
 		setVisible(true);
-		loginManager = loginManager.getInstance();
-	    String id = loginManager.getLogComNum();
-		setTitle("비용관리페이지");
+		setTitle("다고쳐카센터 - 비용관련페이지");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		
+
+		
 		getContentPane = new JPanel();
-		getContentPane.setEnabled(false); //수정불가하게
 		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		setLocationRelativeTo(null);
+
 		setContentPane(getContentPane);
-//		TextField tf = new TextField();
+		TextField tf = new TextField();
 		
-//		테이블
+		DefaultTableModel model = new DefaultTableModel();
+		table = new JTable(model);
 		
-		JTable table = new JTable(model);
-		table.setFont(new Font("나눔바른고딕", Font.PLAIN,20));
+		tableSalesDay = new JTable(model);
+		tableSalesDay.setBounds(1, 1, 1443, 0);
+		tableSalesDay.setAutoCreateRowSorter(true);
+		tableSalesDay.setRowMargin(4);
+		tableSalesDay.setRowHeight(30);
+		tableSalesDay.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+		tableSalesDay.setDefaultEditor(Object.class, null); // 테이블 값 수정 안되게
+		tableSalesDay.getTableHeader().setResizingAllowed(false);
+		tableSalesDay.getTableHeader().setReorderingAllowed(false);
+		
+		Vector<String> columnHeaders = new Vector<>();
+		columnHeaders.add("날짜");
+		columnHeaders.add("부품번호");
+		columnHeaders.add("부품명");
+		columnHeaders.add("수량");
+		columnHeaders.add("부품단가");
+		columnHeaders.add("총비용");
+		
+		HashMap<String, Integer> columnWidthValues = new HashMap<>();
+		columnWidthValues.put("날짜", 90);
+		columnWidthValues.put("부품번호", 80);
+		columnWidthValues.put("부품명", 75);
+		columnWidthValues.put("수량", 50);
+		columnWidthValues.put("부품단가", 50);
+		columnWidthValues.put("총비용", 80);
 		
 		
+		TableDesigner.setFont(tableSalesDay, "NanumBarunGothic", FONT_SIZE);
+		TableDesigner.setTableColumn(tableSalesDay, columnHeaders);
+		TableDesigner.setTableTextCenter(tableSalesDay, columnHeaders);
+		TableDesigner.resizeTableRow(tableSalesDay, 50);
+		TableDesigner.resizeTableColumn(tableSalesDay, columnWidthValues);
+		TableDesigner.resizeTableHeader(tableSalesDay);
 		
 		JScrollPane scrollpane = new JScrollPane(table);
-		scrollpane.setBounds(239, 236, 1186, 533);
-		scrollpane.setAutoscrolls(true);
-
-		
-		table.getColumnModel().getColumn(0).setPreferredWidth(39);
-		table.getColumnModel().getColumn(0).setMinWidth(20);
-		table.getColumnModel().getColumn(3).setResizable(false);
-		table.setRowHeight(40);
-		scrollpane.setLayout(null);
-		
-	
-	
-		scSalesDList = new JScrollPane(table);
-		scSalesDList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
-		scSalesDList.setBounds(100, 145, 1462, 462);
-		scSalesDList.setVisible(true);
-		getContentPane.setLayout(null); //이거 없으면 쪼그라든다.
-		
-
-		getContentPane.add(scSalesDList);//외곽 라인
+		getContentPane.add(tableSalesDay);
+		JLabel lblRegTec = new JLabel("");
+		lblRegTec.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
 		
 		btnBackSales = new JButton("돌아가기");
-		btnBackSales.setBounds(648, 635, Size.BTN_B_W, Size.BTN_B_H);
+		btnBackSales.setBounds(648, 1000, 290, 65);
 		getContentPane.add(btnBackSales);
-		
-		lblYellowCat = new JLabel("");
-		lblYellowCat.setBounds(710, 50, 230, 80);
-		lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
-		getContentPane.add(lblYellowCat);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(1558, 145, 17, 463);
-		getContentPane.add(scrollBar);
-		
-		year = new JTextField();
-		year.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		year.setBounds(1219, 102, 106, 33);
-		getContentPane.add(year);
-		year.setColumns(10);
-		
-		month = new JTextField();
-		month.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		month.setColumns(10);
-		month.setBounds(1354, 102, 76, 33);
-		getContentPane.add(month);
-		
-		JLabel lblNewLabel = new JLabel("년");
-		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
-		lblNewLabel.setBounds(1327, 105, 29, 24);
-		getContentPane.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("월");
-		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(1434, 105, 29, 24);
-		getContentPane.add(lblNewLabel_1);
-		
-		JButton btnSearch = new JButton("검색");
-		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
-		btnSearch.setBounds(1475, 101, 87, 33);
-		getContentPane.add(btnSearch);
-		
-		JLabel lblNewLabel_2 = new JLabel("비용관리페이지");
-		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
-		lblNewLabel_2.setBounds(104, 102, 146, 28);
-		getContentPane.add(lblNewLabel_2);
+		btnBackSales.setBackground(new Color(244, 204, 204));
+		btnBackSales.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		btnBackSales.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
 		
 		
 		
@@ -197,6 +174,69 @@ public class SalesMgr_day extends JFrame {
 
 			}
 		});
+		getContentPane.setLayout(null);
+	
+		
+		scSalesDList = new JScrollPane(tableSalesDay);
+		scSalesDList.setBounds(100, 242, 1462, 750);
+		scSalesDList.setEnabled(false);
+		scSalesDList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scSalesDList.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+		
+		getContentPane.add(scSalesDList);
+//		TextField tf = new TextField();
+	
+	
+	
+//		scSalesDList = new JScrollPane(table);
+//		scSalesDList.setBounds(100, 145, 1462, 630);
+//		scSalesDList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+//		scSalesDList.setVisible(true);
+//		getContentPane.setLayout(null);
+		
+
+		getContentPane.add(scSalesDList);//외곽 라인
+		
+		lblYellowCat = new JLabel("");
+		lblYellowCat.setBounds(710, 50, 230, 80);
+		lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
+		getContentPane.add(lblYellowCat);
+		
+		year = new JTextField();
+		year.setBounds(1219, 102, 106, 33);
+		year.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+		getContentPane.add(year);
+		year.setColumns(10);
+		
+		month = new JTextField();
+		month.setBounds(1354, 102, 76, 33);
+		month.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+		month.setColumns(10);
+		getContentPane.add(month);
+		
+		JLabel lblNewLabel = new JLabel("년");
+		lblNewLabel.setBounds(1327, 105, 29, 24);
+		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
+		getContentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("월");
+		lblNewLabel_1.setBounds(1434, 105, 29, 24);
+		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
+		getContentPane.add(lblNewLabel_1);
+		
+		JButton btnSearch = new JButton("검색");
+		btnSearch.setBounds(1475, 101, 87, 33);
+		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
+		getContentPane.add(btnSearch);
+		btnSearch.setBackground(new Color(244, 204, 204));
+		btnSearch.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		btnSearch.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		
+		JLabel lblNewLabel_2 = new JLabel("비용관리페이지");
+		lblNewLabel_2.setBounds(104, 102, 146, 28);
+		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
+		getContentPane.add(lblNewLabel_2);
 		
 		
 		btnSearch.addActionListener(new ActionListener() {
@@ -211,9 +251,9 @@ public class SalesMgr_day extends JFrame {
 				
 
 			Connection con = null;
-			PreparedStatement pstmt, pstmt2 = null;
-			ResultSet rs , rs2 = null;
-			String sql, sql2 = null;
+			PreparedStatement pstmt= null;
+			ResultSet rs = null;
+			String sql = null;
 			YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
 			YuriSalesMgrBean bean = new YuriSalesMgrBean();
 			System.out.println(boxTotalDay);
@@ -231,15 +271,15 @@ public class SalesMgr_day extends JFrame {
 					+ "FROM stock st "
 					+ "JOIN unit un "
 					+ "ON st.stckUnitNum = un.unitNum "
-					+ "WHERE DATE_FORMAT(st.stckBuyDate,'%Y-%m') = DATE_FORMAT(now(),?) and un.unitNum LIKE 'p%' and stckComNum = ?  " ;
+					+ "WHERE DATE_FORMAT(st.stckBuyDate,'%Y-%m') = DATE_FORMAT(now(),?) and un.unitNum LIKE 'p%' and stckComNum = '1112233333'  " ;
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 
-			pstmt.setString(2, id); 
-
-		
-	
+//			pstmt.setString(2, '1112233333'); 
 			rs = pstmt.executeQuery();
+		
+			DefaultTableModel model = (DefaultTableModel)tableSalesDay.getModel();
+			
 				while(rs.next()){         
 	             model.addRow(new Object[]{
 	            		 rs.getString("st.stckBuyDate"), 

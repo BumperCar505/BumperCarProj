@@ -15,6 +15,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Vector;
 
 import javax.management.modelmbean.ModelMBean;
 import javax.swing.ImageIcon;
@@ -27,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
@@ -46,14 +49,15 @@ public class SalesMgr extends JFrame {
 	private JTable tableSalesD;
 	private JTable table;
 	private JScrollPane scSalesDList;
+	private JScrollPane scSalesDList_1;
 	private JButton btnAddSalesD;
 	private JButton btnEditSalesD;
 	private JButton btnDelSalesD;
 	private JButton btnBackSales;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
-	String header[] = {"날짜","직원명", "고객명", "서비스명","부품명" ,"금액"};
-	DefaultTableModel model = new DefaultTableModel(header, 0);
+//	String header[] = {"날짜","직원명", "고객명", "서비스명","부품명" ,"금액"};
+//	DefaultTableModel model = new DefaultTableModel(header, 0);
 	private String driver  = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
@@ -73,7 +77,7 @@ public class SalesMgr extends JFrame {
 				try {
 					SalesMgr frame = new SalesMgr();
 //					frame.setVisible(true);
-				       
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -92,103 +96,153 @@ public class SalesMgr extends JFrame {
 	
 	public SalesMgr() {
 		setVisible(true);
-		loginManager = loginManager.getInstance();
-	    String id = loginManager.getLogComNum();
-		setTitle("매출관리페이지");
+		setTitle("다고쳐카센터 - 고객관리페이지");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		
-		getContentPane = new JPanel();
-		getContentPane.setEnabled(false); //수정불가하게
-		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		setLocationRelativeTo(null);
-		setContentPane(getContentPane);
-//		TextField tf = new TextField();
-		
-//		테이블
-		
-		JTable table = new JTable(model);
-		table.setFont(new Font("나눔바른고딕", Font.PLAIN,20));
-		
-		
-		
-		JScrollPane scrollpane = new JScrollPane(table);
-		scrollpane.setBounds(239, 236, 1186, 533);
-		scrollpane.setAutoscrolls(true);
 
 		
-		table.getColumnModel().getColumn(0).setPreferredWidth(39);
-		table.getColumnModel().getColumn(0).setMinWidth(20);
-		table.getColumnModel().getColumn(3).setResizable(false);
-		table.setRowHeight(40);
-		scrollpane.setLayout(null);
+		getContentPane = new JPanel();
+		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(getContentPane);
+		TextField tf = new TextField();
 		
+		DefaultTableModel model = new DefaultTableModel();
+		table = new JTable(model);
+		
+		tableSalesD = new JTable(model);
+		tableSalesD.setBounds(1, 1, 1443, 0);
+		tableSalesD.setAutoCreateRowSorter(true);
+		tableSalesD.setRowMargin(4);
+		tableSalesD.setRowHeight(30);
+		tableSalesD.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+		tableSalesD.setDefaultEditor(Object.class, null); // 테이블 값 수정 안되게
+		tableSalesD.getTableHeader().setResizingAllowed(false);
+		tableSalesD.getTableHeader().setReorderingAllowed(false);
+		
+		Vector<String> columnHeaders = new Vector<>();
+		columnHeaders.add("날짜");
+		columnHeaders.add("정비사명");
+		columnHeaders.add("고객명");
+		columnHeaders.add("서비스명");
+		columnHeaders.add("부품명");
+		columnHeaders.add("가격");
+		
+		HashMap<String, Integer> columnWidthValues = new HashMap<>();
+		columnWidthValues.put("날짜", 90);
+		columnWidthValues.put("정비사명", 80);
+		columnWidthValues.put("고객명", 75);
+		columnWidthValues.put("서비스명", 50);
+		columnWidthValues.put("부품명", 50);
+		columnWidthValues.put("가격", 80);
+		
+		
+		TableDesigner.setFont(tableSalesD, "NanumBarunGothic", FONT_SIZE);
+		TableDesigner.setTableColumn(tableSalesD, columnHeaders);
+		TableDesigner.setTableTextCenter(tableSalesD, columnHeaders);
+		TableDesigner.resizeTableRow(tableSalesD, 50);
+		TableDesigner.resizeTableColumn(tableSalesD, columnWidthValues);
+		TableDesigner.resizeTableHeader(tableSalesD);
+		
+		JScrollPane scrollpane = new JScrollPane(table);
+		getContentPane.add(tableSalesD);
+		JLabel lblRegTec = new JLabel("");
+		lblRegTec.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
+		getContentPane.setLayout(null);
+		
+		scSalesDList = new JScrollPane(tableSalesD);
+		scSalesDList.setBounds(100, 145, 1462, 750);
+		scSalesDList.setEnabled(false);
+		scSalesDList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scSalesDList.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+		
+		getContentPane.add(scSalesDList);
+//		TextField tf = new TextField();
 	
 	
-		scSalesDList = new JScrollPane(table);
-		scSalesDList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
-		scSalesDList.setBounds(100, 145, 1462, 630);
-		scSalesDList.setVisible(true);
+	
+		scSalesDList_1 = new JScrollPane(table);
+		scSalesDList_1.setBounds(100, 145, 1462, 630);
+		scSalesDList_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
+		scSalesDList_1.setVisible(true);
 		getContentPane.setLayout(null);
 		
 
-		getContentPane.add(scSalesDList);//외곽 라인
+		getContentPane.add(scSalesDList_1);//외곽 라인
 		
 		btnBackSales = new JButton("돌아가기");
-		btnBackSales.setBounds(650, 817, Size.BTN_B_W, Size.BTN_B_H);
+		btnBackSales.setBounds(650, 817, 290, 65);
 		getContentPane.add(btnBackSales);
+		btnBackSales.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		
+		btnBackSales.setBackground(new Color(244, 204, 204));
 		
 		lblYellowCat = new JLabel("");
 		lblYellowCat.setBounds(710, 50, 230, 80);
 		lblYellowCat.setIcon(new ImageIcon(CusMgr.class.getResource("/img/YellowCat.png")));
 		getContentPane.add(lblYellowCat);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(1558, 145, 17, 630);
-		getContentPane.add(scrollBar);
-		
 		year = new JTextField();
-		year.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
 		year.setBounds(1227, 102, 106, 33);
+		year.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
 		getContentPane.add(year);
 		year.setColumns(10);
 		
 		month = new JTextField();
+		month.setBounds(1362, 102, 76, 33);
 		month.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
 		month.setColumns(10);
-		month.setBounds(1362, 102, 76, 33);
 		getContentPane.add(month);
 		
 		JLabel lblNewLabel = new JLabel("년");
-		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
 		lblNewLabel.setBounds(1335, 105, 29, 24);
+		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
 		getContentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("월");
-		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
 		lblNewLabel_1.setBounds(1442, 105, 29, 24);
+		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
 		getContentPane.add(lblNewLabel_1);
 		
 		JButton btnSearch = new JButton("검색");
-		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
 		btnSearch.setBounds(1472, 102, 87, 33);
+		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
 		getContentPane.add(btnSearch);
+		btnSearch.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		btnSearch.setBackground(new Color(244, 204, 204));
 		
 		JLabel lblNewLabel_2 = new JLabel("매출관리페이지");
-		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 19));
 		lblNewLabel_2.setBounds(100, 102, 132, 33);
+		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 19));
 		getContentPane.add(lblNewLabel_2);
 		
 		JButton btnGoNext = new JButton("비용");
+		btnGoNext.setBounds(240, 94, 106, 41);
 		btnGoNext.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
-		btnGoNext.setBounds(236, 109, 76, 23);
 		getContentPane.add(btnGoNext);
+		btnGoNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
 		
+		btnGoNext.setBackground(new Color(244, 204, 204));
 		
-		
+		JButton btnBackSalesMain = new JButton("돌아가기");
+		btnBackSalesMain.setBounds(650, 922, 290, 65);
+		btnBackSalesMain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new ComMyPage();
+			}
+		});
+		getContentPane.add(btnBackSalesMain);
+		btnBackSalesMain.setBackground(new Color(244, 204, 204));
+		btnBackSalesMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		btnBackSalesMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		btnGoNext.addActionListener(new ActionListener() {
 			
@@ -259,17 +313,16 @@ public class SalesMgr extends JFrame {
 //			pstmt.setString(2, id); 
 
 		
-	
+			DefaultTableModel model = (DefaultTableModel)tableSalesD.getModel();
 			rs = pstmt.executeQuery();
 				while(rs.next()){         
-	             model.addRow(new Object[]{
+					model.addRow(new Object[]{
 	            		 rs.getString("mainEndDay"), 
 	            		 rs.getString("tech.techName"), 
 	            		 rs.getString("cus.cusName"),
 	            		 rs.getString("srv.srvName"), 
 	            		 rs.getString("un.unitName"),
 	            		 rs.getInt("un.unitPrice")
-
 	             	});
 	            }
 				
