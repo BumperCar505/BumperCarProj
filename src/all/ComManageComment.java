@@ -71,6 +71,7 @@ public class ComManageComment extends JFrame implements ActionListener {
 		try {
             String classPath = ComManageComment.class.getResource("").getPath();
             String path = URLDecoder.decode(classPath, "UTF-8");
+            path = path.split("all")[0];
             inputStream = new BufferedInputStream(
                     new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
 
@@ -675,13 +676,13 @@ public class ComManageComment extends JFrame implements ActionListener {
 	 */
 	public ComManageComment() {
 		loginManager = LoginManager.getInstance();
-		loginManager.login("com", "1112233333"); // 가상 로그인 추후 삭제바람
 		
 		setTitle("다고쳐카센터 - 코멘트관리");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
+		this.setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -779,6 +780,8 @@ public class ComManageComment extends JFrame implements ActionListener {
 		btnShowComment.setBounds(262, 70, 150, 50);
 		btnShowComment.addActionListener(this);
 		contentPane.add(btnShowComment);
+		
+		this.setFont();
 	}
 }
 

@@ -43,8 +43,9 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		try {
             String classPath = ComLogin.class.getResource("").getPath();
             String path = URLDecoder.decode(classPath, "UTF-8");
+            path = path.split("all")[0];
             inputStream = new BufferedInputStream(
-                    new FileInputStream(path + "/font/NanumBarunGothic.ttf"));
+                    new FileInputStream(path + "font/NanumBarunGothic.ttf"));
             
             Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             

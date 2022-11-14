@@ -1,3 +1,4 @@
+
 package all;
 
 
@@ -9,6 +10,7 @@ public class YuriCusMgrBean {
 	private String team;
 	private String address;
 	
+	private String cusComNum;
 	private int cusNum;
 	private String cusName;
 	private String cusCarNum;
@@ -23,6 +25,13 @@ public class YuriCusMgrBean {
 	//삽입 이름
 	
 
+	public String getCusComNum() {
+		return cusComNum;
+	}
+	public void setCusComNum(String cusComNum) {
+		this.cusComNum = cusComNum;
+	}
+	
 	public int getCusNum() {
 		return cusNum;
 	}

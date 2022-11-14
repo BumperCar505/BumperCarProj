@@ -1,8 +1,10 @@
 package all;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -94,6 +96,8 @@ public class ComJoin extends JFrame {
 		JButton btnComNext = new JButton("다음");
 		btnComNext.setBounds(695, 913, 290, 65);
 		btnComNext.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
+		btnComNext.setBackground(new Color(244, 204, 204));
+		btnComNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnComNext);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -104,18 +108,21 @@ public class ComJoin extends JFrame {
 		comNum = new JTextField();
 		comNum.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comNum.setBounds(622, 183, 444, 47);
+		comNum.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(comNum);
 		comNum.setColumns(10);
 		
 		comName = new JTextField();
 		comName.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comName.setBounds(622, 453, 444, 47);
+		comName.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		comName.setColumns(10);
 		contentPane.add(comName);
 		
 		comEmail = new JTextField();
 		comEmail.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comEmail.setBounds(622, 543, 444, 47);
+		comEmail.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		comEmail.setColumns(10);
 		contentPane.add(comEmail);
 		
@@ -123,28 +130,33 @@ public class ComJoin extends JFrame {
 		comZip.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comZip.setBounds(622, 633, 444, 47);
 		comZip.setColumns(10);
+		comZip.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(comZip);
 		
 		comAddr = new JTextField();
 		comAddr.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comAddr.setBounds(622, 723, 444, 47);
 		comAddr.setColumns(10);
+		comAddr.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(comAddr);
 		
 		comTel = new JTextField();
 		comTel.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comTel.setBounds(622, 813, 444, 47);
 		comTel.setColumns(10);
+		comTel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(comTel);
 		
 		comPw = new JPasswordField();
 		comPw.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comPw.setBounds(622, 273, 444, 47);
+		comPw.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(comPw);
 		
 		comPwCheck = new JPasswordField();
 		comPwCheck.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comPwCheck.setBounds(622, 363, 444, 47);
+		comPwCheck.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(comPwCheck);
 		
 //		폼 창이 화면 가운데서 뜨게 하는 기능
