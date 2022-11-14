@@ -168,31 +168,31 @@ public class ComJoin extends JFrame {
 //		폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null);
 		
-		comJoinInfo.setComNum(comNum.getText());
-		comJoinInfo.setComName(comName.getText());
-		comJoinInfo.setComEmail(comEmail.getText());
-		comJoinInfo.setComZip(comZip.getText());
-		comJoinInfo.setComAddr(comAddr.getText());
-		comJoinInfo.setComTel(comTel.getText());
-		comJoinInfo.setComPw(String.valueOf(comPw.getPassword()));
-		comJoinInfo.setComPwCheck(String.valueOf(comPwCheck.getPassword()));
+//		comJoinInfo.setComNum(comNum.getText());
+//		comJoinInfo.setComName(comName.getText());
+//		comJoinInfo.setComEmail(comEmail.getText());
+//		comJoinInfo.setComZip(comZip.getText());
+//		comJoinInfo.setComAddr(comAddr.getText());
+//		comJoinInfo.setComTel(comTel.getText());
+//		comJoinInfo.setComPw(String.valueOf(comPw.getPassword()));
+//		comJoinInfo.setComPwCheck(String.valueOf(comPwCheck.getPassword()));
 		
 	}
-		private List<TechBeans> createTechBeans() {
-			List<TechBeans> techBeansList = new ArrayList<>();
-			
-			
-				String comNum = comJoinInfo.getComNum();
-				String comName = comJoinInfo.getComNum();
-				String comEmail = comJoinInfo.getComNum();
-				String comZip = comJoinInfo.getComNum();
-				String comAddr = comJoinInfo.getComNum();
-				String comTel = comJoinInfo.getComNum();
-				String comPw = comJoinInfo.getComNum();
-				String comPwCheck = comJoinInfo.getComNum();
-				
-				techBeansList.add(new TechBeans(comNum, comName, comEmail));
-			return createTechBeans();
+//		private List<TechBeans> createTechBeans() {
+//			List<TechBeans> techBeansList = new ArrayList<>();
+//			
+//			
+//				String comNum = comJoinInfo.getComNum();
+//				String comName = comJoinInfo.getComNum();
+//				String comEmail = comJoinInfo.getComNum();
+//				String comZip = comJoinInfo.getComNum();
+//				String comAddr = comJoinInfo.getComNum();
+//				String comTel = comJoinInfo.getComNum();
+//				String comPw = comJoinInfo.getComNum();
+//				String comPwCheck = comJoinInfo.getComNum();
+//				
+//				techBeansList.add(new TechBeans(comNum, comName, comEmail));
+//			return createTechBeans();
 		
 	}
-}
+
