@@ -21,6 +21,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+/**
+ * 테이블의 디자인을 적용시키는 클래스<br>
+ * 모든 함수가 static으로 선언되어있습니다.<br>
+ * 메소드 설명에 있는 번호 순서대로 적용<br>
+ * @author MoonNight285
+ */
 public class TableDesigner {
 	
     /**
