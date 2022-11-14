@@ -173,7 +173,7 @@ public class SrvReg extends JFrame {
 		
 		JButton btnSrvDel = new JButton("삭제");
 		btnSrvDel.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		btnSrvDel.setBounds(1334, 175, Size.BTN_S_W, Size.BTN_S_H);
+		btnSrvDel.setBounds(1388, 188, 97, 33);
 		btnSrvDel.setBackground(new Color(244, 204, 204));
 		btnSrvDel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 	            Color.red, Color.red));
