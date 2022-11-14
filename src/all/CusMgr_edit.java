@@ -1,8 +1,10 @@
 package all;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import javax.swing.JLabel;
@@ -11,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
@@ -51,10 +54,11 @@ public class CusMgr_edit extends JFrame{
 	 * Create the frame.
 	 */
 	public CusMgr_edit(int a) {
-
-		
+		this.setVisible(true);
+		this.setTitle("다고쳐카센터 - 기존고객 수정");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
+		setBounds(100, 100, 615, 800);
+		this.setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
@@ -67,7 +71,8 @@ public class CusMgr_edit extends JFrame{
 		
 		cusName = new JTextField();
 		cusName.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-		cusName.setBounds(304, 10, 246, 54);
+		cusName.setBounds(200, 19, 307, 54);
+		cusName.setHorizontalAlignment(SwingConstants.CENTER);
 	
 		contentPane.add(cusName);
 		cusName.setColumns(10);
@@ -79,52 +84,60 @@ public class CusMgr_edit extends JFrame{
 		cusCarNum = new JTextField();
 		cusCarNum.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		cusCarNum.setColumns(10);
-		cusCarNum.setBounds(304, 96, 246, 54);
+		cusCarNum.setBounds(200, 95, 307, 54);
+		cusCarNum.setHorizontalAlignment(SwingConstants.CENTER);
 
 		contentPane.add(cusCarNum);
 				
 				cusCarBrand = new JTextField();
 				cusCarBrand.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 				cusCarBrand.setColumns(10);
-				cusCarBrand.setBounds(304, 176, 246, 54);
+				cusCarBrand.setBounds(200, 175, 307, 54);
+				cusCarBrand.setHorizontalAlignment(SwingConstants.CENTER);
 				contentPane.add(cusCarBrand);
 
 						
 						cusCarType = new JTextField();
 						cusCarType.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 						cusCarType.setColumns(10);
-						cusCarType.setBounds(304, 250, 246, 54);
+						cusCarType.setBounds(200, 249, 307, 54);
+						cusCarType.setHorizontalAlignment(SwingConstants.CENTER);
 						contentPane.add(cusCarType);
 						
 						cusKm = new JTextField();
 						cusKm.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 						cusKm.setColumns(10);
-						cusKm.setBounds(304, 330, 246, 54);
+						cusKm.setBounds(200, 329, 307, 54);
+						cusKm.setHorizontalAlignment(SwingConstants.CENTER);
 						contentPane.add(cusKm);
 						
 						cusZip = new JTextField();
 						cusZip.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 						cusZip.setColumns(10);
-						cusZip.setBounds(304, 405, 246, 54);
+						cusZip.setBounds(200, 404, 307, 54);
+						cusZip.setHorizontalAlignment(SwingConstants.CENTER);
 						contentPane.add(cusZip);
 						
 						cusAddr = new JTextField();
 						cusAddr.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 						cusAddr.setColumns(10);
-						cusAddr.setBounds(304, 479, 365, 54);
+						cusAddr.setBounds(200, 478, 307, 54);
+						cusAddr.setHorizontalAlignment(SwingConstants.CENTER);
 						contentPane.add(cusAddr);
 						
 						cusTel = new JTextField();
 						cusTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 						cusTel.setColumns(10);
-						cusTel.setBounds(304, 561, 365, 54);
+						cusTel.setBounds(200, 551, 307, 54);
+						cusTel.setHorizontalAlignment(SwingConstants.CENTER);
 						contentPane.add(cusTel);
 						
 						cusDate = new JTextField();
 						cusDate.setEnabled(false);
 						cusDate.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 						cusDate.setColumns(10);
-						cusDate.setBounds(304, 632, 365, 54);
+						cusDate.setBounds(200, 625, 307, 54);
+						cusDate.setHorizontalAlignment(SwingConstants.CENTER);
 						contentPane.add(cusDate);
 						
 						
@@ -164,18 +177,21 @@ public class CusMgr_edit extends JFrame{
 						contentPane.add(lblCusAddr);
 						
 						lblCusTel = new JLabel("전화번호");
-						lblCusTel.setBounds(63, 551, 122, 72);
+						lblCusTel.setBounds(66, 542, 122, 72);
 						contentPane.add(lblCusTel);
 						lblCusTel.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 						
 						JLabel lblCusDate = new JLabel("가입날짜");
 						lblCusDate.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
-						lblCusDate.setBounds(66, 622, 122, 72);
+						lblCusDate.setBounds(66, 616, 122, 72);
 						contentPane.add(lblCusDate);
 						
 						JButton btnCusEditSave = new JButton("저장");
 						btnCusEditSave.setFont(new Font("나눔바른고딕", Font.BOLD, 30));
-						btnCusEditSave.setBounds(248, 743, 162, 61);
+						btnCusEditSave.setBounds(220, 690, 162, 61);
+						btnCusEditSave.setBackground(new Color(244, 204, 204));
+						btnCusEditSave.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+					            Color.red, Color.red));
 						contentPane.add(btnCusEditSave);
 		
 		
@@ -217,7 +233,7 @@ public class CusMgr_edit extends JFrame{
 				
 //				TechListEdit a1 = new TechListEdit();
 //				a1.setVisible(true);
-				setVisible(false);
+				dispose();
 				new CusMgr();
 
 			}

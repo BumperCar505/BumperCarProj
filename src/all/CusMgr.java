@@ -72,7 +72,7 @@ public class CusMgr extends JFrame {
 	public CusMgr() {
 		
 		setVisible(true);
-		setTitle("고객관리페이지");
+		setTitle("다고쳐카센터 - 고객관리페이지");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);

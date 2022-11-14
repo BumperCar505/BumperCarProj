@@ -193,7 +193,7 @@ public class CusMgr_add {
 		// 저장버튼
 		JButton btnCusSave = new JButton("저장");
 		btnCusSave.setVisible(true);
-		btnCusSave.setBounds(436, 682, Size.BTN_S_W, Size.BTN_B_H);
+		btnCusSave.setBounds(220, 682, Size.BTN_S_W, Size.BTN_B_H);
 		btnCusSave.setBackground(new Color(244, 204, 204));
 		btnCusSave.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 	            Color.red, Color.red));
