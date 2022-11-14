@@ -61,9 +61,8 @@ public class SalesMgr_day extends JFrame {
 	private ResultSet rs = null;
 	private JTextField year;
 	private JTextField month;
-	private JTextField day;
 	
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -158,11 +157,6 @@ public class SalesMgr_day extends JFrame {
 		month.setBounds(245, 97, 76, 33);
 		getContentPane.add(month);
 		
-		day = new JTextField();
-		day.setColumns(10);
-		day.setBounds(353, 97, 67, 33);
-		getContentPane.add(day);
-		
 		JLabel lblNewLabel = new JLabel("년");
 		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
 		lblNewLabel.setBounds(218, 100, 29, 24);
@@ -173,14 +167,9 @@ public class SalesMgr_day extends JFrame {
 		lblNewLabel_1.setBounds(325, 100, 29, 24);
 		getContentPane.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("일");
-		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
-		lblNewLabel_2.setBounds(426, 100, 29, 24);
-		getContentPane.add(lblNewLabel_2);
-		
 		JButton btnSearch = new JButton("검색");
 		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
-		btnSearch.setBounds(458, 97, 87, 33);
+		btnSearch.setBounds(366, 97, 87, 33);
 		getContentPane.add(btnSearch);
 		
 		
@@ -206,7 +195,7 @@ public class SalesMgr_day extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String boxYear = year.getText();
 				String boxMonth = month.getText();
-				String boxDay = day.getText();
+
 				
 				String boxTotalDay = boxYear + "-" + boxMonth ;
 				
