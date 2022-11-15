@@ -39,7 +39,7 @@ public class CusMgr extends JFrame {
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
 	private JPanel mainPanel;
-	
+	private CusMgr oneSelf;
 
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
@@ -77,8 +77,7 @@ public class CusMgr extends JFrame {
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
-		
-
+		oneSelf = this;
 		
 		getContentPane = new JPanel();
 		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -197,7 +196,7 @@ public class CusMgr extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			
-				setVisible(false); 
+				dispose();
 				new ComMyPage();
 
 			}
@@ -208,7 +207,7 @@ public class CusMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new CusMgr_add();
+				new CusMgr_add(oneSelf);
 			}
 		});
 		
@@ -243,6 +242,12 @@ public class CusMgr extends JFrame {
 	});
 	}
 
+	public void requestGetInfo(CusMgr target) {
+		if(target.equals(this)) {
+			getInfo();
+		}
+	}
+	
 	private void getInfo() {
 
 			

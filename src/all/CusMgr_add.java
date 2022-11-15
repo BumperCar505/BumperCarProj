@@ -41,7 +41,7 @@ public class CusMgr_add {
 	private JTextField cusDate;
 	private JLabel lblCusTel;
 	private JLabel lblNewLabel_2;
-	
+	private CusMgr parent;
 	
 	/**
 	 * Launch the application.
@@ -67,6 +67,11 @@ public class CusMgr_add {
 
 		initialize();
 		frame.setVisible(true);
+	}
+	
+	public CusMgr_add(CusMgr parent) {
+		this();
+		this.parent = parent;
 	}
 
 	/**
@@ -223,6 +228,7 @@ public class CusMgr_add {
 
 	            	
 	            	mgr.insertCusMgr(bean);
+	            	parent.requestGetInfo(parent);
 	            	
 	            	frame.dispose();
 	    			new CusMgr();
