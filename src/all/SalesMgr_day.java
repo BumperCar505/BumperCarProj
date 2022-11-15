@@ -271,7 +271,7 @@ public class SalesMgr_day extends JFrame {
 			con = DriverManager.getConnection(url, "root", "1234");
 			
 	
-			sql = "SELECT st.stckBuyDate,st.stckUnitNum , un.unitName, st.stckQty, un.unitPrice , st.stckQty*un.unitPrice "
+			sql = "SELECT st.stckBuyDate,st.stckUnitNum , un.unitName, st.stckQty1, un.unitPrice , st.stckQty1*un.unitPrice "
 					+ "FROM stock st "
 					+ "JOIN unit un "
 					+ "ON st.stckUnitNum = un.unitNum "
@@ -289,9 +289,9 @@ public class SalesMgr_day extends JFrame {
 	            		 rs.getString("st.stckBuyDate"), 
 	            		 rs.getString("st.stckUnitNum"), 
 	            		 rs.getString("un.unitName"),
-	            		 rs.getInt("st.stckQty"), 
+	            		 rs.getInt("st.stckQty1"), 
 	            		 rs.getInt("un.unitPrice"),
-	            		 rs.getInt("st.stckQty*un.unitPrice")
+	            		 rs.getInt("st.stckQty1*un.unitPrice")
 
 	             	});
 	            }
