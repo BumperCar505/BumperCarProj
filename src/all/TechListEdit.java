@@ -245,7 +245,8 @@ public class TechListEdit extends JFrame {
 		btnBackMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// 메인화면은 visible true, 현재화면은 false
-
+				dispose();
+				new ComMyPage();
 			}
 		});
 		
