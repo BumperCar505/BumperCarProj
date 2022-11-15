@@ -8,15 +8,18 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 
-public class ComJoin extends JFrame {
+public class ComJoin extends JFrame implements ActionListener {
 	
 
 	private JPanel contentPane;
@@ -28,6 +31,7 @@ public class ComJoin extends JFrame {
 	private JTextField comTel;
 	private JPasswordField comPw;
 	private JPasswordField comPwCheck;
+	private JButton btnComNext;
 	private GwakMemberBean comJoinInfo;
 
 
@@ -43,6 +47,17 @@ public class ComJoin extends JFrame {
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object obj = e.getSource();
+		
+		if(obj == btnComNext) {
+			new RegTech(); // 여기에 빈즈파일
+			this.dispose();
+		}
 	}
 
 	/**
@@ -99,11 +114,12 @@ public class ComJoin extends JFrame {
 		
 		
 		// 다음
-		JButton btnComNext = new JButton("다음");
+		btnComNext = new JButton("다음");
 		btnComNext.setBounds(695, 913, 290, 65);
 		btnComNext.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnComNext.setBackground(new Color(244, 204, 204));
 		btnComNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		btnComNext.addActionListener(this);
 		contentPane.add(btnComNext);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -115,6 +131,7 @@ public class ComJoin extends JFrame {
 		comNum.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comNum.setBounds(622, 183, 444, 47);
 		comNum.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		comNum.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comNum);
 		comNum.setColumns(10);
 		
@@ -123,6 +140,7 @@ public class ComJoin extends JFrame {
 		comName.setBounds(622, 453, 444, 47);
 		comName.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		comName.setColumns(10);
+		comName.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comName);
 		
 		comEmail = new JTextField();
@@ -130,6 +148,7 @@ public class ComJoin extends JFrame {
 		comEmail.setBounds(622, 543, 444, 47);
 		comEmail.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		comEmail.setColumns(10);
+		comEmail.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comEmail);
 		
 		comZip = new JTextField();
@@ -137,6 +156,7 @@ public class ComJoin extends JFrame {
 		comZip.setBounds(622, 633, 444, 47);
 		comZip.setColumns(10);
 		comZip.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		comZip.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comZip);
 		
 		comAddr = new JTextField();
@@ -144,6 +164,7 @@ public class ComJoin extends JFrame {
 		comAddr.setBounds(622, 723, 444, 47);
 		comAddr.setColumns(10);
 		comAddr.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		comAddr.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comAddr);
 		
 		comTel = new JTextField();
@@ -151,47 +172,50 @@ public class ComJoin extends JFrame {
 		comTel.setBounds(622, 813, 444, 47);
 		comTel.setColumns(10);
 		comTel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		comTel.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comTel);
 		
 		comPw = new JPasswordField();
 		comPw.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comPw.setBounds(622, 273, 444, 47);
 		comPw.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		comPw.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comPw);
 		
 		comPwCheck = new JPasswordField();
 		comPwCheck.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		comPwCheck.setBounds(622, 363, 444, 47);
 		comPwCheck.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		comPwCheck.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(comPwCheck);
 		
 //		폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null);
 		
-		comJoinInfo.setComNum(comNum.getText());
-		comJoinInfo.setComName(comName.getText());
-		comJoinInfo.setComEmail(comEmail.getText());
-		comJoinInfo.setComZip(comZip.getText());
-		comJoinInfo.setComAddr(comAddr.getText());
-		comJoinInfo.setComTel(comTel.getText());
-		comJoinInfo.setComPw(String.valueOf(comPw.getPassword()));
-		comJoinInfo.setComPwCheck(String.valueOf(comPwCheck.getPassword()));
+		//comJoinInfo.setComNum(comNum.getText());
+		//comJoinInfo.setComName(comName.getText());
+		//comJoinInfo.setComEmail(comEmail.getText());
+		//comJoinInfo.setComZip(comZip.getText());
+		//comJoinInfo.setComAddr(comAddr.getText());
+		//comJoinInfo.setComTel(comTel.getText());
+		//comJoinInfo.setComPw(String.valueOf(comPw.getPassword()));
+		//comJoinInfo.setComPwCheck(String.valueOf(comPwCheck.getPassword()));
 		
 	}
 		private List<TechBeans> createTechBeans() {
 			List<TechBeans> techBeansList = new ArrayList<>();
 			
 			
-				String comNum = comJoinInfo.getComNum();
-				String comName = comJoinInfo.getComNum();
-				String comEmail = comJoinInfo.getComNum();
-				String comZip = comJoinInfo.getComNum();
-				String comAddr = comJoinInfo.getComNum();
-				String comTel = comJoinInfo.getComNum();
-				String comPw = comJoinInfo.getComNum();
-				String comPwCheck = comJoinInfo.getComNum();
+				//String comNum = comJoinInfo.getComNum();
+				//String comName = comJoinInfo.getComNum();
+				//String comEmail = comJoinInfo.getComNum();
+				//String comZip = comJoinInfo.getComNum();
+				//String comAddr = comJoinInfo.getComNum();
+				//String comTel = comJoinInfo.getComNum();
+				//String comPw = comJoinInfo.getComNum();
+				//String comPwCheck = comJoinInfo.getComNum();
 				
-				techBeansList.add(new TechBeans(comNum, comName, comEmail));
+				//techBeansList.add(new TechBeans(comNum, comName, comEmail));
 			return createTechBeans();
 		
 	}
