@@ -129,7 +129,7 @@ public class UnitBuyHistory extends JFrame {
 					+ "ORDER BY stock.stckBuyDate DESC ";
 			
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id); // 사업자번호
+			pstmt.setString(1, id);
 			pstmt.setString(2, unitNum); // p001
 			rs = pstmt.executeQuery();
 				while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가

@@ -168,8 +168,7 @@ public class GwakMemberMgr {
 				+ "WHERE stock.stckComNum = ? ";
 		
 		pstmt = con.prepareStatement(sql);
-//		★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
-		pstmt.setString(1, id); // 테스트용
+		pstmt.setString(1, id);
 		rs = pstmt.executeQuery();
 		
 		while(rs.next()){
@@ -203,7 +202,6 @@ public class GwakMemberMgr {
 						+ "AND stock.stckComNum = ? ";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setInt(1, stckNum);
-//				★★★★★★★★★★★★★★★테스트용 입력!! 나중에 수정할 것 ★★★★★★★★★★★★★★★★★
 				pstmt.setString(2, id);
 				
 				rs = pstmt.executeQuery();
@@ -337,7 +335,7 @@ public class GwakMemberMgr {
 	 
 	
 	// 추가 기능 - TechListedit
-	public GwakMemberBean add(GwakMemberBean bean){
+	public GwakMemberBean add(GwakMemberBean bean, String id){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
@@ -346,12 +344,13 @@ public class GwakMemberMgr {
 		
 		try {
 			con = pool.getConnection();
-			sql = "INSERT INTO technician (techNum, techComNum, techName, techTel, techLv) VALUES (NULL, '1112233333', ?, ?, ?) ";
+			sql = "INSERT INTO technician (techNum, techComNum, techName, techTel, techLv) VALUES (NULL, ?, ?, ?, ?) ";
 			pstmt = con.prepareStatement(sql);
 
-			pstmt.setString(1, bean.getTechName());
-			pstmt.setString(2, bean.getTechTel());
-			pstmt.setString(3, bean.getTechLv());
+			pstmt.setString(1, id);
+			pstmt.setString(2, bean.getTechName());
+			pstmt.setString(3, bean.getTechTel());
+			pstmt.setString(4, bean.getTechLv());
 			pstmt.executeUpdate();
 
 		} catch (Exception e) {
@@ -496,7 +495,6 @@ public class GwakMemberMgr {
         return list;
     }
 }
-
 
 
 

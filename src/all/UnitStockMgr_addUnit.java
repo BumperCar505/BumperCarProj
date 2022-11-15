@@ -204,7 +204,8 @@ public class UnitStockMgr_addUnit extends JFrame {
 				bean.setUnitName(Uname);
 				mgr.addUnit(bean, id);
 
-				parent.requestSelectUnit(parent);
+				UnitStockMgr unit = new UnitStockMgr();
+				unit.setVisible(true);
 				
 				dispose();//--
 				
@@ -216,9 +217,6 @@ public class UnitStockMgr_addUnit extends JFrame {
 	}
 	
 
-	public UnitStockMgr_addUnit(UnitStockMgr parent) {
-		this();
-		this.parent = parent;
-	}
+
 	
 }

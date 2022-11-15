@@ -174,7 +174,7 @@ public class GwakMemberBean {
 	public void setComName(String comName) {
 		this.comName = comName;
 	}
-
+//
 	public String getComNum() {
 		return comNum;
 	}
