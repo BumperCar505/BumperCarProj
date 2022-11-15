@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +53,12 @@ import javax.swing.JFormattedTextField;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class RegTech extends JFrame {
 	
 //	헤더 출력, 디자인 수정
@@ -64,6 +73,13 @@ public class RegTech extends JFrame {
     private JTextField techLv;
     private JTextField techTel;
     private GwakMemberBean comJoinInfo;
+    private String driver  = "com.mysql.cj.jdbc.Driver";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+//    Connection conn = null;
+//    PreparedStatement pstmt = null;
+//    ResultSet rs = null;
+
+    private TechBeans createTechBeans;
  
 	/**
 	 * Launch the application.
@@ -266,16 +282,119 @@ public class RegTech extends JFrame {
 			}
 		});
 		
-//		다음 버튼 누르면 서비스 등록페이지로 이동
+//		다음 버튼 누르면 데이터가 들어가야한다. 그리고 로그인페이지로 이동. 테이블은 company, technician 순서대로 입력을 해야 한다. 
 		btnTechNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				new SrvReg(comJoinInfo, createTechBeans());	
+				companyData(comJoinInfo);
+				loginData(comJoinInfo);
+				technicianData(createTechBeans);
+				
+		
+				new ComLogin();
 			}
 		});
 	}
 	
+//	앞에서 받은 company 데이터 insert하기
+	private void companyData(GwakMemberBean comJoinInfo) {
+		Connection con = null;
+		PreparedStatement pstmt= null;
+		ResultSet rs = null;
+		String sql = null;
+	try {
+		Class.forName(driver);
+	} catch (ClassNotFoundException e1) {
+		e1.printStackTrace();
+	}
+	try {
+		con = DriverManager.getConnection(url, "root", "1234");
+	} catch (SQLException e1) {
+		e1.printStackTrace();
+	}
+	sql = " INSERT company (comNum, comName, comEmail, comZip, comAddr, comTel) "
+		+	"VALUE (?,?,?,?,?,?) " ;	
+try {
+	pstmt = con.prepareStatement(sql);
+	pstmt.setString(1, comJoinInfo.getComNum());
+	pstmt.setString(2, comJoinInfo.getComName());
+	pstmt.setString(3, comJoinInfo.getComEmail());
+	pstmt.setString(4, comJoinInfo.getComZip());
+	pstmt.setString(5, comJoinInfo.getComAddr());
+	pstmt.setString(6, comJoinInfo.getComTel());
+	
+	} catch (SQLException e1) {
+	
+		e1.printStackTrace();
+	}
+
+	}
+	
+//	로그인 데이터 삽입
+	private void loginData(GwakMemberBean comJoinInfo ) {
+		Connection con = null;
+		PreparedStatement pstmt= null;
+		ResultSet rs = null;
+		String sql = null;
+		try {
+			Class.forName(driver);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			con = DriverManager.getConnection(url, "root", "1234");
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		sql = " INSERT login (logComNum, pw, seperator) "
+				+ "VALUE (?,?,'com') " ;	
+	try {
+		pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, comJoinInfo.getComNum());
+		pstmt.setString(2, comJoinInfo.getComPw());
+		
+		
+		} catch (SQLException e1) {
+		
+			e1.printStackTrace();
+		}
+
+		}
+	
+	private void technicianData(TechBeans techBeansList) {
+		Connection con = null;
+		PreparedStatement pstmt= null;
+		ResultSet rs = null;
+		String sql = null;
+		try {
+			Class.forName(driver);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			con = DriverManager.getConnection(url, "root", "1234");
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		sql = " INSERT technician (techComNum,techName,techTel,techLv) "
+				+ "VALUE (?,?,?,?) ";	
+	try {
+		pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, comJoinInfo.getComNum());
+		pstmt.setString(2, techBeansList.getTechName());
+		pstmt.setString(3, techBeansList.getTechTel());
+		pstmt.setString(4, techBeansList.getTechLv());
+		
+		
+		} catch (SQLException e1) {
+		
+			e1.printStackTrace();
+		}
+
+		}
+	
+
 	private List<TechBeans> createTechBeans() {
 		List<TechBeans> techBeansList = new ArrayList<>();
 		
