@@ -18,6 +18,7 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 //import com.mysql.cj.xdevapi.Statement;
@@ -229,6 +230,9 @@ public class CusMgr_add {
 	            	
 	            	mgr.insertCusMgr(bean);
 	            	parent.requestGetInfo(parent);
+	            	
+					DialogManager.createMsgDialog("저장 되었습니다.", "\\img\\success1.png",
+							"성공", JOptionPane.PLAIN_MESSAGE);
 	            	
 	            	frame.dispose();
 	            }

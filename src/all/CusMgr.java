@@ -226,7 +226,7 @@ public class CusMgr extends JFrame {
 					int num = DialogManager.createMsgDialog("수정하시겠습니까","\\img\\question6.png", "수정",JOptionPane.YES_NO_OPTION);
 			    	if(num==0){		    		
 			    		int editIndex = (int) tableCusList.getValueAt(row, column);	
-						CusMgr_edit edit = new CusMgr_edit(editIndex); 
+						CusMgr_edit edit = new CusMgr_edit(oneSelf, editIndex); 
 			    	}
 			    	else if(num==1) {
 			    		
