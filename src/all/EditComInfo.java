@@ -197,7 +197,7 @@ public class EditComInfo extends JFrame {
 		btnFixedComInfo.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 	}
 
-	public void updateComInfo(String comNum) {
+	public void updateComInfo(String id) {
 //		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
 //		Connection conn = null;
 		Connection conn = dbManager.getConn();
@@ -212,7 +212,7 @@ public class EditComInfo extends JFrame {
 					+ "WHERE logComNum = ? ";
 			
 			pstmt = conn.prepareStatement(sql1);
-			pstmt.setString(1, comNum);
+			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
 			if (rs.next()) {
@@ -229,7 +229,7 @@ public class EditComInfo extends JFrame {
 						pstmt.setInt(4, Integer.parseInt(this.comZip.getText()));
 						pstmt.setString(5, this.comAddr.getText());
 						pstmt.setString(6, this.comTel.getText());
-						pstmt.setString(7, comNum);
+						pstmt.setString(7, id);
 						pstmt.executeUpdate();
 						
 						setVisible(false);
@@ -251,7 +251,7 @@ public class EditComInfo extends JFrame {
 						pstmt.setInt(4, Integer.parseInt(this.comZip.getText()));
 						pstmt.setString(5, this.comAddr.getText());
 						pstmt.setString(6, this.comTel.getText());
-						pstmt.setString(7, comNum);
+						pstmt.setString(7, id);
 						pstmt.executeUpdate();
 						
 						setVisible(false);
@@ -277,7 +277,7 @@ public class EditComInfo extends JFrame {
 	}
 	
 	
-	public void showComInfo(String comNum) {
+	public void showComInfo(String id) {
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -290,7 +290,7 @@ public class EditComInfo extends JFrame {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, comNum);
+			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
