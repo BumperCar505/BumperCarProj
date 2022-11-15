@@ -332,23 +332,58 @@ public class SrvReg extends JFrame {
 	
 	private boolean setDbCompany(GwakMemberBean comJoinInfo) { 
 		String query = "INSERT INTO company "
-				+ "VALUES('9998877777', '테스트 회사', 'test@naver.com', 55555, '서울광역시', "
-				+ "'010-1111-2222', NOW())";
+				+ "VALUES(?, ?, ?, ?, ?, "
+				+ "?, NOW())";
 		
-		String comNum = "9998877777";
-		
+		String comId = "9998877777";
+		String comName = "테스트 회사";
+		String comEmail = "test@naver.com";
+		int comZip = 55555;
+		String comAddr = "서울 광역시";
+		String comPhoneNum = "010-1111-2222";
 		
 		QueryCommunicator communicator = new QueryCommunicator();
-		communicator.setQuery(query, comId, );
+		communicator.setQuery(query, comId, comName, comEmail, comZip, comAddr, comPhoneNum);
 		communicator.addParams();
+		return communicator.executeUpdate() != -1 ? true : false;
 	}
 	
-	private boolean setDbTechs(List<TechBeans> techList) {
+	private boolean setDbTechs(List<TechBeans> techList, String comId) {
+		boolean flag = true;
+		String query = "INSERT INTO technician(techComNum, techName, techTel, techLv) "
+				+ "VALUES('6665544444', '김지민', '010-5555-3323', '사원')";
 		
+		QueryCommunicator communicator = new QueryCommunicator();
+		for(int i = 0; i < techList.size(); ++i) {
+			String techName = techList.get(i).getTechName();
+			String techTel = techList.get(i).getTechTel();
+			String techLv = techList.get(i).getTechLv();
+			communicator.setQuery(query, comId, techName, techTel, techLv);
+			if(communicator.executeUpdate() == -1 && flag == true) {
+				flag = false;
+			}
+		}
+		
+		return flag;
 	}
 	
 	private boolean setDbService(List<ComSrvBeans> srvList) {
+		boolean flag = true;
+		String query = "INSERT INTO service(srvTechNum, srvName) "
+				+ "VALUES(?, ?)";
 		
+		QueryCommunicator communicator = new QueryCommunicator();
+		for(int i = 0; i < srvList.size(); ++i) {
+			ComSrvBeans service = srvList.get(i);
+			int srvTechNum = service.getTechNum();
+			String srvName = service.getSrvName();
+			communicator.setQuery(query, srvTechNum, srvName);
+			if(communicator.executeUpdate() == -1 && flag == true) {
+				flag = false;
+			}
+		}
+		
+		return flag;
 	}
 }
 

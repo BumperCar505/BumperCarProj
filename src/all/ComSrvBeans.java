@@ -3,6 +3,7 @@ package all;
 public class ComSrvBeans {
 	private int srvNum;
 	private int unitPrice;
+	private int techNum;
 	private String srvName;
 	private String techName;
 	private String unitName;
@@ -13,6 +14,10 @@ public class ComSrvBeans {
 	
 	public int getUnitPrice() {
 		return unitPrice;
+	}
+	
+	public int getTechNum() {
+		return techNum;
 	}
 	
 	public String getSrvName() {
@@ -33,6 +38,10 @@ public class ComSrvBeans {
 	
 	public void setUnitPrice(int unitPrice) {
 		this.unitPrice = unitPrice;
+	}
+	
+	public void setTechNum(int techNum) {
+		this.techNum = techNum;
 	}
 	
 	public void setSrvName(String srvName) {
