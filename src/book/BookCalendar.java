@@ -109,6 +109,16 @@ public class BookCalendar extends JFrame {
 		panel.add(la_month);
 		la_month.setHorizontalAlignment(JLabel.CENTER);
 		
+		JButton btnNewButton = new JButton("새로고침");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCal();
+			}
+		});
+		btnNewButton.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
+		btnNewButton.setBounds(1191, 1, 98, 50);
+		panel.add(btnNewButton);
+		
 		// 이전 달
 		prev.addActionListener(new ActionListener() {
 

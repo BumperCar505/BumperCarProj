@@ -343,7 +343,7 @@ public class BookDetail extends JFrame {
 				btnBook.setText("저장");
 				btnBook.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-//						updateDetail(mainNum);
+						updateDetail(mainNum);
 						setVisible(false);
 					}
 				});
@@ -406,6 +406,7 @@ public class BookDetail extends JFrame {
 			pstmt.setString(6, this.completedTime.getText().substring(11));
 			pstmt.setString(7, (String) this.statusBox.getSelectedItem());
 			pstmt.setString(8, (String) this.techName.getSelectedItem());
+			
 			pstmt.executeUpdate();
 			
 		} catch (SQLException e3) {
@@ -413,35 +414,35 @@ public class BookDetail extends JFrame {
 		}
 	}
 	
-//	public void updateDetail(int mainNum) {
-//		Connection conn = dbManager.getConn();
-//		PreparedStatement pstmt = null;
-////		ResultSet rs = null;
-//		
-//		try {
-//			String sql = "UPDATE maintenance, customer SET customer.cusName = ?, customer.cusCarNum = ?, customer.cusCarBrand = ?, customer.cusCarType = ?, customer.cusTel = ?, mainSrvNum = (SELECT service.srvNum FROM service WHERE service.srvName = ?), mainTechNum = (SELECT technician.techNum FROM technician WHERE technician.techName = ?), mainStatus = ?, mainStartDay = ?, mainStartTime = ?, mainEndDay = ?, mainEndTime = ? "
-//					+ "WHERE maintenance.mainNum = ? ";
-//			pstmt = conn.prepareStatement(sql);
-//			
-//			pstmt.setString(1, this.cusName.getText());
-//			pstmt.setString(2, this.cusCarNum.getText());
-//			pstmt.setString(3, this.cusCarBrand.getText());
-//			pstmt.setString(4, this.cusCarType.getText());
-//			pstmt.setString(5, this.cusTel.getText());
-//			pstmt.setString(6, (String) this.srvName.getSelectedItem());
-//			pstmt.setString(7, (String) this.techName.getSelectedItem());
-//			pstmt.setString(8, (String) this.statusBox.getSelectedItem());
-//			pstmt.setString(9, this.cusBookTime.getText().substring(0, 10));
-//			pstmt.setString(10, this.cusBookTime.getText().substring(11));
-//			pstmt.setString(11, this.completedTime.getText().substring(0, 10));
-//			pstmt.setString(12, this.completedTime.getText().substring(11));
-//			pstmt.setInt(13, mainNum);
-//			
-//			pstmt.executeUpdate();
-//		} catch (SQLException e3) {
-//			e3.printStackTrace();
-//		}
-//	}
+	public void updateDetail(int mainNum) {
+		Connection conn = dbManager.getConn();
+		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+		
+		try {
+			String sql = "UPDATE maintenance, customer SET customer.cusName = ?, customer.cusCarNum = ?, customer.cusCarBrand = ?, customer.cusCarType = ?, customer.cusTel = ?, mainSrvNum = (SELECT service.srvNum FROM service WHERE service.srvName = ?), mainTechNum = (SELECT technician.techNum FROM technician WHERE technician.techName = ?), mainStatus = ?, mainStartDay = ?, mainStartTime = ?, mainEndDay = ?, mainEndTime = ? "
+					+ "WHERE maintenance.mainNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, this.cusName.getText());
+			pstmt.setString(2, this.cusCarNum.getText());
+			pstmt.setString(3, this.cusCarBrand.getText());
+			pstmt.setString(4, this.cusCarType.getText());
+			pstmt.setString(5, this.cusTel.getText());
+			pstmt.setString(6, (String) this.srvName.getSelectedItem());
+			pstmt.setString(7, (String) this.techName.getSelectedItem());
+			pstmt.setString(8, (String) this.statusBox.getSelectedItem());
+			pstmt.setString(9, this.cusBookTime.getText().substring(0, 10));
+			pstmt.setString(10, this.cusBookTime.getText().substring(11));
+			pstmt.setString(11, this.completedTime.getText().substring(0, 10));
+			pstmt.setString(12, this.completedTime.getText().substring(11));
+			pstmt.setInt(13, mainNum);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e3) {
+			e3.printStackTrace();
+		}
+	}
 	
 }
 //}

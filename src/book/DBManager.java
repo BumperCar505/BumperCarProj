@@ -39,9 +39,9 @@ public class DBManager {
 			}
 			
 			if (this.conn == null) {
-				System.out.println("DB 연결 실패");
+//				System.out.println("DB 연결 실패");
 			} else {
-				System.out.println("DB 연결 성공");
+//				System.out.println("DB 연결 성공");
 			}
 		}
 	}
