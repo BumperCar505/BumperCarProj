@@ -39,7 +39,7 @@ public class CusMgr extends JFrame {
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
 	private JPanel mainPanel;
-	
+	private CusMgr oneSelf;
 
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
@@ -66,37 +66,10 @@ public class CusMgr extends JFrame {
 	}
 
 	
-	
-	
-	
-	public CusMgr() {
-		
-		setVisible(true);
-		setTitle("다고쳐카센터 - 고객관리페이지");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
-		
-
-		
-		getContentPane = new JPanel();
-		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(getContentPane);
-		TextField tf = new TextField();
-		
+	private void setTableDesign(JTable table) {
 		DefaultTableModel model = new DefaultTableModel();
-		table = new JTable(model);
 		
-		tableCusList = new JTable(model);
-		tableCusList.setAutoCreateRowSorter(true);
-		tableCusList.setRowMargin(4);
-		tableCusList.setRowHeight(30);
-		tableCusList.setFont(new Font("나눔바른고딕", Font.PLAIN, 20));
-		tableCusList.setDefaultEditor(Object.class, null); // 테이블 값 수정 안되게
-		tableCusList.getTableHeader().setResizingAllowed(false);
-		tableCusList.getTableHeader().setReorderingAllowed(false);
+		table = new JTable(model);
 		
 		Vector<String> columnHeaders = new Vector<>();
 		columnHeaders.add("번호");
@@ -109,6 +82,7 @@ public class CusMgr extends JFrame {
 		columnHeaders.add("주소");
 		columnHeaders.add("전화번호");
 		columnHeaders.add("가입날짜");
+		
 		HashMap<String, Integer> columnWidthValues = new HashMap<>();
 		columnWidthValues.put("번호", 20);
 		columnWidthValues.put("고객이름", 80);
@@ -127,6 +101,34 @@ public class CusMgr extends JFrame {
 		TableDesigner.resizeTableRow(tableCusList, 50);
 		TableDesigner.resizeTableColumn(tableCusList, columnWidthValues);
 		TableDesigner.resizeTableHeader(tableCusList);
+	}
+	
+	
+	public CusMgr() {
+		
+		setVisible(true);
+		setTitle("다고쳐카센터 - 고객관리페이지");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
+		oneSelf = this;
+		
+		getContentPane = new JPanel();
+		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(getContentPane);
+		TextField tf = new TextField();
+		
+		tableCusList = new JTable();
+		tableCusList.setAutoCreateRowSorter(true);
+		tableCusList.setRowMargin(4);
+		tableCusList.setRowHeight(30);
+		tableCusList.setDefaultEditor(Object.class, null); // 테이블 값 수정 안되게
+		tableCusList.getTableHeader().setResizingAllowed(false);
+		tableCusList.getTableHeader().setReorderingAllowed(false);
+		
+		setTableDesign(tableCusList);
 		
 		JScrollPane scrollpane = new JScrollPane(table);
 		getContentPane.add(tableCusList);
@@ -177,10 +179,6 @@ public class CusMgr extends JFrame {
 		mainPanel.setBounds(0, 0, 1666, 1037);
 		getContentPane.add(mainPanel);
 		mainPanel.setLayout(new CardLayout(0, 0));
-//		
-//		JScrollPane scroll = new JScrollPane(table);  // 스크롤패널을 선언
-//		scroll.setBounds(0,0,160,160);
-//		table.add(scroll); 
 		
 		JPanel jpList = new JPanel();		
 	    jpList.setLayout(new GridBagLayout());			
@@ -196,10 +194,8 @@ public class CusMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
-				setVisible(false); 
 				new ComMyPage();
-
+				dispose();
 			}
 		});
 		
@@ -208,7 +204,7 @@ public class CusMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new CusMgr_add();
+				new CusMgr_add(oneSelf);
 			}
 		});
 		
@@ -229,7 +225,7 @@ public class CusMgr extends JFrame {
 					int num = DialogManager.createMsgDialog("수정하시겠습니까","\\img\\question6.png", "수정",JOptionPane.YES_NO_OPTION);
 			    	if(num==0){		    		
 			    		int editIndex = (int) tableCusList.getValueAt(row, column);	
-						CusMgr_edit edit = new CusMgr_edit(editIndex); 
+						CusMgr_edit edit = new CusMgr_edit(oneSelf, editIndex); 
 			    	}
 			    	else if(num==1) {
 			    		
@@ -243,6 +239,12 @@ public class CusMgr extends JFrame {
 	});
 	}
 
+	public void requestGetInfo(CusMgr target) {
+		if(target.equals(this)) {
+			getInfo();
+		}
+	}
+	
 	private void getInfo() {
 
 			
@@ -259,7 +261,7 @@ public class CusMgr extends JFrame {
 		pstmt = conn.prepareStatement(sql);
 		rs = pstmt.executeQuery();
 		
-		
+		setTableDesign(tableCusList);
 		DefaultTableModel model = (DefaultTableModel)tableCusList.getModel();
 		while(rs.next()) {
 			model.addRow(new Object[] {

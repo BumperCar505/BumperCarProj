@@ -8,6 +8,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +34,7 @@ public class CusMgr_edit extends JFrame{
 	private JLabel lblCusTel;
 	private JLabel lblNewLabel_2;
 	private JPanel contentPane;
+	private CusMgr parent;
 	
 	int aa = 0;
 	
@@ -227,21 +230,20 @@ public class CusMgr_edit extends JFrame{
             	bean.setCusZip (Integer.parseInt(cusZip.getText().toString()));
             	bean.setCusAddr(cusAddr.getText());
             	bean.setCusTel(cusTel.getText());
-//            	bean.setCusDate(cusDate.getText());
 				
 				mgr.updateCusMgr(bean, a);
+				parent.requestGetInfo(parent);
 				
-//				TechListEdit a1 = new TechListEdit();
-//				a1.setVisible(true);
+				DialogManager.createMsgDialog("저장 되었습니다.", "\\img\\success1.png",
+						"성공", JOptionPane.PLAIN_MESSAGE);
+				
 				dispose();
-				new CusMgr();
-
 			}
-		});
-		
-		
-		
+		});	
 	}
 
-
+	public CusMgr_edit(CusMgr parent, int selectedRowNumber) {
+		this(selectedRowNumber);
+		this.parent = parent;
+	}
 }

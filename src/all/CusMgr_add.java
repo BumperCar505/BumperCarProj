@@ -18,6 +18,7 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 //import com.mysql.cj.xdevapi.Statement;
@@ -41,7 +42,7 @@ public class CusMgr_add {
 	private JTextField cusDate;
 	private JLabel lblCusTel;
 	private JLabel lblNewLabel_2;
-	
+	private CusMgr parent;
 	
 	/**
 	 * Launch the application.
@@ -68,6 +69,11 @@ public class CusMgr_add {
 		initialize();
 		frame.setVisible(true);
 	}
+	
+	public CusMgr_add(CusMgr parent) {
+		this();
+		this.parent = parent;
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -82,7 +88,7 @@ public class CusMgr_add {
 		frame.setResizable(false);
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
+		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
 		panel.setBounds(12, 10, 574, 662);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
@@ -223,10 +229,12 @@ public class CusMgr_add {
 
 	            	
 	            	mgr.insertCusMgr(bean);
+	            	parent.requestGetInfo(parent);
+	            	
+					DialogManager.createMsgDialog("저장 되었습니다.", "\\img\\success1.png",
+							"성공", JOptionPane.PLAIN_MESSAGE);
 	            	
 	            	frame.dispose();
-	    			new CusMgr();
-	            	
 	            }
 	           
 	            
