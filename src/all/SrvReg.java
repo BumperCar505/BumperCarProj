@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -130,7 +131,7 @@ public class SrvReg extends JFrame {
 		TableDesigner.setFont(table, "NanumBarunGothic", 18);
 		TableDesigner.setTableColumn(table, colName);
 		TableDesigner.setTableTextCenter(table, colName);
-		TableDesigner.resizeTableRow(table, 50);
+		TableDesigner.resizeTableRow(table, 25);
 		TableDesigner.resizeTableColumn(table, columnWidthValues);
 		TableDesigner.resizeTableHeader(table);
         
@@ -220,6 +221,8 @@ public class SrvReg extends JFrame {
 		JComboBox<?> selectedSrvPrice = new JComboBox();
 		selectedSrvPrice.setModel(new DefaultComboBoxModel(new String[] {"테스트 가격"}));
 		selectedSrvPrice.setBounds(141, 672, 385, 45);
+		selectedSrvPrice.setSelectedIndex(-1);
+		selectedSrvPrice.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		getContentPane().add(selectedSrvPrice);
 		
 		ComboBoxModel<CheckableItem> model = selectedSrvTech.getModel();
@@ -230,20 +233,24 @@ public class SrvReg extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				
-				Vector<String> list = new Vector<String>();
-				list.add(srvName.getText());
-				list.add(selectedSrvTech.getCheckedItemString(model));
-				list.add(selectedSrvPrice.getSelectedItem().toString());
 				dtm = (DefaultTableModel)table.getModel();
-				dtm.addRow(list);
+				String[] checkedTechNames = selectedSrvTech.getCheckedItemString(model).split(",");
 				
-
+				for(int i = 0; i < checkedTechNames.length; ++i) {
+					Vector<String> list = new Vector<String>();
+					list.add(srvName.getText());
+					list.add(checkedTechNames[i].trim());
+					list.add(selectedSrvPrice.getSelectedItem().toString());
+					dtm.addRow(list);
+				}
+				
 				panel.removeAll();
 				panel.revalidate();
 				panel.repaint();
 
 				srvName.setText("");
+				selectedSrvTech.setSelectedIndex(-1);
+				selectedSrvPrice.setSelectedIndex(-1);
 				
 		        panel.setBounds(141, 489, 464, 65);
 		        getContentPane().add(panel);
