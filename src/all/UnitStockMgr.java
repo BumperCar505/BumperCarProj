@@ -250,10 +250,10 @@ public class UnitStockMgr extends JFrame {
 		btnBackUnitStockMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// 메인화면은 visible true, 현재화면은 false
-				ComMyPage myPage = new ComMyPage();
-				myPage.setVisible(true);
 				
-				// 현재 메인창 닫기(업데이트를 위해)
+//				ComMyPage myPage = new ComMyPage();
+//				myPage.setVisible(true);
+
 				dispose();
 			}
 		});
@@ -261,8 +261,7 @@ public class UnitStockMgr extends JFrame {
 	}
 	
 
-	
-			}
+}
 	
 	
 

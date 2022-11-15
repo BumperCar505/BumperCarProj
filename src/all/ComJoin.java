@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 
 public class ComJoin extends JFrame implements ActionListener {
-	
+
 
 	private JPanel contentPane;
 	private JTextField comNum;
@@ -33,6 +35,7 @@ public class ComJoin extends JFrame implements ActionListener {
 	private JPasswordField comPwCheck;
 	private JButton btnComNext;
 	private GwakMemberBean comJoinInfo;
+	
 
 
 	// Launch the application.
@@ -51,19 +54,43 @@ public class ComJoin extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object obj = e.getSource();
-		
+
 		if(obj == btnComNext) {
-			new RegTech(); // 여기에 빈즈파일
-			this.dispose();
+			
+			GwakMemberBean comJoinInfo =  new GwakMemberBean();
+			
+			comJoinInfo.setComNum(comNum.getText());
+			comJoinInfo.setComName(comName.getText());
+			comJoinInfo.setComEmail(comEmail.getText());
+			comJoinInfo.setComZip(comZip.getText());
+			comJoinInfo.setComAddr(comAddr.getText());
+			comJoinInfo.setComTel(comTel.getText());
+			
+			String passA = String.valueOf(comPw.getPassword());
+			String passB = String.valueOf(comPwCheck.getPassword());
+			
+			if(passA.equals(passB)) {
+				comJoinInfo.setComPw(String.valueOf(comPw.getPassword()));
+				comJoinInfo.setComPwCheck(String.valueOf(comPwCheck.getPassword()));
+
+				// 빈즈파일 넘기기
+				new RegTech(comJoinInfo);
+				this.dispose();
+			}
+			else {
+				DialogManager.createMsgDialog("비밀번호가 동일하지 않습니다.", "\\img\\information5.png", "오류", JOptionPane.PLAIN_MESSAGE);
+			}
 		}
 	}
+	
+
 
 	/**
 	 * Create the frame.
 	 */
 	public ComJoin() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
@@ -192,31 +219,10 @@ public class ComJoin extends JFrame implements ActionListener {
 //		폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null);
 		
-//		comJoinInfo.setComNum(comNum.getText());
-//		comJoinInfo.setComName(comName.getText());
-//		comJoinInfo.setComEmail(comEmail.getText());
-//		comJoinInfo.setComZip(comZip.getText());
-//		comJoinInfo.setComAddr(comAddr.getText());
-//		comJoinInfo.setComTel(comTel.getText());
-//		comJoinInfo.setComPw(String.valueOf(comPw.getPassword()));
-//		comJoinInfo.setComPwCheck(String.valueOf(comPwCheck.getPassword()));
+
+
 		
 	}
-//		private List<TechBeans> createTechBeans() {
-//			List<TechBeans> techBeansList = new ArrayList<>();
-//			
-//			
-//			String comNum = comJoinInfo.getComNum();
-//			String comName = comJoinInfo.getComNum();
-//			String comEmail = comJoinInfo.getComNum();
-//			String comZip = comJoinInfo.getComNum();
-//			String comAddr = comJoinInfo.getComNum();
-//			String comTel = comJoinInfo.getComNum();
-//			String comPw = comJoinInfo.getComNum();
-//			String comPwCheck = comJoinInfo.getComNum();
-//				
-//			techBeansList.add(new TechBeans(comNum, comName, comEmail));
-//			return createTechBeans();
-		
+
 }
 
