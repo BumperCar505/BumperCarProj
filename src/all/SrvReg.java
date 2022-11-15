@@ -55,6 +55,8 @@ public class SrvReg extends JFrame {
 	private JTable table;
 	private JComboBox<String> selectedSrvPrice;
 	private CheckedComboBox selectedSrvTech;
+	private GwakMemberBean comJoinInfo;
+	private List<TechBeans> techList;
 	
 	DefaultTableModel dtm;
     Vector<String> list;
@@ -90,7 +92,6 @@ public class SrvReg extends JFrame {
 
 	SrvReg()
     {
-
         setBounds(300, 300, Size.SCREEN_W, Size.SCREEN_H);
         
 //      폼 창이 화면 가운데서 뜨게 하는 기능
@@ -282,6 +283,15 @@ public class SrvReg extends JFrame {
 	
 	public SrvReg(GwakMemberBean comJoinInfo, List<TechBeans> techList) {
 		this();
+		this.comJoinInfo = comJoinInfo;
+		this.techList = techList;
+		
+		List<String> techNames = new ArrayList<String>();
+		for(int i = 0; i < techList.size(); ++i) {
+			techNames.add(techList.get(i).getTechName());
+		}
+		
+		addCheckComboBoxData(selectedSrvTech, techNames);
 		addComboBoxData(selectedSrvPrice, getDbUnitPrice());
 	}
 	
@@ -318,6 +328,27 @@ public class SrvReg extends JFrame {
 		}
 		
 		return list;
+	}
+	
+	private boolean setDbCompany(GwakMemberBean comJoinInfo) { 
+		String query = "INSERT INTO company "
+				+ "VALUES('9998877777', '테스트 회사', 'test@naver.com', 55555, '서울광역시', "
+				+ "'010-1111-2222', NOW())";
+		
+		String comNum = "9998877777";
+		
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, comId, );
+		communicator.addParams();
+	}
+	
+	private boolean setDbTechs(List<TechBeans> techList) {
+		
+	}
+	
+	private boolean setDbService(List<ComSrvBeans> srvList) {
+		
 	}
 }
 
