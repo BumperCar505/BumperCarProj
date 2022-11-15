@@ -57,7 +57,6 @@ public class SrvReg extends JFrame {
     Vector<String> list;
     Vector<String> colName;
     private JTextField srvName;
-    private JFormattedTextField srvPrice;
     
     private static ComboBoxModel<CheckableItem> makeModel() {
 	    CheckableItem[] m = {
@@ -199,15 +198,9 @@ public class SrvReg extends JFrame {
 		lblNewLabel_3.setBounds(141, 600, 259, 55);
 		getContentPane().add(lblNewLabel_3);
 		lblNewLabel_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		//        srvName.setColumns(10);
-		
-		srvPrice = new JFormattedTextField(new NumberFormatter());
-		srvPrice.setBounds(141, 665, 274, 45);
-		getContentPane().add(srvPrice);
-		srvPrice.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		JButton btnSrvReg = new JButton("등록");
-		btnSrvReg.setBounds(275, 763, 150, 50);
+		btnSrvReg.setBounds(242, 763, 150, 50);
 		btnSrvReg.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnSrvReg.setBackground(new Color(244, 204, 204));
 		btnSrvReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
@@ -224,6 +217,11 @@ public class SrvReg extends JFrame {
 		selectedSrvTech.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		panel.add(selectedSrvTech);
 		
+		JComboBox<?> selectedSrvPrice = new JComboBox();
+		selectedSrvPrice.setModel(new DefaultComboBoxModel(new String[] {"테스트 가격"}));
+		selectedSrvPrice.setBounds(141, 672, 385, 45);
+		getContentPane().add(selectedSrvPrice);
+		
 		ComboBoxModel<CheckableItem> model = selectedSrvTech.getModel();
         
 		
@@ -236,7 +234,7 @@ public class SrvReg extends JFrame {
 				Vector<String> list = new Vector<String>();
 				list.add(srvName.getText());
 				list.add(selectedSrvTech.getCheckedItemString(model));
-				list.add(srvPrice.getText());
+				list.add(selectedSrvPrice.getSelectedItem().toString());
 				dtm = (DefaultTableModel)table.getModel();
 				dtm.addRow(list);
 				
@@ -246,7 +244,6 @@ public class SrvReg extends JFrame {
 				panel.repaint();
 
 				srvName.setText("");
-				srvPrice.setText("");
 				
 		        panel.setBounds(141, 489, 464, 65);
 		        getContentPane().add(panel);
