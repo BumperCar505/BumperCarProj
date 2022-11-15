@@ -118,7 +118,7 @@ public class GwakMemberMgr {
 	
 	
 	// UnitStockMgr 테이블 값 받아오기
-	public GwakMemberBean select2(String editIndex){
+	public GwakMemberBean select2(String editIndex, String id){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -134,8 +134,7 @@ public class GwakMemberMgr {
 					+ "AND stock.stckComNum = ? ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, editIndex);
-//			pstmt.setString(2, "1112233333");
-			pstmt.setString(2, "1112233333");
+			pstmt.setString(2, id);
 			
 			rs = pstmt.executeQuery();
 			if(rs.next()){
@@ -155,7 +154,7 @@ public class GwakMemberMgr {
 		return bean;
 	}
 	
-	public GwakMemberBean ComboUnit(JComboBox<String> unitNameCmb) {
+	public GwakMemberBean ComboUnit(JComboBox<String> unitNameCmb, String id) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -170,7 +169,7 @@ public class GwakMemberMgr {
 		
 		pstmt = con.prepareStatement(sql);
 //		★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
-		pstmt.setString(1, "1112233333"); // 테스트용
+		pstmt.setString(1, id); // 테스트용
 		rs = pstmt.executeQuery();
 		
 		while(rs.next()){
@@ -188,7 +187,7 @@ public class GwakMemberMgr {
 	
 	
 	// UnitStockMgr edit 창 기본값 세팅
-		public GwakMemberBean Select4(int stckNum){
+		public GwakMemberBean Select4(int stckNum, String id){
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
@@ -205,7 +204,7 @@ public class GwakMemberMgr {
 				pstmt = con.prepareStatement(sql);
 				pstmt.setInt(1, stckNum);
 //				★★★★★★★★★★★★★★★테스트용 입력!! 나중에 수정할 것 ★★★★★★★★★★★★★★★★★
-				pstmt.setString(2, "1112233333");
+				pstmt.setString(2, id);
 				
 				rs = pstmt.executeQuery();
 				if(rs.next()){
@@ -282,7 +281,7 @@ public class GwakMemberMgr {
 	}
 	
 	// UnitstockMgr 구매내역 수정기능
-		public boolean update2(GwakMemberBean bean){
+		public boolean update2(GwakMemberBean bean, String id){
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			String sql = null;
@@ -296,8 +295,7 @@ public class GwakMemberMgr {
 				
 				pstmt.setInt(1, bean.getStckQty1());
 				pstmt.setString(2, bean.getStckBuyDate());
-				//pstmt.setString(3, bean.getStckComNum());  : 연결할때 변경
-				pstmt.setString(3, "1112233333"); 
+				pstmt.setString(3, id); 
 				pstmt.setInt(4, bean.getStckNum()); 
 				
 				int cnt = pstmt.executeUpdate();
@@ -366,7 +364,7 @@ public class GwakMemberMgr {
 	
 	
 	// 품목 추가 기능 - UnitStockMgr_addUnit
-		public GwakMemberBean addUnit(GwakMemberBean bean){
+		public GwakMemberBean addUnit(GwakMemberBean bean, String id){
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			String sql = null;
@@ -378,7 +376,7 @@ public class GwakMemberMgr {
 						+ "FROM unit WHERE unit.unitName = ? ";
 				pstmt = con.prepareStatement(sql);
 
-				pstmt.setString(1, bean.getStckComNum());
+				pstmt.setString(1, id);
 				pstmt.setString(2, bean.getStckBuyDate()); 
 				pstmt.setString(3, bean.getUnitName()); 
 				pstmt.executeUpdate();
@@ -392,7 +390,7 @@ public class GwakMemberMgr {
 		}
 		
 		// 구매 이력 추가기능 -  UnitStockMgr_addHistory
-				public GwakMemberBean addHistoty(GwakMemberBean bean){
+				public GwakMemberBean addHistoty(GwakMemberBean bean, String id){
 					Connection con = null;
 					PreparedStatement pstmt = null;
 					String sql = null;
@@ -404,9 +402,7 @@ public class GwakMemberMgr {
 								+ "FROM unit WHERE unit.unitName = ? ";
 						pstmt = con.prepareStatement(sql);
 
-						// 변경예정!
-						// pstmt.setString(1, bean.getStckComNum());
-						pstmt.setString(1, "1112233333");
+						pstmt.setString(1, id);
 						pstmt.setInt(2, bean.getStckQty1());
 						pstmt.setInt(3, bean.getStckQty2());
 						pstmt.setString(4, bean.getStckBuyDate()); 

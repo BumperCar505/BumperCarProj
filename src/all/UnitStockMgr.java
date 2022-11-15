@@ -38,14 +38,18 @@ public class UnitStockMgr extends JFrame {
 	private JButton btnDelUnitStock;
 	private JButton btnBackUnitStockMain;
 	private LoginManager loginManager;
-	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};  // 테이블 컬럼 값들
-	private DefaultTableModel model = new DefaultTableModel(header, 0);
+	private UnitStockMgr unitStockMgr;
+	
+
+//	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};
+//	private DefaultTableModel model = new DefaultTableModel(header, 0);
 
 	// Launch the application..
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					UnitStockMgr frame = new UnitStockMgr();
 					
 				} catch (Exception e) {
@@ -56,8 +60,10 @@ public class UnitStockMgr extends JFrame {
 	}
 
 
+	
 	// Create the frame.
 	public UnitStockMgr() {
+		
 		loginManager = loginManager.getInstance();
 		String id = loginManager.getLogComNum();
 		setVisible(true);
@@ -75,7 +81,7 @@ public class UnitStockMgr extends JFrame {
 		setLocationRelativeTo(null); //--
 		setContentPane(contentPane);
 		
-		//테이블 생성		
+		//테이블 생성
 		table = new JTable(model);
 		
 		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
@@ -194,7 +200,7 @@ public class UnitStockMgr extends JFrame {
 									GwakMemberBean bean =  new GwakMemberBean();
 									
 									// 사업자번호 : 임시방편
-									bean.setStckComNum("1112233333");
+									bean.setStckComNum(id);
 									bean.setStckUnitNum(editIndex);
 					            	mgr.delete2(bean);
 					            	
@@ -214,13 +220,17 @@ public class UnitStockMgr extends JFrame {
 				btnAddUnitStock.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// 메인화면은 visible true, 현재화면은 false
-						UnitStockMgr_addUnit history = new UnitStockMgr_addUnit();
 						
+						
+						
+						
+						
+						UnitStockMgr_addUnit history = new UnitStockMgr_addUnit(unitStockMgr);
 						
 						history.setVisible(true);
 						
 						// 현재 메인창 닫기(업데이트를 위해)
-						dispose();
+						//dispose();
 
 					}
 				});
@@ -250,8 +260,19 @@ public class UnitStockMgr extends JFrame {
 			}
 		});
 
-		
+		unitStockMgr = this;
 	}
+	
+	public void requestSelectUnit(UnitStockMgr unitStockMgr) {
+		if(unitStockMgr.equals(this)) {
+			loginManager = loginManager.getInstance();
+			String id = loginManager.getLogComNum();
+			GwakMemberMgr mgr = new GwakMemberMgr();
+			GwakMemberBean bean = mgr.SelectUnitMgrTable(model, id);
+
+		}
+	}
+	
 			}
 	
 	

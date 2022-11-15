@@ -22,6 +22,7 @@ public class UnitBuyHistory extends JFrame {
 
 	private JTable table;
 	private JPanel contentPane;
+	private LoginManager loginManager;
 	private String driver  = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
@@ -49,6 +50,8 @@ public class UnitBuyHistory extends JFrame {
 	 * Create the frame.
 	 */
 	public UnitBuyHistory(int stckNum, String unitNum) {
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 895, 730);
 		contentPane = new JPanel();
@@ -85,6 +88,7 @@ public class UnitBuyHistory extends JFrame {
 		scrollPane.setBounds(54, 171, 770, 477);
 		scrollPane.setAutoscrolls(true);
 		contentPane.add (scrollPane) ; 
+		
 //		테이블 행 높이 조절
 		table.setRowHeight(40);
 		
@@ -97,52 +101,14 @@ public class UnitBuyHistory extends JFrame {
 		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		lblNewLabel_1.setBounds(85, 111, Size.BTN_S_W, Size.BTN_S_H);
 		contentPane.add(lblNewLabel_1);
-		
-//		JButton btnEdit = new JButton("내역 수정");
-//		btnEdit.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-//		btnEdit.setBounds(512, 111, Size.BTN_S_W, Size.BTN_S_H);
-//		contentPane.add(btnEdit);
-//		
-//		JButton btnDelete = new JButton("내역 삭제");
-//		btnDelete.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-//		btnDelete.setBounds(674, 111, Size.BTN_S_W, Size.BTN_S_H);
-//		contentPane.add(btnDelete);
-		
-		
-		// 수정 버튼
-//		btnEdit.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				
-//				int row = table.getSelectedRow();
-//				int column = 0;
-//				int stckNum = (int) table.getValueAt(row, column);
-//				
-//				
-//				UnitStockMgr_edit history = new UnitStockMgr_edit(stckNum);
-//				history.setVisible(true);
-//			}
-//		});
-		
-		// 삭제 버튼
-//		btnDelete.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				
-//				int row = table.getSelectedRow();
-//				int column = 0;
-//				// String unitName = (String) table.getValueAt(row, column);
-//				
-//
-//			}
-//		});
-		
-
-
 	}
 	
 	
 	//  : DB에서 데이터 불러와서 테이블 채우기(제품 구매 이력)
 	private void Select5(int stckNum, String unitNum){
 			
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -161,14 +127,10 @@ public class UnitBuyHistory extends JFrame {
 					+ "on stock.stckUnitNum = unit.unitNum "
 					+ "WHERE stock.stckComNum = ? AND unit.unitNum = ? "
 					+ "ORDER BY stock.stckBuyDate DESC ";
-
+			
 			pstmt = con.prepareStatement(sql);
-//★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
-			pstmt.setString(1, "1112233333"); // 테스트용
+			pstmt.setString(1, id); // 사업자번호
 			pstmt.setString(2, unitNum); // p001
-
-
-	
 			rs = pstmt.executeQuery();
 				while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
                  model.addRow(new Object[]{rs.getInt("stock.stckNum"), rs.getString("stock.stckBuyDate"), rs.getString("unit.unitNum"), rs.getString("unit.unitName"), rs.getString("unit.unitVendor"),rs.getInt("stock.stckQty1")});
