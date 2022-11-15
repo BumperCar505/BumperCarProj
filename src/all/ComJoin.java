@@ -76,6 +76,7 @@ public class ComJoin extends JFrame implements ActionListener {
 
 				// 빈즈파일 넘기기
 				new RegTech(comJoinInfo);
+//				new test(comJoinInfo);
 				this.dispose();
 			}
 			else {

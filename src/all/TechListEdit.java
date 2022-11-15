@@ -109,6 +109,12 @@ public class TechListEdit extends JFrame {
 		contentPane.setLayout(null);
 
 		table.setBounds(247, 231, 1170, 671);
+		
+		
+		table.getColumn("techNum").setWidth(0);
+		table.getColumn("techNum").setMinWidth(0);
+		table.getColumn("techNum").setMaxWidth(0);
+		
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
