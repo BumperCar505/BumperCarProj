@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.FlowLayout;
 
@@ -72,6 +73,8 @@ public class DayDay extends JFrame {
 
 		JButton btnAdd = new JButton("추가");
 		btnAdd.setBounds(192, 401, 100, 50);
+		btnAdd.setBackground(new Color(244, 204, 204));
+		btnAdd.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		contentPane.add(btnAdd);
 

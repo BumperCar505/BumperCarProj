@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import all.Size;
@@ -75,7 +76,8 @@ public class BookDetail extends JFrame {
 		contentPane.setLayout(null);
 		
 		btnBook = new JButton();
-		
+		btnBook.setBackground(new Color(244, 204, 204));
+		btnBook.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		btnBook.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnBook.setBounds(332, 923, 150, 50);
 		contentPane.add(btnBook);
@@ -361,7 +363,7 @@ public class BookDetail extends JFrame {
 
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public void insertCusInfo() {
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;

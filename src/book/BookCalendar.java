@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import all.ComMyPage;
@@ -96,10 +97,15 @@ public class BookCalendar extends JFrame {
 		p_south.setPreferredSize(new Dimension(800, 420));
 		
 		next = new JButton("다음 달");
+		next.setBackground(new Color(244, 204, 204));
+		next.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 		next.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		next.setBounds(1361, 1, 98, 50);
 		panel.add(next);
+		
 		prev = new JButton("이전 달");
+		prev.setBackground(new Color(244, 204, 204));
+		prev.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 		prev.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		prev.setBounds(179, 1, 98, 50);
 		panel.add(prev);
@@ -109,15 +115,17 @@ public class BookCalendar extends JFrame {
 		panel.add(la_month);
 		la_month.setHorizontalAlignment(JLabel.CENTER);
 		
-		JButton btnNewButton = new JButton("새로고침");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnReset = new JButton("새로고침");
+		btnReset.setBackground(new Color(244, 204, 204));
+		btnReset.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
+		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setCal();
 			}
 		});
-		btnNewButton.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-		btnNewButton.setBounds(1191, 1, 98, 50);
-		panel.add(btnNewButton);
+		btnReset.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
+		btnReset.setBounds(1191, 1, 98, 50);
+		panel.add(btnReset);
 		
 		// 이전 달
 		prev.addActionListener(new ActionListener() {
@@ -151,6 +159,8 @@ public class BookCalendar extends JFrame {
 		});
 		
 		JButton btnBackCusMain = new JButton("돌아가기");
+		btnBackCusMain.setBackground(new Color(244, 204, 204));
+		btnBackCusMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		btnBackCusMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -179,6 +189,8 @@ public class BookCalendar extends JFrame {
 				la_dayOfWeek[i].setForeground(Color.BLUE);
 			}
 			p_dayOfWeek[i].add(la_dayOfWeek[i]);
+			p_dayOfWeek[i].setBackground(new Color(244, 204, 204));
+//			p_dayOfWeek[i].setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 			p_dayOfWeek[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			la_dayOfWeek[i].setFont(new Font("NanumBarunGothic", Font.BOLD, 19));
 			p_center.add(p_dayOfWeek[i]);
