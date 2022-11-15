@@ -74,6 +74,8 @@ public class YuriCusMgr_mgr {
 	
 //	 CusMgr 모든 값 가져오기(화면에 전체 값 보여주기)
 	public YuriCusMgrBean showCusMgr(int cusNum){
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -81,9 +83,10 @@ public class YuriCusMgr_mgr {
 		YuriCusMgrBean bean = new YuriCusMgrBean();
 		try {
 			con = pool.getConnection();
-			sql = "select * from customer where cusNum = ? " ;
+			sql = "select * from customer where cusNum = ? and cusComNum=?" ;
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, cusNum);
+			pstmt.setString(2, id);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				bean.setCusNum(rs.getInt("cusNum"));
@@ -110,7 +113,7 @@ public class YuriCusMgr_mgr {
 	
 	public YuriCusMgrBean insertCusMgr(YuriCusMgrBean bean){
 		loginManager = loginManager.getInstance();
-	      String id = loginManager.getLogComNum();
+	    String id = loginManager.getLogComNum();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -148,6 +151,8 @@ public class YuriCusMgr_mgr {
 //	cusMgr 수정
 	
 	public boolean updateCusMgr(YuriCusMgrBean bean, int index){
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
@@ -156,7 +161,7 @@ public class YuriCusMgr_mgr {
 			con = pool.getConnection();
 			sql = " update customer  "
 					+ "set cusName=?,cusCarNum=?,CusCarBrand=?,CusCarType=?, cusZip=?, cusAddr=?,cusTel=?,cusKm=?  "
-					+ "where cusNum=? " ;
+					+ "where cusNum=? and cusComNum=? " ;
 			
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, bean.getCusName());
@@ -168,6 +173,7 @@ public class YuriCusMgr_mgr {
 			pstmt.setString(7, bean.getCusTel());
 			pstmt.setInt(8, bean.getCusKm());
 			pstmt.setInt(9, index);
+			pstmt.setString(10, id);
 			int cnt = pstmt.executeUpdate();
 			if(cnt==1) flag = true; 
 		} catch (Exception e) {
@@ -180,6 +186,8 @@ public class YuriCusMgr_mgr {
 	
 //	선택한 열 값 가져오기 위해
 	public YuriCusMgrBean select_(int cusNum){
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -187,9 +195,10 @@ public class YuriCusMgr_mgr {
 		YuriCusMgrBean bean = new YuriCusMgrBean();
 		try {
 			con = pool.getConnection();
-			sql = "select * from customer where cusNum=? " ;
+			sql = "select * from customer where cusNum=? and cusComNum =? " ;
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, cusNum);
+			pstmt.setString(2, id);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				bean.setCusNum(rs.getInt("cusNum"));
