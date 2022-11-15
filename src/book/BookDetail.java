@@ -393,19 +393,21 @@ public class BookDetail extends JFrame {
 		
 		try {
 			String sql = "INSERT INTO maintenance (mainComNum, mainCusNum, mainSrvNum, mainStartDay, mainStartTime, mainEndDay, mainEndTime, mainStatus, mainTechNum) "
-					+ "VALUES ('1112233333', (SELECT customer.cusNum FROM customer WHERE customer.cusName = ?), (SELECT service.srvNum FROM service WHERE service.srvName = ?), ?, ?, ?, ?, ?, (SELECT technician.techNum FROM technician WHERE technician.techName = ?)) ";
-
+					+ "SELECT '1112233333', (SELECT customer.cusNum FROM customer WHERE customer.cusName = ?), "
+					+ "(SELECT service.srvNum FROM service WHERE service.srvName = ? AND srvTechNum = (SELECT techNum FROM technician WHERE techName = ?)), "
+					+ "?, ?, ?, ?, ?, (SELECT technician.techNum FROM technician WHERE technician.techName = ?) ";
 
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, this.cusName.getText());
 			pstmt.setString(2, (String) this.srvName.getSelectedItem());
-			pstmt.setString(3, this.cusBookTime.getText().substring(0, 10));
-			pstmt.setString(4, this.cusBookTime.getText().substring(11));
-			pstmt.setString(5, this.completedTime.getText().substring(0, 10));
-			pstmt.setString(6, this.completedTime.getText().substring(11));
-			pstmt.setString(7, (String) this.statusBox.getSelectedItem());
-			pstmt.setString(8, (String) this.techName.getSelectedItem());
+			pstmt.setString(3, (String) this.techName.getSelectedItem());
+			pstmt.setString(4, this.cusBookTime.getText().substring(0, 10));
+			pstmt.setString(5, this.cusBookTime.getText().substring(11));
+			pstmt.setString(6, this.completedTime.getText().substring(0, 10));
+			pstmt.setString(7, this.completedTime.getText().substring(11));
+			pstmt.setString(8, (String) this.statusBox.getSelectedItem());
+			pstmt.setString(9, (String) this.techName.getSelectedItem());
 			
 			pstmt.executeUpdate();
 			
@@ -420,8 +422,10 @@ public class BookDetail extends JFrame {
 //		ResultSet rs = null;
 		
 		try {
-			String sql = "UPDATE maintenance, customer SET customer.cusName = ?, customer.cusCarNum = ?, customer.cusCarBrand = ?, customer.cusCarType = ?, customer.cusTel = ?, mainSrvNum = (SELECT service.srvNum FROM service WHERE service.srvName = ?), mainTechNum = (SELECT technician.techNum FROM technician WHERE technician.techName = ?), mainStatus = ?, mainStartDay = ?, mainStartTime = ?, mainEndDay = ?, mainEndTime = ? "
-					+ "WHERE maintenance.mainNum = ? ";
+			String sql = "UPDATE maintenance, customer SET customer.cusName = ?, customer.cusCarNum = ?, customer.cusCarBrand = ?, customer.cusCarType = ?, customer.cusTel = ?, "
+					+ "mainSrvNum = (SELECT srvNum FROM service WHERE srvName = ? AND srvTechNum = (SELECT techNum FROM technician WHERE techName = ?)), "
+					+ "mainTechNum = (SELECT techNum FROM technician WHERE techName = ?), mainStatus = ?, mainStartDay = ?, mainStartTime = ?, mainEndDay = ?, mainEndTime = ? "
+					+ "WHERE customer.cusNum = maintenance.mainCusNum AND maintenance.mainNum = ? ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, this.cusName.getText());
@@ -431,12 +435,13 @@ public class BookDetail extends JFrame {
 			pstmt.setString(5, this.cusTel.getText());
 			pstmt.setString(6, (String) this.srvName.getSelectedItem());
 			pstmt.setString(7, (String) this.techName.getSelectedItem());
-			pstmt.setString(8, (String) this.statusBox.getSelectedItem());
-			pstmt.setString(9, this.cusBookTime.getText().substring(0, 10));
-			pstmt.setString(10, this.cusBookTime.getText().substring(11));
-			pstmt.setString(11, this.completedTime.getText().substring(0, 10));
-			pstmt.setString(12, this.completedTime.getText().substring(11));
-			pstmt.setInt(13, mainNum);
+			pstmt.setString(8, (String) this.techName.getSelectedItem());
+			pstmt.setString(9, (String) this.statusBox.getSelectedItem());
+			pstmt.setString(10, this.cusBookTime.getText().substring(0, 10));
+			pstmt.setString(11, this.cusBookTime.getText().substring(11));
+			pstmt.setString(12, this.completedTime.getText().substring(0, 10));
+			pstmt.setString(13, this.completedTime.getText().substring(11));
+			pstmt.setInt(14, mainNum);
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e3) {
