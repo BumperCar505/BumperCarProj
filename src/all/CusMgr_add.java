@@ -231,8 +231,6 @@ public class CusMgr_add {
 	            	parent.requestGetInfo(parent);
 	            	
 	            	frame.dispose();
-	    			new CusMgr();
-	            	
 	            }
 	           
 	            
