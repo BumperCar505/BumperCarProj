@@ -88,7 +88,7 @@ public class CusMgr_add {
 		frame.setResizable(false);
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
+		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE));
 		panel.setBounds(12, 10, 574, 662);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
