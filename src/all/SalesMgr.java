@@ -50,14 +50,9 @@ public class SalesMgr extends JFrame {
 	private JTable table;
 	private JScrollPane scSalesDList;
 	private JScrollPane scSalesDList_1;
-	private JButton btnAddSalesD;
-	private JButton btnEditSalesD;
-	private JButton btnDelSalesD;
 	private JButton btnBackSales;
 	private JLabel lblYellowCat;
 	private final int FONT_SIZE = 21;
-//	String header[] = {"날짜","직원명", "고객명", "서비스명","부품명" ,"금액"};
-//	DefaultTableModel model = new DefaultTableModel(header, 0);
 	private String driver  = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
@@ -76,7 +71,7 @@ public class SalesMgr extends JFrame {
 			public void run() {
 				try {
 					SalesMgr frame = new SalesMgr();
-//					frame.setVisible(true);
+					frame.setVisible(true);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -250,7 +245,7 @@ public class SalesMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false); 
+				dispose();
 				new SalesMgr_day();
 
 			}
@@ -263,7 +258,7 @@ public class SalesMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false); 
+				dispose();
 				new ComMyPage();
 
 			}

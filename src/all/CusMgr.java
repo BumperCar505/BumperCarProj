@@ -195,10 +195,8 @@ public class CusMgr extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
-				dispose();
 				new ComMyPage();
-
+				dispose();
 			}
 		});
 		

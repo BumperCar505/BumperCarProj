@@ -156,7 +156,7 @@ public class SalesMgr_day extends JFrame {
 		lblRegTec.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
 		
 		btnBackSales = new JButton("돌아가기");
-		btnBackSales.setBounds(648, 1000, 290, 65);
+		btnBackSales.setBounds(650, 931, 290, 65);
 		getContentPane.add(btnBackSales);
 		btnBackSales.setBackground(new Color(244, 204, 204));
 		btnBackSales.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
@@ -173,8 +173,8 @@ public class SalesMgr_day extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false); 
 				new SalesMgr();
+				dispose();
 
 			}
 		});
@@ -182,7 +182,7 @@ public class SalesMgr_day extends JFrame {
 	
 		
 		scSalesDList = new JScrollPane(tableSalesDay);
-		scSalesDList.setBounds(100, 242, 1462, 750);
+		scSalesDList.setBounds(100, 171, 1462, 750);
 		scSalesDList.setEnabled(false);
 		scSalesDList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scSalesDList.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
@@ -275,7 +275,7 @@ public class SalesMgr_day extends JFrame {
 					+ "FROM stock st "
 					+ "JOIN unit un "
 					+ "ON st.stckUnitNum = un.unitNum "
-					+ "WHERE DATE_FORMAT(st.stckBuyDate,'%Y-%m') = DATE_FORMAT(now(),?) and un.unitNum LIKE 'p%' and stckComNum = '1112233333'  " ;
+					+ "WHERE DATE_FORMAT(st.stckBuyDate,'%Y-%m') = DATE_FORMAT(now(),?) and un.unitNum LIKE 'p%' and stckComNum = ?  " ;
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 

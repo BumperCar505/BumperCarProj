@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import book.BookCalendar;
 
@@ -21,6 +22,7 @@ import javax.swing.border.BevelBorder;
 public class ComMyPage {
 
    private JFrame frame;
+   private LoginManager loginManager;
    
    /**
     * Launch the application.
@@ -48,6 +50,8 @@ public class ComMyPage {
       initialize();
       frame.setVisible(true); 
       frame.setLocationRelativeTo(null); //화면 가운데에 뜨기
+      loginManager = loginManager.getInstance();
+      String id = loginManager.getLogComNum();
 
    
    }
@@ -142,6 +146,14 @@ public class ComMyPage {
       panel.add(btnMgrComment);
       btnMgrComment.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
       
+      JButton btnLogout = new JButton("Logout");
+      btnLogout.setFont(new Font("나눔바른고딕", Font.BOLD, 20));
+      btnLogout.setBounds(688, 899, 290, 42);
+      frame.getContentPane().add(btnLogout);
+      btnLogout.setBackground(new Color(199, 199, 199));
+      btnLogout.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+      
 //         코멘트 관리 페이지로
       btnMgrComment.addActionListener(new ActionListener() {
             
@@ -182,9 +194,11 @@ public class ComMyPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                frame.setVisible(false); 
+        
+               String id = loginManager.getLogComNum();
                
                EditComInfo editComInfo = new EditComInfo();
-               editComInfo.showComInfo("1112233333");
+               editComInfo.showComInfo(id);
 
             }
          });
@@ -229,11 +243,32 @@ public class ComMyPage {
          @Override
          public void actionPerformed(ActionEvent e) {
             frame.setVisible(false);
+//            loginManager = loginManager.getInstance();
+            String id = loginManager.getLogComNum();
             
             EditComInfo editComInfo = new EditComInfo();
-            editComInfo.showComInfo("1112233333");
+            editComInfo.showComInfo(id);
          }
       });
+      
+      
+//      로그아웃 버튼을 누르면
+      btnLogout.addActionListener(new ActionListener() {
+//		yes = 0, no = 1
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int num = DialogManager.createMsgDialog("로그아웃을 하시겠습니까?", "/img/question6.png", "로그아웃", JOptionPane.YES_NO_OPTION);
+			
+			if(num==0) {
+				loginManager.logout();
+				DialogManager.createMsgDialog("로그아웃 되었습니다", "/img/success1.png", "로그아웃성공", JOptionPane.PLAIN_MESSAGE);
+				new ComLogin();
+				frame.dispose();
+				
+			}
+			
+		}
+	});
          
    }
 }
