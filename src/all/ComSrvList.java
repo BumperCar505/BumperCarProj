@@ -49,6 +49,7 @@ public class ComSrvList extends JFrame implements ActionListener {
 	private final int FONT_SIZE = 21;
 	private LoginManager loginManager;
 	private Vector<String> headerNames = new Vector<>(Arrays.asList("번호", "서비스 명", "제공 정비사", "서비스 가격"));
+	private JLabel lblBackGround;
 	
 	public void setFont() {
 		InputStream inputStream = null;
@@ -466,6 +467,11 @@ public class ComSrvList extends JFrame implements ActionListener {
 		lblYellowCat.setIcon(new ImageIcon(ComSrvList.class.getResource("/img/YellowCat.png")));
 		lblYellowCat.setBounds(710, 50, 230, 80);
 		contentPane.add(lblYellowCat);
+		
+		lblBackGround = new JLabel("");
+		lblBackGround.setIcon(new ImageIcon(ComSrvList.class.getResource("/img/Car2.jpg")));
+		lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		contentPane.add(lblBackGround);
 		
 		this.setFont();
 		

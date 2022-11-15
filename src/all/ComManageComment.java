@@ -63,6 +63,7 @@ public class ComManageComment extends JFrame implements ActionListener {
 	private UtilDateModel model1, model2;
 	private JDatePanelImpl datePanel1, datePanel2;
 	private JDatePickerImpl datePicker1, datePicker2;
+	private JLabel lblBackGround;
 	
 	public ComManageComment setFont() {
 		InputStream inputStream = null;
@@ -780,6 +781,11 @@ public class ComManageComment extends JFrame implements ActionListener {
 		btnShowComment.setBounds(262, 70, 150, 50);
 		btnShowComment.addActionListener(this);
 		contentPane.add(btnShowComment);
+		
+		lblBackGround = new JLabel("");
+		lblBackGround.setIcon(new ImageIcon(ComManageComment.class.getResource("/img/Car2.jpg")));
+		lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		contentPane.add(lblBackGround);
 		
 		this.setFont();
 	}
