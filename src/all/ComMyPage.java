@@ -159,7 +159,7 @@ public class ComMyPage {
             
          @Override
          public void actionPerformed(ActionEvent e) {
-            frame.setVisible(false); 
+            frame.dispose(); 
             new ComManageComment();
 
          }
@@ -170,7 +170,7 @@ public class ComMyPage {
          
          @Override
          public void actionPerformed(ActionEvent e) {
-            frame.setVisible(false); 
+            frame.dispose(); 
             new SalesMgr();
 
          }
@@ -182,7 +182,7 @@ public class ComMyPage {
          
          @Override
          public void actionPerformed(ActionEvent e) {
-            frame.setVisible(false); 
+            frame.dispose();  
             new CusMgr();
 
          }
@@ -193,7 +193,7 @@ public class ComMyPage {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-               frame.setVisible(false); 
+               frame.dispose();  
         
                String id = loginManager.getLogComNum();
                
@@ -208,7 +208,7 @@ public class ComMyPage {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-               frame.setVisible(false); 
+               frame.dispose();  
                new UnitStockMgr();
 
             }
@@ -219,7 +219,7 @@ public class ComMyPage {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-               frame.setVisible(false); 
+               frame.dispose();  
                new ComSrvList();
 
             }
@@ -230,7 +230,7 @@ public class ComMyPage {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-               frame.setVisible(false); 
+               frame.dispose();  
                new TechListEdit();
 
             }
@@ -242,7 +242,7 @@ public class ComMyPage {
          
          @Override
          public void actionPerformed(ActionEvent e) {
-            frame.setVisible(false);
+            frame.dispose(); 
 //            loginManager = loginManager.getInstance();
             String id = loginManager.getLogComNum();
             
