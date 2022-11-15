@@ -53,6 +53,7 @@ public class SrvReg extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	private JComboBox<String> selectedSrvPrice;
 	
 	DefaultTableModel dtm;
     Vector<String> list;
@@ -218,8 +219,7 @@ public class SrvReg extends JFrame {
 		selectedSrvTech.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		panel.add(selectedSrvTech);
 		
-		JComboBox<?> selectedSrvPrice = new JComboBox();
-		selectedSrvPrice.setModel(new DefaultComboBoxModel(new String[] {"테스트 가격"}));
+		selectedSrvPrice = new JComboBox<>();
 		selectedSrvPrice.setBounds(141, 672, 385, 45);
 		selectedSrvPrice.setSelectedIndex(-1);
 		selectedSrvPrice.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
@@ -277,13 +277,44 @@ public class SrvReg extends JFrame {
 				}
 			}
 		});
-		
     }
 	
 	public SrvReg(GwakMemberBean comJoinInfo, List<TechBeans> techList) {
+		this();
+		addComboBoxData(selectedSrvPrice, getDbUnitPrice());
+	}
+	
+	private void addComboBoxData(JComboBox<String> comboBox, List<String> list) {
+		for(int i = 0; i < list.size(); ++i) {
+			comboBox.addItem(list.get(i));
+		}
+	}
+	
+	private List<String> getDbUnitPrice() {
+		List<String> list = new ArrayList<String>();
+		String query = "SELECT unitName, unitPrice FROM unit "
+				+ "WHERE unitNum LIKE 's%' "
+				+ "ORDER BY unitNum";
 		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("unitName", "unitPrice");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String priceName = row.get("unitName");
+				String priceValue = row.get("unitPrice");
+				list.add(priceName + "(" + priceValue + ")");
+			}
+		}
+		
+		return list;
 	}
 }
+
+
 
 
 //Select multiple JCheckBox in JComboBox
