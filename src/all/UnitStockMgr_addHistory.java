@@ -52,8 +52,9 @@ public class UnitStockMgr_addHistory extends JFrame {
 	private JFormattedTextField unitBuyDate;
 	private JButton btnUnitReg;
 	private JLabel lblNewLabel;
+	private LoginManager loginManager;
 	private String driver  = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
@@ -80,6 +81,8 @@ public class UnitStockMgr_addHistory extends JFrame {
 	 * Create the frame.
 	 */
 	public UnitStockMgr_addHistory() {
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //		폼 크기 : 600 * 500
 		setBounds(100, 100, 592, 764);
@@ -148,19 +151,14 @@ public class UnitStockMgr_addHistory extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		// 콤보박스
+		
 		JComboBox unitNameCmb = new JComboBox();
+		
 		unitNameCmb.setMaximumRowCount(10);
 		unitNameCmb.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		unitNameCmb.setBounds(93, 238, 390, 39);
 		unitNameCmb.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(unitNameCmb);
-			    
-
-		
-		
-		
-		
-		
 		try {
 			con = DriverManager.getConnection(url, "root", "1234");
 			String sql="SELECT distinct unit.unitName from unit "
@@ -169,8 +167,7 @@ public class UnitStockMgr_addHistory extends JFrame {
 					+ "WHERE stock.stckComNum = ? ";
 			
 			pstmt = con.prepareStatement(sql);
-//			★★★★★★★★★★     pstmt.setString(1, bean.getStckComNum()); // 실제 -> 사업자번호 값 받아오기★★★★★★★★★★
-			pstmt.setString(1, "1112233333"); // 테스트용
+			pstmt.setString(1, id); // 테스트용
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()){
@@ -181,32 +178,24 @@ public class UnitStockMgr_addHistory extends JFrame {
 			}catch(SQLException e) {
 				
 			}
-		
-		/////////////////////////////////
-		
-		
-		
+
 		
 		// 등록 완료 버튼
 		btnUnitReg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				
 				GwakMemberMgr mgr = new GwakMemberMgr();
 				GwakMemberBean bean =  new GwakMemberBean();
 
-				// 임의설정 -> 나중에 값 받아오도록 변경
-				bean.setStckComNum("1112233333");
-				
+				bean.setStckComNum(id);
 				bean.setStckQty1(Integer.parseInt(unitQty1.getText()));
 				bean.setStckQty2(Integer.parseInt(unitQty1.getText()));
 				bean.setStckBuyDate(unitBuyDate.getText());
 				
-
 				String Uname = unitNameCmb.getSelectedItem().toString();
 				bean.setUnitName(Uname);
 
-				mgr.addHistoty(bean);
+				mgr.addHistoty(bean, id);
 				
 				UnitStockMgr uform = new UnitStockMgr();
 				uform.setVisible(true);

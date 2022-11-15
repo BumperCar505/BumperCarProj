@@ -44,12 +44,13 @@ public class UnitStockMgr_addUnit extends JFrame {
 	private JTextField unitVendor;
 	private JButton btnUnitReg;
 	private JLabel lblNewLabel;
+	private UnitStockMgr parent;
 	private String driver  = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://127.0.0.1:3306/cardb5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+    private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection con = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-	
+	private LoginManager loginManager;
 
 	/**
 	 * Launch the application...
@@ -71,6 +72,8 @@ public class UnitStockMgr_addUnit extends JFrame {
 	 * Create the frame.
 	 */
 	public UnitStockMgr_addUnit() {
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //		폼 크기 : 600 * 500
 		setBounds(100, 100, 592, 764);
@@ -193,38 +196,27 @@ public class UnitStockMgr_addUnit extends JFrame {
 		// 등록 완료 버튼
 		btnUnitReg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
+
 				GwakMemberMgr mgr = new GwakMemberMgr();
 				GwakMemberBean bean =  new GwakMemberBean();
-
-				
-				// 임의설정 -> 나중에 값 받아오도록 변경
-				bean.setStckComNum("1112233333");
 				
 				String Uname = unitNameCmb.getSelectedItem().toString();
 				bean.setUnitName(Uname);
+				mgr.addUnit(bean, id);
 
-				mgr.addUnit(bean);
-				
-				UnitStockMgr uform = new UnitStockMgr();
-				uform.setVisible(true);
+				UnitStockMgr unit = new UnitStockMgr();
+				unit.setVisible(true);
 				
 				dispose();//--
 				
 			}
 		});
 		
-		// 콤보박스 값 추가
 
-	
-		
-		
 		
 	}
 	
 
-		
+
 	
 }

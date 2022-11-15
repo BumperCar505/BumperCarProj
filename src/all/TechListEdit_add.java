@@ -23,6 +23,7 @@ public class TechListEdit_add extends JFrame {
 	private JTextField techLv;
 	private JButton btnTechReg;
 	private JLabel lblNewLabel;
+	private LoginManager loginManager;
 
 	/**
 	 * Launch the application.
@@ -44,6 +45,8 @@ public class TechListEdit_add extends JFrame {
 	 * Create the frame.
 	 */
 	public TechListEdit_add() {
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //		폼 크기 : 600 * 500
 		setBounds(100, 100, 600, 550);
@@ -110,7 +113,7 @@ public class TechListEdit_add extends JFrame {
 				bean.setTechLv(techLv.getText());	
 
 				
-				mgr.add(bean);
+				mgr.add(bean, id);
 				
 				TechListEdit a1 = new TechListEdit();
 				a1.setVisible(true);

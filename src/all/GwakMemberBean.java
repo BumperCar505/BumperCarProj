@@ -3,6 +3,17 @@ package all;
 
 public class GwakMemberBean {
 
+	// Com
+	private String comName;
+	private String comNum;
+	private String comEmail;
+	private String comZip;
+	private String comAddr;
+	private String comTel;
+	private String comDate;
+	private String comPw;
+	private String comPwCheck;
+	
 	// technician 테이블 .
 	private int techNum;
 	private String techName;
@@ -154,6 +165,78 @@ public class GwakMemberBean {
 	}
 	public void setTechLv(String techLv) {
 		this.techLv = techLv;
+	}
+
+	public String getComName() {
+		return comName;
+	}
+
+	public void setComName(String comName) {
+		this.comName = comName;
+	}
+//
+	public String getComNum() {
+		return comNum;
+	}
+
+	public void setComNum(String comNum) {
+		this.comNum = comNum;
+	}
+
+	public String getComEmail() {
+		return comEmail;
+	}
+
+	public void setComEmail(String comEmail) {
+		this.comEmail = comEmail;
+	}
+
+	public String getComZip() {
+		return comZip;
+	}
+
+	public void setComZip(String comZip) {
+		this.comZip = comZip;
+	}
+
+	public String getComAddr() {
+		return comAddr;
+	}
+
+	public void setComAddr(String comAddr) {
+		this.comAddr = comAddr;
+	}
+
+	public String getComTel() {
+		return comTel;
+	}
+
+	public void setComTel(String comTel) {
+		this.comTel = comTel;
+	}
+
+	public String getComDate() {
+		return comDate;
+	}
+
+	public void setComDate(String comDate) {
+		this.comDate = comDate;
+	}
+
+	public String getComPw() {
+		return comPw;
+	}
+
+	public void setComPw(String comPw) {
+		this.comPw = comPw;
+	}
+
+	public String getComPwCheck() {
+		return comPwCheck;
+	}
+
+	public void setComPwCheck(String comPwCheck) {
+		this.comPwCheck = comPwCheck;
 	}
 
 

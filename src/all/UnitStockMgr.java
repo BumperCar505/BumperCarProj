@@ -38,7 +38,10 @@ public class UnitStockMgr extends JFrame {
 	private JButton btnDelUnitStock;
 	private JButton btnBackUnitStockMain;
 	private LoginManager loginManager;
-	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};  // 테이블 컬럼 값들
+	private UnitStockMgr unitStockMgr;
+	
+
+	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 
 	// Launch the application..
@@ -46,6 +49,7 @@ public class UnitStockMgr extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					UnitStockMgr frame = new UnitStockMgr();
 					
 				} catch (Exception e) {
@@ -56,9 +60,11 @@ public class UnitStockMgr extends JFrame {
 	}
 
 
+	
 	// Create the frame.
 	public UnitStockMgr() {
-		loginManager.getInstance();
+		
+		loginManager = loginManager.getInstance();
 		String id = loginManager.getLogComNum();
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -75,7 +81,7 @@ public class UnitStockMgr extends JFrame {
 		setLocationRelativeTo(null); //--
 		setContentPane(contentPane);
 		
-		//테이블 생성		
+		//테이블 생성
 		table = new JTable(model);
 		
 		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
@@ -194,9 +200,9 @@ public class UnitStockMgr extends JFrame {
 									GwakMemberBean bean =  new GwakMemberBean();
 									
 									// 사업자번호 : 임시방편
-									bean.setStckComNum("1112233333");
+									bean.setStckComNum(id);
 									bean.setStckUnitNum(editIndex);
-					            	mgr.delete2(bean);
+					            	mgr.delete2(bean, id);
 					            	
 					            	DialogManager.createMsgDialog("<html><h3>삭제되었습니다.</h3>", "/img/success1.png", "삭제", JOptionPane.CLOSED_OPTION);
 					            } else if (result == 1) {
@@ -214,12 +220,12 @@ public class UnitStockMgr extends JFrame {
 				btnAddUnitStock.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// 메인화면은 visible true, 현재화면은 false
+
 						UnitStockMgr_addUnit history = new UnitStockMgr_addUnit();
-						
-						
+
 						history.setVisible(true);
 						
-						// 현재 메인창 닫기(업데이트를 위해)
+						//현재 메인창 닫기(업데이트를 위해)
 						dispose();
 
 					}
@@ -231,8 +237,6 @@ public class UnitStockMgr extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						// 메인화면은 visible true, 현재화면은 false
 						UnitStockMgr_addHistory history = new UnitStockMgr_addHistory();
-						
-						
 						history.setVisible(true);
 						
 						// 현재 메인창 닫기(업데이트를 위해)
@@ -246,16 +250,20 @@ public class UnitStockMgr extends JFrame {
 		btnBackUnitStockMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// 메인화면은 visible true, 현재화면은 false
+				
+//				ComMyPage myPage = new ComMyPage();
+//				myPage.setVisible(true);
 
+				dispose();
 			}
 		});
 
-		
 	}
-			}
-	
 	
 
+}
+	
+	
 
 
 
