@@ -54,6 +54,7 @@ public class SrvReg extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private JComboBox<String> selectedSrvPrice;
+	private CheckedComboBox selectedSrvTech;
 	
 	DefaultTableModel dtm;
     Vector<String> list;
@@ -214,7 +215,7 @@ public class SrvReg extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		CheckedComboBox selectedSrvTech = new CheckedComboBox<>(makeModel());
+		selectedSrvTech = new CheckedComboBox<>(makeModel());
 		selectedSrvTech.setBounds(0, 10, 385, 45);
 		selectedSrvTech.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		panel.add(selectedSrvTech);
@@ -256,7 +257,7 @@ public class SrvReg extends JFrame {
 		        getContentPane().add(panel);
 		        panel.setLayout(null);
 
-		        CheckedComboBox selectedSrvTech = new CheckedComboBox<>(makeModel());
+		        selectedSrvTech = new CheckedComboBox<>(makeModel());
 		        selectedSrvTech.setBounds(0, 10, 385, 45);
 		        selectedSrvTech.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		        panel.add(selectedSrvTech);
@@ -287,6 +288,12 @@ public class SrvReg extends JFrame {
 	private void addComboBoxData(JComboBox<String> comboBox, List<String> list) {
 		for(int i = 0; i < list.size(); ++i) {
 			comboBox.addItem(list.get(i));
+		}
+	}
+	
+	private void addCheckComboBoxData(CheckedComboBox comboBox , List<String> list) {
+		for(int i = 0; i < list.size(); ++i) {
+			comboBox.addItem(new CheckableItem(list.get(i), false));
 		}
 	}
 	
