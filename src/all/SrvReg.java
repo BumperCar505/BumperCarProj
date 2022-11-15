@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -52,12 +53,15 @@ public class SrvReg extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	private JComboBox<String> selectedSrvPrice;
+	private CheckedComboBox selectedSrvTech;
+	private GwakMemberBean comJoinInfo;
+	private List<TechBeans> techList;
 	
 	DefaultTableModel dtm;
     Vector<String> list;
     Vector<String> colName;
     private JTextField srvName;
-    private JFormattedTextField srvPrice;
     
     private static ComboBoxModel<CheckableItem> makeModel() {
 	    CheckableItem[] m = {
@@ -88,7 +92,6 @@ public class SrvReg extends JFrame {
 
 	SrvReg()
     {
-
         setBounds(300, 300, Size.SCREEN_W, Size.SCREEN_H);
         
 //      폼 창이 화면 가운데서 뜨게 하는 기능
@@ -131,7 +134,7 @@ public class SrvReg extends JFrame {
 		TableDesigner.setFont(table, "NanumBarunGothic", 18);
 		TableDesigner.setTableColumn(table, colName);
 		TableDesigner.setTableTextCenter(table, colName);
-		TableDesigner.resizeTableRow(table, 50);
+		TableDesigner.resizeTableRow(table, 25);
 		TableDesigner.resizeTableColumn(table, columnWidthValues);
 		TableDesigner.resizeTableHeader(table);
         
@@ -199,15 +202,9 @@ public class SrvReg extends JFrame {
 		lblNewLabel_3.setBounds(141, 600, 259, 55);
 		getContentPane().add(lblNewLabel_3);
 		lblNewLabel_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		//        srvName.setColumns(10);
-		
-		srvPrice = new JFormattedTextField(new NumberFormatter());
-		srvPrice.setBounds(141, 665, 274, 45);
-		getContentPane().add(srvPrice);
-		srvPrice.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		JButton btnSrvReg = new JButton("등록");
-		btnSrvReg.setBounds(275, 763, 150, 50);
+		btnSrvReg.setBounds(242, 763, 150, 50);
 		btnSrvReg.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnSrvReg.setBackground(new Color(244, 204, 204));
 		btnSrvReg.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
@@ -219,10 +216,16 @@ public class SrvReg extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		CheckedComboBox selectedSrvTech = new CheckedComboBox<>(makeModel());
+		selectedSrvTech = new CheckedComboBox<>(makeModel());
 		selectedSrvTech.setBounds(0, 10, 385, 45);
 		selectedSrvTech.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		panel.add(selectedSrvTech);
+		
+		selectedSrvPrice = new JComboBox<>();
+		selectedSrvPrice.setBounds(141, 672, 385, 45);
+		selectedSrvPrice.setSelectedIndex(-1);
+		selectedSrvPrice.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		getContentPane().add(selectedSrvPrice);
 		
 		ComboBoxModel<CheckableItem> model = selectedSrvTech.getModel();
         
@@ -232,27 +235,30 @@ public class SrvReg extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				
-				Vector<String> list = new Vector<String>();
-				list.add(srvName.getText());
-				list.add(selectedSrvTech.getCheckedItemString(model));
-				list.add(srvPrice.getText());
 				dtm = (DefaultTableModel)table.getModel();
-				dtm.addRow(list);
+				String[] checkedTechNames = selectedSrvTech.getCheckedItemString(model).split(",");
 				
-
+				for(int i = 0; i < checkedTechNames.length; ++i) {
+					Vector<String> list = new Vector<String>();
+					list.add(srvName.getText());
+					list.add(checkedTechNames[i].trim());
+					list.add(selectedSrvPrice.getSelectedItem().toString());
+					dtm.addRow(list);
+				}
+				
 				panel.removeAll();
 				panel.revalidate();
 				panel.repaint();
 
 				srvName.setText("");
-				srvPrice.setText("");
+				selectedSrvTech.setSelectedIndex(-1);
+				selectedSrvPrice.setSelectedIndex(-1);
 				
 		        panel.setBounds(141, 489, 464, 65);
 		        getContentPane().add(panel);
 		        panel.setLayout(null);
 
-		        CheckedComboBox selectedSrvTech = new CheckedComboBox<>(makeModel());
+		        selectedSrvTech = new CheckedComboBox<>(makeModel());
 		        selectedSrvTech.setBounds(0, 10, 385, 45);
 		        selectedSrvTech.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		        panel.add(selectedSrvTech);
@@ -273,13 +279,122 @@ public class SrvReg extends JFrame {
 				}
 			}
 		});
-		
     }
 	
 	public SrvReg(GwakMemberBean comJoinInfo, List<TechBeans> techList) {
+		this();
+		this.comJoinInfo = comJoinInfo;
+		this.techList = techList;
 		
+		List<String> techNames = new ArrayList<String>();
+		for(int i = 0; i < techList.size(); ++i) {
+			techNames.add(techList.get(i).getTechName());
+		}
+		
+		addCheckComboBoxData(selectedSrvTech, techNames);
+		addComboBoxData(selectedSrvPrice, getDbUnitPrice());
+	}
+	
+	private void addComboBoxData(JComboBox<String> comboBox, List<String> list) {
+		for(int i = 0; i < list.size(); ++i) {
+			comboBox.addItem(list.get(i));
+		}
+	}
+	
+	private void addCheckComboBoxData(CheckedComboBox comboBox , List<String> list) {
+		for(int i = 0; i < list.size(); ++i) {
+			comboBox.addItem(new CheckableItem(list.get(i), false));
+		}
+	}
+	
+	private List<ComSrvBeans> createServiceBeans() {
+		List<ComSrvBeans> srvBeans = new ArrayList<ComSrvBeans>();
+		for(int i = 0; i < table.getRowCount(); ++i) {
+			
+		}
+	}
+	
+	private List<String> getDbUnitPrice() {
+		List<String> list = new ArrayList<String>();
+		String query = "SELECT unitName, unitPrice FROM unit "
+				+ "WHERE unitNum LIKE 's%' "
+				+ "ORDER BY unitNum";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query);
+		List<HashMap<String, String>> result = communicator.executeQueryToList("unitName", "unitPrice");
+		if(result == null) {
+			return null;
+		} else {
+			for(int i = 0; i < result.size(); ++i) {
+				HashMap<String, String> row = result.get(i);
+				String priceName = row.get("unitName");
+				String priceValue = row.get("unitPrice");
+				list.add(priceName + "(" + priceValue + ")");
+			}
+		}
+		
+		return list;
+	}
+	
+	private boolean setDbCompany(GwakMemberBean comJoinInfo) { 
+		String query = "INSERT INTO company "
+				+ "VALUES(?, ?, ?, ?, ?, "
+				+ "?, NOW())";
+		
+		String comId = "9998877777";
+		String comName = "테스트 회사";
+		String comEmail = "test@naver.com";
+		int comZip = 55555;
+		String comAddr = "서울 광역시";
+		String comPhoneNum = "010-1111-2222";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		communicator.setQuery(query, comId, comName, comEmail, comZip, comAddr, comPhoneNum);
+		communicator.addParams();
+		return communicator.executeUpdate() != -1 ? true : false;
+	}
+	
+	private boolean setDbTechs(List<TechBeans> techList, String comId) {
+		boolean flag = true;
+		String query = "INSERT INTO technician(techComNum, techName, techTel, techLv) "
+				+ "VALUES('6665544444', '김지민', '010-5555-3323', '사원')";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		for(int i = 0; i < techList.size(); ++i) {
+			String techName = techList.get(i).getTechName();
+			String techTel = techList.get(i).getTechTel();
+			String techLv = techList.get(i).getTechLv();
+			communicator.setQuery(query, comId, techName, techTel, techLv);
+			if(communicator.executeUpdate() == -1 && flag == true) {
+				flag = false;
+			}
+		}
+		
+		return flag;
+	}
+	
+	private boolean setDbService(List<ComSrvBeans> srvList) {
+		boolean flag = true;
+		String query = "INSERT INTO service(srvTechNum, srvName) "
+				+ "VALUES(?, ?)";
+		
+		QueryCommunicator communicator = new QueryCommunicator();
+		for(int i = 0; i < srvList.size(); ++i) {
+			ComSrvBeans service = srvList.get(i);
+			int srvTechNum = service.getTechNum();
+			String srvName = service.getSrvName();
+			communicator.setQuery(query, srvTechNum, srvName);
+			if(communicator.executeUpdate() == -1 && flag == true) {
+				flag = false;
+			}
+		}
+		
+		return flag;
 	}
 }
+
+
 
 
 //Select multiple JCheckBox in JComboBox
