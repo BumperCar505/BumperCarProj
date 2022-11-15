@@ -201,9 +201,9 @@ public class BookCell extends JPanel {
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		} finally {
-			dbManager.closeDB(pstmt, rs);
-			dbManager.closeDB();
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
 //			if (rs != null) { rs.close(); }
 //			if (pstmt != null) { pstmt.close(); }
 //			if (conn != null) { conn.close(); }

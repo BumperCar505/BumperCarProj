@@ -85,6 +85,18 @@ public class DayDay extends JFrame {
 				detail.setVisible(true);
 				detail.srvList();
 				detail.btnBook.setText("등록");
+//				setVisible(false);
+				detail.btnBook.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						detail.insertDetail();
+						detail.setVisible(false);
+//						BookCalendar bookCalendar = new BookCalendar();
+//						bookCalendar.setVisible(false);
+//						bookCalendar.setVisible(true);
+						setVisible(false);
+					}
+				});
+				
 			}
 		});
 	}
@@ -145,9 +157,9 @@ public class DayDay extends JFrame {
 
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		} finally {
-			dbManager.closeDB(pstmt, rs);
-			dbManager.closeDB();
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
 //			if (rs != null) { rs.close(); }
 //			if (pstmt != null) { pstmt.close(); }
 //			if (conn != null) { conn.close(); }

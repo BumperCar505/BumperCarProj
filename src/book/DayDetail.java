@@ -62,7 +62,6 @@ public class DayDetail extends JLabel {
 				BookDetail bookDetail = new BookDetail(); 
 				bookDetail.setVisible(true);		
 				bookDetail.getDetail(mainNum);
-		
 			}
 		});
 		
