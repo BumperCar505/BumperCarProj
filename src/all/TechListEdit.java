@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,14 +37,18 @@ import javax.swing.ImageIcon;
 
 public class TechListEdit extends JFrame {
 
+
+
+	
 	private JPanel contentPane;
 	private JTable table;
 	private JButton btnEditTech;
 	private JButton btnDelTech;
 	private JButton btnBackMain;
 	private LoginManager loginManager;
-	
 
+	
+	
 	private String header[] = {"techNum","정비사 이름","전화번호","직급"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 	
