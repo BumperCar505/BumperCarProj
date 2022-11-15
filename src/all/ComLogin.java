@@ -173,6 +173,7 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
+		this.setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
@@ -220,5 +221,7 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		lblYellowCat.setIcon(new ImageIcon(ComLogin.class.getResource("/img/YellowCat.png")));
 		lblYellowCat.setBounds(714, 215, 230, 80);
 		contentPane.add(lblYellowCat);
+		
+		this.setFont();
 	}
 }
