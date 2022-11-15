@@ -307,6 +307,13 @@ public class SrvReg extends JFrame {
 		}
 	}
 	
+	private List<ComSrvBeans> createServiceBeans() {
+		List<ComSrvBeans> srvBeans = new ArrayList<ComSrvBeans>();
+		for(int i = 0; i < table.getRowCount(); ++i) {
+			
+		}
+	}
+	
 	private List<String> getDbUnitPrice() {
 		List<String> list = new ArrayList<String>();
 		String query = "SELECT unitName, unitPrice FROM unit "
