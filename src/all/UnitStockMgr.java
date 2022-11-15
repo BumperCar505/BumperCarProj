@@ -123,9 +123,9 @@ public class UnitStockMgr extends JFrame {
 		scUnitList.setEnabled(false);
 		scUnitList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scUnitList.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		scUnitList.setBounds(100, 145, 1462, 750);
+		scUnitList.setBounds(500, 250, 800, 500);
 		contentPane.setLayout(null);
-		contentPane.add(tableUnitList);
+		contentPane.add(scUnitList);
 		
 		JPanel jpList = new JPanel();		
 	    jpList.setLayout(new GridBagLayout());			
@@ -185,7 +185,7 @@ public class UnitStockMgr extends JFrame {
 		btnUnitBuyHistory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				int row = table.getSelectedRow();
+				int row = tableUnitList.getSelectedRow();
 				int column1 = 0;
 				int column2 = 1;
 				
@@ -193,8 +193,8 @@ public class UnitStockMgr extends JFrame {
 					JOptionPane.showConfirmDialog(null, "셀을 선택하지 않으셨습니다.", "구매 이력", JOptionPane.DEFAULT_OPTION);
 				}
 				else {
-					int stckNum = (int) table.getValueAt(row, column1);
-					String unitNum = (String) table.getValueAt(row, column2);
+					int stckNum = (int) tableUnitList.getValueAt(row, column1);
+					String unitNum = (String) tableUnitList.getValueAt(row, column2);
 					UnitBuyHistory history = new UnitBuyHistory(stckNum, unitNum);
 					
 					
@@ -208,9 +208,9 @@ public class UnitStockMgr extends JFrame {
 				btnDelUnitStock.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-						int row = table.getSelectedRow();
+						int row = tableUnitList.getSelectedRow();
 						int column = 1;
-						String editIndex = (String) table.getValueAt(row, column);
+						String editIndex = (String) tableUnitList.getValueAt(row, column);
 						
 						if(row == -1){
 				            JOptionPane.showConfirmDialog(null, "셀을 선택하지 않으셨습니다.", "삭제", JOptionPane.DEFAULT_OPTION);
@@ -227,9 +227,8 @@ public class UnitStockMgr extends JFrame {
 									GwakMemberBean bean =  new GwakMemberBean();
 									
 									// 사업자번호 : 임시방편
-									bean.setStckComNum(id);
 									bean.setStckUnitNum(editIndex);
-					            	mgr.delete2(bean);
+					            	mgr.delete2(bean, id);
 					            	
 					            	DialogManager.createMsgDialog("<html><h3>삭제되었습니다.</h3>", "/img/success1.png", "삭제", JOptionPane.CLOSED_OPTION);
 					            } else if (result == 1) {

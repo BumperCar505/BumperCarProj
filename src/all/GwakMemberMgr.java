@@ -444,7 +444,7 @@ public class GwakMemberMgr {
 	}
 	
 	// UnitStockMgr의 삭제 기능
-	public GwakMemberBean delete2(GwakMemberBean bean){
+	public GwakMemberBean delete2(GwakMemberBean bean, String id){
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
@@ -453,7 +453,7 @@ public class GwakMemberMgr {
 			con = pool.getConnection();
 			sql = "DELETE FROM stock WHERE stckComNum = ? AND stckUnitNum = ? ";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, bean.getStckComNum());
+			pstmt.setString(1, id);
 			pstmt.setString(2, bean.getStckUnitNum());
 			pstmt.executeUpdate();
 
