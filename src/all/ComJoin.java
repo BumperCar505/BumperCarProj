@@ -38,6 +38,7 @@ public class ComJoin extends JFrame implements ActionListener {
 	
 
 
+//	 화면 UI 호출
 	// Launch the application.
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -76,7 +77,8 @@ public class ComJoin extends JFrame implements ActionListener {
 
 				// 빈즈파일 넘기기
 //				new RegTech(comJoinInfo);
-				new test(comJoinInfo);
+				
+				new RegTech(comJoinInfo);
 				this.dispose();
 			}
 			else {
