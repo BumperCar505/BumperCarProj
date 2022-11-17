@@ -201,7 +201,7 @@ public class QueryCommunicator {
 		try {
 			connection = mgr.getConnection();
 			psmt = connection.prepareStatement(query);
-			
+			 
 			if(combineParams() == false) {
 				return null; // 파라미터 결합 실패시 null 반환
 			}
