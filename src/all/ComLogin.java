@@ -35,6 +35,7 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 	private JPasswordField comPw;
 	private JButton btnComLogin;
 	private JButton btnComJoin;
+	private JLabel lblBackGround;
 
 	public void setFont() {
 		InputStream inputStream = null;
@@ -221,6 +222,11 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		lblYellowCat.setIcon(new ImageIcon(ComLogin.class.getResource("/img/YellowCat.png")));
 		lblYellowCat.setBounds(714, 215, 230, 80);
 		contentPane.add(lblYellowCat);
+		
+		lblBackGround = new JLabel("");
+		lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car.png")));
+		lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		contentPane.add(lblBackGround);
 		
 		this.setFont();
 	}
