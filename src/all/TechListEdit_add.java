@@ -24,6 +24,7 @@ public class TechListEdit_add extends JFrame {
 	private JButton btnTechReg;
 	private JLabel lblNewLabel;
 	private LoginManager loginManager;
+	private TechListEdit parent;
 
 	/**
 	 * Launch the application.
@@ -101,7 +102,6 @@ public class TechListEdit_add extends JFrame {
 		
 		
 		// 등록 버튼 누르면 현재 창이 닫히면서 TechListEdit 창이 뜸(데이터 이동 완료상태)
-		// 또는 추가 버튼 누르면 기존 폼이 닫히고, 등록 버튼 누를때 기존 폼 새로 뜨게??????????????????????????????????????????????????????????
 		btnTechReg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -115,12 +115,16 @@ public class TechListEdit_add extends JFrame {
 				
 				mgr.add(bean, id);
 				
-				TechListEdit a1 = new TechListEdit();
-				a1.setVisible(true);
+				parent.requestSelect2(parent);
 				
 				dispose();//--
 			}
 		});
+	}
+	
+	public TechListEdit_add(TechListEdit parent) {
+		this();
+		this.parent = parent;
 	}
 
 }

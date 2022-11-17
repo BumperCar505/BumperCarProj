@@ -185,7 +185,8 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		comId.setBounds(638, 333, 404, 66);
 		comId.setText("아이디");
 		comId.setHorizontalAlignment(SwingConstants.CENTER);
-		comId.setColumns(10);
+		comId.setColumns(
+				10);
 		comId.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 				Color.red, Color.red));
 		comId.addCaretListener(this);

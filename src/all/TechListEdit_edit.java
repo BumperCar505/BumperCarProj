@@ -25,6 +25,7 @@ public class TechListEdit_edit extends JFrame{
 	private JButton btnTechSave;
 	private JLabel lblNewLabel;
 	int aa = 0;
+	private TechListEdit parent;
 	
 	/**
 	 * Launch the application.
@@ -53,7 +54,7 @@ public class TechListEdit_edit extends JFrame{
 	/**
 	 * Create the frame.
 	 */
-	public TechListEdit_edit(int a) {
+	public TechListEdit_edit() {
 
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -111,19 +112,10 @@ public class TechListEdit_edit extends JFrame{
 		contentPane.add(lblNewLabel);
 		
 		
-		//////////////////////db에 있는 값 넣기
-		GwakMemberMgr mgr = new GwakMemberMgr();
-		GwakMemberBean bean =  mgr.select(a);
 		
-		techName.setText(bean.getTechName());
-		techTel.setText(bean.getTechTel());
-		techLv.setText(bean.getTechLv());
-		//////////////////////
-		aa = a;
 		
 		
 		// 저장 버튼 누르면 현재 창이 닫히면서 TechListEdit 창이 뜸(데이터 이동 완료상태)
-		// 또는 추가 버튼 누르면 기존 폼이 닫히고, 등록 버튼 누를때 기존 폼 새로 뜨게??????????????????????????????????????????????????????????
 		btnTechSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -136,8 +128,9 @@ public class TechListEdit_edit extends JFrame{
 				
 				mgr.update(bean,aa);
 				
-				TechListEdit a1 = new TechListEdit();
-				a1.setVisible(true);
+				parent.requestSelect2(parent);
+//				TechListEdit a1 = new TechListEdit();
+//				a1.setVisible(true);
 				
 				dispose();
 
@@ -147,6 +140,18 @@ public class TechListEdit_edit extends JFrame{
 		
 		
 	}
+	public TechListEdit_edit(TechListEdit parent, int a) {
+		this();
+		this.parent = parent;
+		
+		GwakMemberMgr mgr = new GwakMemberMgr();
+		GwakMemberBean bean =  mgr.select(a);
 
+		techName.setText(bean.getTechName());
+		techTel.setText(bean.getTechTel());
+		techLv.setText(bean.getTechLv());
+		//////////////////////
+		aa = a;
+	}
 
 }
