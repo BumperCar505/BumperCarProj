@@ -79,7 +79,8 @@ public class RegTech extends JFrame {
 //    PreparedStatement pstmt = null;
 //    ResultSet rs = null;
 
-    private TechBeans createTechBeans;
+//    ArrayList<TechBeans> techBeansList = new ArrayList<>();
+//    private <List>techBeansList;
  
 	/**
 	 * Launch the application.
@@ -89,6 +90,7 @@ public class RegTech extends JFrame {
 			public void run() {
 				try {
 					RegTech frame = new RegTech();
+					
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -102,6 +104,7 @@ public class RegTech extends JFrame {
 
 	RegTech()
     {
+
 		setVisible(true);   
         setBounds(300, 300, Size.SCREEN_W, Size.SCREEN_H);
 		setLocationRelativeTo(null);
@@ -281,18 +284,20 @@ public class RegTech extends JFrame {
 				}
 			}
 		});
-		
+	
 //		다음 버튼 누르면 데이터가 들어가야한다. 그리고 로그인페이지로 이동. 테이블은 company, technician 순서대로 입력을 해야 한다. 
 		btnTechNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				
 				companyData(comJoinInfo);
 				loginData(comJoinInfo);
-				technicianData(createTechBeans);
+
+//				technicianData();
 				
-		
+
 				new ComLogin();
+				dispose();
 			}
 		});
 	}
@@ -303,6 +308,7 @@ public class RegTech extends JFrame {
 		PreparedStatement pstmt= null;
 		ResultSet rs = null;
 		String sql = null;
+		
 	try {
 		Class.forName(driver);
 	} catch (ClassNotFoundException e1) {
@@ -332,11 +338,13 @@ try {
 	}
 	
 //	로그인 데이터 삽입
-	private void loginData(GwakMemberBean comJoinInfo ) {
+	public void loginData(GwakMemberBean comJoinInfo ) {
+		
 		Connection con = null;
 		PreparedStatement pstmt= null;
 		ResultSet rs = null;
 		String sql = null;
+//		GwakMemberBean comJoinInfo = new GwakMemberBean();
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e1) {
@@ -362,51 +370,78 @@ try {
 
 		}
 	
-	private void technicianData(TechBeans techBeansList) {
-		Connection con = null;
-		PreparedStatement pstmt= null;
-		ResultSet rs = null;
-		String sql = null;
-		try {
-			Class.forName(driver);
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		try {
-			con = DriverManager.getConnection(url, "root", "1234");
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		sql = " INSERT technician (techComNum,techName,techTel,techLv) "
-				+ "VALUE (?,?,?,?) ";	
-	try {
-		pstmt = con.prepareStatement(sql);
-		pstmt.setString(1, comJoinInfo.getComNum());
-		pstmt.setString(2, techBeansList.getTechName());
-		pstmt.setString(3, techBeansList.getTechTel());
-		pstmt.setString(4, techBeansList.getTechLv());
+//	이거는 한 명씩 넣어주는 구조임.
+//	private void technicianData() {
+//	
+//		Connection con = null;
+//		PreparedStatement pstmt= null;
+//		ResultSet rs = null;
+//		String sql = null;
+//		try {
+//			Class.forName(driver);
+//		} catch (ClassNotFoundException e1) {
+//			e1.printStackTrace();
+//		}
+//		try {
+//			con = DriverManager.getConnection(url, "root", "1234");
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		}
+////		sql = " INSERT technician (techComNum,techName,techTel,techLv) "
+////				+ "VALUE (?,?,?,?) " ;
+//		
+//		sql = "CREATE PROCEDURE loopInsert() "
+//				+ "BEGIN "
+//				+ "    DECLARE i INT DEFAULT 1; "
+//				+ "    WHILE i <= table.getRowCount() "
+//				+ "        DO "
+//				+ "            INSERT INTO technician(techComNum,techComNum, techName, techLv) "
+//				+ "            VALUES (?,?,?,?); "
+//				+ "            SET i = i + 1; "
+//				+ "        END WHILE; "
+//				+ "END " ; 
+//	
+//		
+//	try {
+//		pstmt = con.prepareStatement(sql);
+//		pstmt.setString(1, comJoinInfo.getComNum());
+//		pstmt.setString(2, techName.getText());
+//		pstmt.setString(3, techTel.getText());
+//		pstmt.setString(4, techLv.getText());
+//		
+//		
+//		} catch (SQLException e1) {
+//		
+//			e1.printStackTrace();
+//		}
+//	}
 		
 		
-		} catch (SQLException e1) {
-		
-			e1.printStackTrace();
-		}
-
-		}
 	
 
-	private List<TechBeans> createTechBeans() {
-		List<TechBeans> techBeansList = new ArrayList<>();
-		
-		for(int i = 0; i < table.getRowCount(); ++i) {
-			String techName = table.getValueAt(i, 0).toString();
-			String techTel = table.getValueAt(i, 1).toString();
-			String techLv = table.getValueAt(i, 2).toString();
-			techBeansList.add(new TechBeans(techName, techTel, techLv));
-		}
-		
-		return techBeansList;
-	}
+	
+	
+
+//	private List<TechBeans> createTechBeans() {
+//		ArrayList<TechBeans> techBeansList = new ArrayList<>();
+//		
+//	
+//		for(int i = 0; i < table.getRowCount(); ++i) {
+//			String techName = table.getValueAt(i, 0).toString();
+//			String techTel = table.getValueAt(i, 1).toString();
+//			String techLv = table.getValueAt(i, 2).toString();
+//			techBeansList.add(new TechBeans(techName, techTel, techLv));
+//		};
+//		
+//		for(TechBeans test:techBeansList) {
+//			System.out.println(test);
+//		}
+//		
+//		return techBeansList;
+//	}
+
+	
+
 	
 	public RegTech(GwakMemberBean comJoinInfo) {	
 		this();
