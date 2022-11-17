@@ -6,7 +6,7 @@ public class TechBeans {
 	private String techLv;
 	
 	public TechBeans() {
-		this("디폴트정비사", "010-1111-2222", "사원");
+//		this("디폴트정비사", "010-1111-2222", "사원");
 	}
 	
 	public TechBeans(String techName, String techTel, String techLv) {
