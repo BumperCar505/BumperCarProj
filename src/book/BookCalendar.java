@@ -14,18 +14,24 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import all.ComMyPage;
 import all.Size;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.ImageIcon;
 
 public class BookCalendar extends JFrame {
 
 	BookMain bMain;
 	ArrayList<BookCell> cell_list = new ArrayList<BookCell>();
+	ArrayList<DayDetail> day_list = new ArrayList<DayDetail>();
 	JPanel p_center, p_south;
 	JButton prev, next;
 	JLabel la_month;
@@ -42,15 +48,11 @@ public class BookCalendar extends JFrame {
 	
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					BookCalendar frame = new BookCalendar();
-					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -58,10 +60,9 @@ public class BookCalendar extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+
 	public BookCalendar() {
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
@@ -73,6 +74,11 @@ public class BookCalendar extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.setLayout(null);
+		
+		JLabel backgroundImg = new JLabel("");
+		backgroundImg.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/Car2.jpg")));
+		backgroundImg.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		contentPane.add(backgroundImg);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/YellowCat.png")));
@@ -96,10 +102,15 @@ public class BookCalendar extends JFrame {
 		p_south.setPreferredSize(new Dimension(800, 420));
 		
 		next = new JButton("다음 달");
+		next.setBackground(new Color(244, 204, 204));
+		next.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 		next.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		next.setBounds(1361, 1, 98, 50);
 		panel.add(next);
+		
 		prev = new JButton("이전 달");
+		prev.setBackground(new Color(244, 204, 204));
+		prev.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 		prev.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
 		prev.setBounds(179, 1, 98, 50);
 		panel.add(prev);
@@ -108,6 +119,18 @@ public class BookCalendar extends JFrame {
 		la_month.setBounds(420, 2, 800, 50);
 		panel.add(la_month);
 		la_month.setHorizontalAlignment(JLabel.CENTER);
+		
+		JButton btnReset = new JButton("새로고침");
+		btnReset.setBackground(new Color(244, 204, 204));
+		btnReset.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCal();
+			}
+		});
+		btnReset.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
+		btnReset.setBounds(1191, 1, 98, 50);
+		panel.add(btnReset);
 		
 		// 이전 달
 		prev.addActionListener(new ActionListener() {
@@ -141,6 +164,14 @@ public class BookCalendar extends JFrame {
 		});
 		
 		JButton btnBackCusMain = new JButton("돌아가기");
+		btnBackCusMain.setBackground(new Color(244, 204, 204));
+		btnBackCusMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
+		btnBackCusMain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				new ComMyPage();
+			}
+		});
 		btnBackCusMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnBackCusMain.setBounds(687, 914, Size.BTN_B_W, Size.BTN_B_H);
 		contentPane.add(btnBackCusMain);
@@ -163,6 +194,8 @@ public class BookCalendar extends JFrame {
 				la_dayOfWeek[i].setForeground(Color.BLUE);
 			}
 			p_dayOfWeek[i].add(la_dayOfWeek[i]);
+			p_dayOfWeek[i].setBackground(new Color(244, 204, 204));
+//			p_dayOfWeek[i].setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 			p_dayOfWeek[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			la_dayOfWeek[i].setFont(new Font("NanumBarunGothic", Font.BOLD, 19));
 			p_center.add(p_dayOfWeek[i]);
@@ -182,6 +215,7 @@ public class BookCalendar extends JFrame {
 			BookCell tmpCell = new BookCell();
 			tmpCell = cell_list.get(i);
 			tmpCell.labelDel();
+			
 		}
 		days = 0;
 		
@@ -189,15 +223,18 @@ public class BookCalendar extends JFrame {
 		la_month.setFont(new Font("Dialog", Font.BOLD, 25));
 		cal.set(year, month, 1);
 		
+		
 		int startday = cal.get(Calendar.DAY_OF_WEEK);
 		int lastday = cal.getActualMaximum(Calendar.DATE);
 		
 		for (int i = 0; i < 42; i++) {
 			BookCell tmp_cell = cell_list.get(i);
+			
 			if((i + 1) >= startday && days < lastday) {
 				days++;
 				tmp_cell.setCellDate(year, month, days);
 				tmp_cell.setMonthDay();
+								
 			}
 			else {
 				tmp_cell.setCellDate(0, 0, 0);

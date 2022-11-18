@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 
 public class PlanInfo extends JLabel {
 	BookMain bMain;
-	BookDetail detail;
+	BookDetail detail = new BookDetail();
 	PlanCount planCount;
 	int get_maintenance_num;
 	String mon;
@@ -66,78 +66,7 @@ public class PlanInfo extends JLabel {
 		setPreferredSize(new Dimension(170, 21));
 	}
 
-	public void move(int mainNum) {
-		Connection conn = bMain.getConn();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 
 
-		String sql = "SELECT customer.cusName, customer.cusCarNum, customer.cusCarBrand, customer.cusCarType, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
-				+ "FROM maintenance "
-				+ "JOIN customer "
-				+ "ON customer.cusNum = maintenance.mainCusNum "
-				+ "JOIN service "
-				+ "ON service.srvNum = maintenance.mainSrvNum "
-				+ "WHERE maintenance.mainNum = ? ";
-		
-
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, get_maintenance_num);
-
-			rs = pstmt.executeQuery();
-			rs.next();
-			String cusName = rs.getString("cusName");
-			String cusCarNum = rs.getString("cusCarNum");
-			String cusCarBrand = rs.getString("cusCarBrand");
-			String cusCarType = rs.getString("cusCarType");
-			String cusTel = rs.getString("cusTel");
-			String srvName = rs.getString("srvName");
-			String mainStartDay = rs.getString("mainStartDay");
-			String mainStartTime = rs.getString("mainStartTime");
-			String mainEndDay = rs.getString("mainEndDay");
-			String mainEndTime = rs.getString("mainEndTime");
-			detail.setSchedule(mainNum, cusName, cusCarNum, cusCarBrand, cusCarType, cusTel, srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			bMain.closeDB(pstmt, rs);
-		}
-
-	}
-
-//	// db에서 색상 가져와 반환하는 메서드
-//	public Color getColor(int schedule_no) {
-//		Connection con = bMain.getConn();
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		int r = 0;
-//		int g = 0;
-//		int b = 0;
-//
-//		String sql = "select color_r,color_g,color_b from schedule where schedule_no=?";
-//
-//		try {
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setInt(1, get_schedule_no);
-//
-//			rs = pstmt.executeQuery();
-//			rs.next();
-//			r = rs.getInt("color_r");
-//			g = rs.getInt("color_g");
-//			b = rs.getInt("color_b");
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			bMain.closeDB(pstmt, rs);
-//		}
-//
-//		Color c = new Color(r, g, b);
-//
-//		return c;
-//
-//	}
 
 }

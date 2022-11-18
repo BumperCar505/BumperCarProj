@@ -28,15 +28,16 @@ public class BookCell extends JPanel {
 	private final DBManager dbManager = new DBManager();
 
 	BookCalendar bookCalendar;
-//	BookSchedule schedule;
 	BookDetail detail;
 	BookMain bMain;
 	PlanCount planCount = new PlanCount();
 	ArrayList<JLabel> plan_list = new ArrayList<JLabel>();
+	ArrayList<JLabel> day_list = new ArrayList<JLabel>();
 	JLabel la_day, plan_count;
 	String printDay;
 	JPanel p_center, lday;
 	int year, month, days;
+	int get_maintenance_num;
 	
 	
 	public BookCell() {
@@ -70,6 +71,16 @@ public class BookCell extends JPanel {
 		}
 	}
 	
+//	public void setDayDate(int year, int month, int days) {
+//		this.year = year;
+//		this.month = month;
+//		this.days = days;
+//		
+//		if (year > 0) {
+//			setDaySchedule();
+//		}
+//	}
+	
 	public void setCellColor(Color color) { p_center.setBackground(color); }
 	
 	public void setOtherMonthDay() {
@@ -87,38 +98,12 @@ public class BookCell extends JPanel {
 		
 		
 		p_center.addMouseListener(new MouseAdapter() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// cell 클릭
-				JFrame f = new JFrame((month+1) + "월 " + days + "일");
-				f.getContentPane().setLayout(null);
-				f.setSize(500,500);
-				f.setLocationRelativeTo(null);
-				
-				JLabel l = new JLabel();
-				l.setHorizontalAlignment(JLabel.CENTER);
-				l.setBounds(193, 10, 98, 36);
-				l.setText((month+1) + "월 " + days + "일");
-				l.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-				f.getContentPane().add(l);
-//				f.add(l, BorderLayout.NORTH);
-				
-				JButton btnAdd = new JButton("추가");
-				btnAdd.setBounds(192, 401, 100, 50);
-				btnAdd.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-				f.getContentPane().add(btnAdd);
-				
-				f.show();
-				
-				btnAdd.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						BookDetail detail = new BookDetail();
-						detail.setVisible(true);
-					}
-				});
+				DayDay dayDay = new DayDay(year, month, days);
+				dayDay.setDayDate(year, month, days);
+				dayDay.setVisible(true);
 				
 			}
 		});
@@ -147,7 +132,8 @@ public class BookCell extends JPanel {
 				+ "ON customer.cusNum = maintenance.mainCusNum "
 				+ "JOIN service "
 				+ "ON service.srvNum = maintenance.mainSrvNum "
-				+ "WHERE mainStartDay = ? ";
+				+ "WHERE mainStartDay = ? "
+				+ "ORDER BY mainStartTime ASC ";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -180,6 +166,7 @@ public class BookCell extends JPanel {
 					
 					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
 							 days, planCount);
+					
 					
 				
 					plan_list.add(tmpLabel);
@@ -214,9 +201,9 @@ public class BookCell extends JPanel {
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		} finally {
-			dbManager.closeDB(pstmt, rs);
-			dbManager.closeDB();
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
 //			if (rs != null) { rs.close(); }
 //			if (pstmt != null) { pstmt.close(); }
 //			if (conn != null) { conn.close(); }
@@ -224,4 +211,5 @@ public class BookCell extends JPanel {
 		}
 		
 	}
+	
 }
