@@ -15,6 +15,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -99,6 +101,7 @@ public class SalesMgr extends JFrame {
 		
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
+
 
 		
 		getContentPane = new JPanel();
@@ -225,6 +228,20 @@ public class SalesMgr extends JFrame {
 		btnGoNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 				Color.red, Color.red));
 		
+		
+//	    현재 년도, 월 구하기
+	    Date date = new Date();
+	    String sDate = "%tY";
+	    String nowYear = String.format(sDate, date);
+	    
+	    sDate = "%tm";
+		String nowMonth = String.format(sDate, date);
+		
+	
+		
+		
+		
+		//돌아가기버튼
 		btnGoNext.setBackground(new Color(244, 204, 204));
 		
 		JButton btnBackSalesMain = new JButton("돌아가기");

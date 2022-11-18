@@ -325,8 +325,8 @@ public class RegTech extends JFrame {
 	} catch (SQLException e1) {
 		e1.printStackTrace();
 	}
-	sql = " INSERT company (comNum, comName, comEmail, comZip, comAddr, comTel) "
-		+	"VALUE (?,?,?,?,?,?) " ;	
+	sql = " INSERT company (comNum, comName, comEmail, comZip, comAddr, comTel,comDate) "
+		+	"VALUE (?,?,?,?,?,?,NOW()) " ;	
 try {
 	pstmt = con.prepareStatement(sql);
 	pstmt.setString(1, comJoinInfo.getComNum());
