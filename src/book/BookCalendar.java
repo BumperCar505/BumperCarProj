@@ -75,6 +75,11 @@ public class BookCalendar extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.setLayout(null);
 		
+		JLabel backgroundImg = new JLabel("");
+		backgroundImg.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/Car2.jpg")));
+		backgroundImg.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		contentPane.add(backgroundImg);
+		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/YellowCat.png")));
 		lblNewLabel.setBounds(717, 10, 230, 86);
