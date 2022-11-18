@@ -64,7 +64,6 @@ public class UnitBuyHistory extends JFrame {
 		setLocationRelativeTo(null); //--
 
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
 		table = new JTable(model);
 		table.setAutoCreateRowSorter(true);
@@ -72,7 +71,6 @@ public class UnitBuyHistory extends JFrame {
 		table.getColumnModel().getColumn(0).setPreferredWidth(39);
 		table.getColumnModel().getColumn(0).setMinWidth(20);
 		table.getColumnModel().getColumn(3).setResizable(false);
-		contentPane.setLayout(null);
 
 		table.setBounds(247, 231, 1170, 671);
 		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
@@ -80,12 +78,13 @@ public class UnitBuyHistory extends JFrame {
 		table.getColumn("stckNum").setWidth(0);
 		table.getColumn("stckNum").setMinWidth(0);
 		table.getColumn("stckNum").setMaxWidth(0);
+		contentPane.setLayout(null);
+		contentPane.setLayout(null);
 		
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		//--
 		scrollPane.setBounds(54, 171, 770, 477);
+		scrollPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		scrollPane.setAutoscrolls(true);
 		contentPane.add (scrollPane) ; 
 		
@@ -93,14 +92,22 @@ public class UnitBuyHistory extends JFrame {
 		table.setRowHeight(40);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(UnitBuyHistory.class.getResource("/img/YellowCat.png")));
 		lblNewLabel.setBounds(309, 22, 261, 69);
+		lblNewLabel.setIcon(new ImageIcon(UnitBuyHistory.class.getResource("/img/YellowCat.png")));
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("구매내역 조회");
+		lblNewLabel_1.setBounds(85, 111, 150, 50);
 		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
-		lblNewLabel_1.setBounds(85, 111, Size.BTN_S_W, Size.BTN_S_H);
 		contentPane.add(lblNewLabel_1);
+
+
+		JLabel lblBackGround = new JLabel("");
+		lblBackGround.setBounds(-12, -79, 904, 788);
+	      lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+	      contentPane.add(lblBackGround);
+		
+		
 	}
 	
 	
