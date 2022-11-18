@@ -38,11 +38,20 @@ public class UnitStockMgr extends JFrame {
 	private JButton btnDelUnitStock;
 	private JButton btnBackUnitStockMain;
 	private LoginManager loginManager;
-	private UnitStockMgr unitStockMgr;
+	private UnitStockMgr me;
+	
+	private String driver  = "com.mysql.cj.jdbc.Driver";
+	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
 	
 
 	private String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"};
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
+	
+
+	
 
 	// Launch the application..
 	public static void main(String[] args) {
@@ -99,6 +108,7 @@ public class UnitStockMgr extends JFrame {
 		
 //		테이블에 열 제목 나오게 하는 코드. 참고 : https://yyman.tistory.com/550
 		JScrollPane scrollPane = new JScrollPane(table); //
+		scrollPane.setBackground(new Color(192, 192, 192));
 		scrollPane.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 		
 		scrollPane.setBounds(239, 236, 1186, 533);
@@ -221,26 +231,26 @@ public class UnitStockMgr extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						// 메인화면은 visible true, 현재화면은 false
 
-						UnitStockMgr_addUnit history = new UnitStockMgr_addUnit();
-
+						UnitStockMgr_addUnit history = new UnitStockMgr_addUnit(me);
+						
 						history.setVisible(true);
 						
 						//현재 메인창 닫기(업데이트를 위해)
-						dispose();
+//						dispose();
 
 					}
 				});
 				
 				
-				// 입고 추가 버튼 누르면 실행됨 -> 현재 화면 닫고 메인화면 띄우기
+				// 입고 추가 버튼 누르면 실행됨
 				btnAddUnitStockHistory.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// 메인화면은 visible true, 현재화면은 false
-						UnitStockMgr_addHistory history = new UnitStockMgr_addHistory();
+						UnitStockMgr_addHistory history = new UnitStockMgr_addHistory(me);
 						history.setVisible(true);
 						
 						// 현재 메인창 닫기(업데이트를 위해)
-						dispose();
+//						dispose();
 
 					}
 				});
@@ -255,7 +265,61 @@ public class UnitStockMgr extends JFrame {
 				dispose();
 			}
 		});
+		
+		me = this;
 
+	}
+	
+	
+//  UnitStockMgr : DB에서 데이터 불러와서 테이블 채우기
+	public void SelectUnitMgrTable2(){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+//		GwakMemberBean bean = new GwakMemberBean();
+		LoginManager loginManager;
+		loginManager = LoginManager.getInstance();
+		String id = loginManager.getLogComNum();
+
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, "root", "1234");
+			// 재고는 stckQty2 (정비완료시 재고 빠진것 업데이트 된 열)
+			sql = "SELECT stock.stckNum, stock.stckUnitNum, unit.unitName, unit.unitVendor, sum(stock.stckQty2) "
+					+ "FROM stock " 
+					+ "inner join unit "
+					+ "on stock.stckUnitNum = unit.unitNum "
+					+ "WHERE stock.stckComNum = ? "
+					+ "group by stock.stckUnitNum "
+					+ "ORDER BY stock.stckUnitNum ";
+					pstmt = con.prepareStatement(sql);
+					pstmt.setString(1, id);
+	
+					rs = pstmt.executeQuery();
+					
+					String header[] = {"stckNum", "부품번호","부품명","벤더", "재고수량"}; 
+					DefaultTableModel model = new DefaultTableModel(header, 0);
+					table.setModel(model);
+					table.getColumn("stckNum").setWidth(0);
+					table.getColumn("stckNum").setMinWidth(0);
+					table.getColumn("stckNum").setMaxWidth(0);
+					
+					while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
+						model.addRow(new Object[]{rs.getInt("stock.stckNum"), rs.getString("stock.stckUnitNum"), rs.getString("unit.unitName"), rs.getString("unit.unitVendor"),rs.getInt("sum(stock.stckQty2)")});
+					}
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+					}
+
+				}
+	
+	
+	public void requestSelect2(UnitStockMgr unitStockMgr) {
+		if(unitStockMgr.equals(this)) {
+			SelectUnitMgrTable2();
+		}
 	}
 	
 

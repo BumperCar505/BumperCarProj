@@ -51,6 +51,8 @@ public class UnitStockMgr_addUnit extends JFrame {
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 	private LoginManager loginManager;
+	
+
 
 	/**
 	 * Launch the application...
@@ -72,7 +74,7 @@ public class UnitStockMgr_addUnit extends JFrame {
 	 * Create the frame.
 	 */
 	public UnitStockMgr_addUnit() {
-		loginManager = loginManager.getInstance();
+		loginManager = LoginManager.getInstance();
 		String id = loginManager.getLogComNum();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //		폼 크기 : 600 * 500
@@ -203,9 +205,12 @@ public class UnitStockMgr_addUnit extends JFrame {
 				String Uname = unitNameCmb.getSelectedItem().toString();
 				bean.setUnitName(Uname);
 				mgr.addUnit(bean, id);
+				
+				parent.requestSelect2(parent);
 
-				UnitStockMgr unit = new UnitStockMgr();
-				unit.setVisible(true);
+//				UnitStockMgr unit = new UnitStockMgr();
+//				unit.setVisible(true);
+				
 				
 				dispose();//--
 				
@@ -216,6 +221,10 @@ public class UnitStockMgr_addUnit extends JFrame {
 		
 	}
 	
+	public UnitStockMgr_addUnit(UnitStockMgr parent) {
+		this();
+		this.parent = parent;
+	}
 
 
 	

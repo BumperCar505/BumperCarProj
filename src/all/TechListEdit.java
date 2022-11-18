@@ -46,12 +46,19 @@ public class TechListEdit extends JFrame {
 	private JButton btnDelTech;
 	private JButton btnBackMain;
 	private LoginManager loginManager;
-
+	
+	
+	private String driver  = "com.mysql.cj.jdbc.Driver";
+	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
 	
 	
 	private String header[] = {"techNum","정비사 이름","전화번호","직급"};  // 테이블 컬럼 값들
 	private DefaultTableModel model = new DefaultTableModel(header, 0);
 	
+	private TechListEdit me;
 
 
 	
@@ -173,10 +180,10 @@ public class TechListEdit extends JFrame {
 		btnAddTech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				TechListEdit_add add = new TechListEdit_add();
+				TechListEdit_add add = new TechListEdit_add(me);
 				add.setVisible(true);
 				
-				dispose();
+				//dispose();
 			}
 		});
 		
@@ -196,9 +203,9 @@ public class TechListEdit extends JFrame {
 		        }
 				else {
 					int editIndex = (int) table.getValueAt(row, column);	
-					TechListEdit_edit edit = new TechListEdit_edit(editIndex);
+					TechListEdit_edit edit = new TechListEdit_edit(me, editIndex);
 					edit.setVisible(true);
-					dispose();
+//					dispose();
 				}
 				
 				
@@ -212,10 +219,11 @@ public class TechListEdit extends JFrame {
 		// 삭제 버튼 누르면 실행됨
 		btnDelTech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+		
 				int row = table.getSelectedRow();
 				int column = 0;
 				int editIndex = (int) table.getValueAt(row, column);
+				
 				
 				if(row == -1){
 		            JOptionPane.showConfirmDialog(null, "셀을 선택하지 않으셨습니다.", "삭제", JOptionPane.DEFAULT_OPTION);
@@ -226,13 +234,16 @@ public class TechListEdit extends JFrame {
 		        		int result = DialogManager.createMsgDialog("<html><h3>삭제하시겠습니까?</h3>", "/img/trash.png", "삭제", JOptionPane.YES_NO_OPTION);
    
 			            if (result == 0) {
+
 			            	model.removeRow(row);
-			            	
+
 			            	GwakMemberMgr mgr = new GwakMemberMgr();
 							GwakMemberBean bean =  new GwakMemberBean();
 							
 							bean.setTechNum(editIndex);
 			            	mgr.delete(bean);
+			            	
+							
 			            	
 			            	DialogManager.createMsgDialog("<html><h3>삭제되었습니다.</h3>", "/img/success1.png", "삭제", JOptionPane.CLOSED_OPTION);
 			            } else if (result == 1) {
@@ -255,8 +266,47 @@ public class TechListEdit extends JFrame {
 			}
 		});
 		
+		
+		me = this;
 
 	}
+	// select2 : 테이블 채우기
+	private void Select2() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+//		MemberBean bean = new MemberBean();
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, "root", "1234");
+			sql = "select * from technician ";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			String header[] = {"techNum","정비사 이름","전화번호","직급"}; 
+			DefaultTableModel model = new DefaultTableModel(header, 0);
+			table.setModel(model);
+			table.getColumn("techNum").setWidth(0);
+			table.getColumn("techNum").setMinWidth(0);
+			table.getColumn("techNum").setMaxWidth(0);
+			
+				while(rs.next()){            // 각각 값을 가져와서 테이블값들을 추가
+				
+                 model.addRow(new Object[]{rs.getInt("techNum"), rs.getString("techName"), rs.getString("techTel"),rs.getString("techLv")});
+                }
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+		}
+	}
+	public void requestSelect2(TechListEdit techListEdit) {
+		if(techListEdit.equals(this)) {
+			Select2();
+		}
+	}
+	
 }
 
 

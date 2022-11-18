@@ -52,6 +52,7 @@ public class UnitStockMgr_addHistory extends JFrame {
 	private JFormattedTextField unitBuyDate;
 	private JButton btnUnitReg;
 	private JLabel lblNewLabel;
+	private UnitStockMgr parent;
 	private LoginManager loginManager;
 	private String driver  = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
@@ -81,7 +82,7 @@ public class UnitStockMgr_addHistory extends JFrame {
 	 * Create the frame.
 	 */
 	public UnitStockMgr_addHistory() {
-		loginManager = loginManager.getInstance();
+		loginManager = LoginManager.getInstance();
 		String id = loginManager.getLogComNum();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //		폼 크기 : 600 * 500
@@ -197,20 +198,18 @@ public class UnitStockMgr_addHistory extends JFrame {
 
 				mgr.addHistoty(bean, id);
 				
-				UnitStockMgr uform = new UnitStockMgr();
-				uform.setVisible(true);
+				parent.requestSelect2(parent);
+//				UnitStockMgr uform = new UnitStockMgr();
+//				uform.setVisible(true);
 				
 				dispose();//--
 
 				
 			}
 		});
-		
-		
-		
-
-		 
-
-
+	}
+	public UnitStockMgr_addHistory(UnitStockMgr parent) {
+		this();
+		this.parent = parent;
 	}
 }
