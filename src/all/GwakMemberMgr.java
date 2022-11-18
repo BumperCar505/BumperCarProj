@@ -260,7 +260,7 @@ public class GwakMemberMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update technician set techName=?,techTel=?,techLv=? "
+			sql = "update technician set techName=?,techTel=?,techLv=?z "
 					+ "where techNum=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, bean.getTechName());
@@ -428,7 +428,8 @@ public class GwakMemberMgr {
 		
 		try {
 			con = pool.getConnection();
-			sql = "DELETE FROM technician WHERE techNum = ? ";
+			// sql = "DELETE FROM technician WHERE techNum = ? ";
+			sql = "UPDATE technician SET techDeleted_yn = 'Y' WHERE techNum = ? ";
 			pstmt = con.prepareStatement(sql);
 
 			pstmt.setInt(1, bean.getTechNum());

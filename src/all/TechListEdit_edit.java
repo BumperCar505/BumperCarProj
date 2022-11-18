@@ -129,8 +129,6 @@ public class TechListEdit_edit extends JFrame{
 				mgr.update(bean,aa);
 				
 				parent.requestSelect2(parent);
-//				TechListEdit a1 = new TechListEdit();
-//				a1.setVisible(true);
 				
 				dispose();
 

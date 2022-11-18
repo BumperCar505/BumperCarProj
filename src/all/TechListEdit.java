@@ -138,7 +138,11 @@ public class TechListEdit extends JFrame {
 		table.setRowHeight(40);
 		table.setFont(new Font("나눔바른고딕", Font.PLAIN, 21));
 
-		
+		JLabel lblBackGround = new JLabel("");
+	    lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+	    lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+	    contentPane.add(lblBackGround);
+	      
 		JButton btnAddTech = new JButton("추가");
 		btnAddTech.setFont(new Font("나눔바른고딕", Font.BOLD, 21));
 		btnAddTech.setBounds(239, 174, Size.BTN_S_W, Size.BTN_S_H);
@@ -242,9 +246,7 @@ public class TechListEdit extends JFrame {
 							
 							bean.setTechNum(editIndex);
 			            	mgr.delete(bean);
-			            	
-							
-			            	
+
 			            	DialogManager.createMsgDialog("<html><h3>삭제되었습니다.</h3>", "/img/success1.png", "삭제", JOptionPane.CLOSED_OPTION);
 			            } else if (result == 1) {
 			            	   
@@ -280,7 +282,7 @@ public class TechListEdit extends JFrame {
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, "root", "1234");
-			sql = "select * from technician ";
+			sql = "select * from technician WHERE techDeleted_yn = 'N'";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
