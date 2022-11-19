@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 public class EditComInfo extends JFrame {
 
 	private final DBManager dbManager = new DBManager();	
+	private LoginManager loginManager;
 	
 	private JPanel contentPane;
 	private JTextField comNum;
@@ -57,6 +58,10 @@ public class EditComInfo extends JFrame {
 
 	
 	public EditComInfo() {
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
+	      
+	      
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
@@ -194,7 +199,7 @@ public class EditComInfo extends JFrame {
 		contentPane.add(btnFixedComInfo);
 		btnFixedComInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updateComInfo("1112233333");
+				updateComInfo(id);
 
 			}
 		});

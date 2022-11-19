@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import all.LoginManager;
 import all.Size;
 
 import javax.swing.JButton;
@@ -33,6 +34,7 @@ import javax.swing.SwingConstants;
 public class BookDetail extends JFrame {
 
 	private final DBManager dbManager = new DBManager();
+	private LoginManager loginManager;
 	
 	JPanel contentPane;
 	JTextField cusName;
@@ -63,7 +65,8 @@ public class BookDetail extends JFrame {
 	
 
 	public BookDetail() {
-			
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 620, Size.SCREEN_H);
@@ -162,7 +165,7 @@ public class BookDetail extends JFrame {
 		srvName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				selectedSrv = (String) srvName.getSelectedItem();
-				techList(selectedSrv);
+				techList(id, selectedSrv);
 			}
 		});
 		
@@ -248,7 +251,7 @@ public class BookDetail extends JFrame {
 		
 	}
 	
-	public void srvList() {
+	public void srvList(String id) {
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -258,8 +261,9 @@ public class BookDetail extends JFrame {
 					+ "FROM service "
 					+ "JOIN technician "
 					+ "ON technician.techNum = service.srvTechNum "
-					+ "WHERE technician.techComNum = '1112233333' ";
+					+ "WHERE technician.techComNum = ? ";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
@@ -272,7 +276,7 @@ public class BookDetail extends JFrame {
 		}
 	}
 	
-	public void techList(String selectedSrv) {
+	public void techList(String id, String selectedSrv) {
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -284,9 +288,10 @@ public class BookDetail extends JFrame {
 					+ "FROM technician "
 					+ "JOIN service "
 					+ "ON service.srvTechNum = technician.techNum "
-					+ "WHERE technician.techComNum = '1112233333' AND service.srvName = ? ";
+					+ "WHERE technician.techComNum = ? AND service.srvName = ? ";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, selectedSrv);
+			pstmt.setString(1, id);
+			pstmt.setString(2, selectedSrv);
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
@@ -299,7 +304,7 @@ public class BookDetail extends JFrame {
 		}
 	}
 	
-	public void getDetail(int mainNum) {
+	public void getDetail(String id, int mainNum) {
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -334,10 +339,10 @@ public class BookDetail extends JFrame {
 				this.cusBookTime.setText(rs.getString("mainStartDay") + " " + rs.getString("mainStartTime"));
 				this.completedTime.setText(rs.getString("mainEndDay") + " " + rs.getString("mainEndTime"));
 
-				srvList();
+				srvList(id);
 				this.srvName.setSelectedItem(srvName);
 				
-				techList(srvName);
+				techList(id, srvName);
 				this.techName.setSelectedItem(techName);
 				
 				this.statusBox.setSelectedItem(rs.getString("mainStatus"));
@@ -389,27 +394,28 @@ public class BookDetail extends JFrame {
 		}
 	}
 	
-	public void insertDetail() {
+	public void insertDetail(String id) {
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		
 		try {
 			String sql = "INSERT INTO maintenance (mainComNum, mainCusNum, mainSrvNum, mainStartDay, mainStartTime, mainEndDay, mainEndTime, mainStatus, mainTechNum) "
-					+ "SELECT '1112233333', (SELECT customer.cusNum FROM customer WHERE customer.cusName = ?), "
+					+ "SELECT ? , (SELECT customer.cusNum FROM customer WHERE customer.cusName = ?), "
 					+ "(SELECT service.srvNum FROM service WHERE service.srvName = ? AND srvTechNum = (SELECT techNum FROM technician WHERE techName = ?)), "
 					+ "?, ?, ?, ?, ?, (SELECT technician.techNum FROM technician WHERE technician.techName = ?) ";
 
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, this.cusName.getText());
-			pstmt.setString(2, (String) this.srvName.getSelectedItem());
-			pstmt.setString(3, (String) this.techName.getSelectedItem());
-			pstmt.setString(4, this.cusBookTime.getText().substring(0, 10));
-			pstmt.setString(5, this.cusBookTime.getText().substring(11));
-			pstmt.setString(6, this.completedTime.getText().substring(0, 10));
-			pstmt.setString(7, this.completedTime.getText().substring(11));
-			pstmt.setString(8, (String) this.statusBox.getSelectedItem());
-			pstmt.setString(9, (String) this.techName.getSelectedItem());
+			pstmt.setString(1, id);
+			pstmt.setString(2, this.cusName.getText());
+			pstmt.setString(3, (String) this.srvName.getSelectedItem());
+			pstmt.setString(4, (String) this.techName.getSelectedItem());
+			pstmt.setString(5, this.cusBookTime.getText().substring(0, 10));
+			pstmt.setString(6, this.cusBookTime.getText().substring(11));
+			pstmt.setString(7, this.completedTime.getText().substring(0, 10));
+			pstmt.setString(8, this.completedTime.getText().substring(11));
+			pstmt.setString(9, (String) this.statusBox.getSelectedItem());
+			pstmt.setString(10, (String) this.techName.getSelectedItem());
 			
 			pstmt.executeUpdate();
 			

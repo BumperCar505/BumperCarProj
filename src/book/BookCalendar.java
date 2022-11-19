@@ -1,6 +1,5 @@
 package book;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -18,16 +17,16 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import all.ComMyPage;
+import all.LoginManager;
 import all.Size;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.ImageIcon;
 
 public class BookCalendar extends JFrame {
+	
+	private LoginManager loginManager;
 
 	BookMain bMain;
 	ArrayList<BookCell> cell_list = new ArrayList<BookCell>();
@@ -63,13 +62,15 @@ public class BookCalendar extends JFrame {
 
 
 	public BookCalendar() {
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
+		
 //		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-//      폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null);
 		
 		setContentPane(contentPane);
@@ -121,7 +122,7 @@ public class BookCalendar extends JFrame {
 		btnReset.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setCal();
+				setCal(id);
 			}
 		});
 		btnReset.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
@@ -139,7 +140,7 @@ public class BookCalendar extends JFrame {
 					year--;
 					month = 11;
 				}
-				setCal();
+				setCal(id);
 			}
 			
 		});
@@ -155,7 +156,7 @@ public class BookCalendar extends JFrame {
 					year++;
 					month = 0;
 				}
-				setCal();
+				setCal(id);
 			}
 		});
 		
@@ -178,7 +179,7 @@ public class BookCalendar extends JFrame {
 		contentPane.add(backgroundImg);
 		
 		initCal();
-		setCal();
+		setCal(id);
 		setWeek();
 	}
 	
@@ -211,7 +212,7 @@ public class BookCalendar extends JFrame {
 		}
 	}
 	
-	public void setCal() {
+	public void setCal(String id) {
 		for (int i = 0; i < cell_list.size(); i++) {
 			BookCell tmpCell = new BookCell();
 			tmpCell = cell_list.get(i);
@@ -233,12 +234,12 @@ public class BookCalendar extends JFrame {
 			
 			if((i + 1) >= startday && days < lastday) {
 				days++;
-				tmp_cell.setCellDate(year, month, days);
+				tmp_cell.setCellDate(year, month, days, id);
 				tmp_cell.setMonthDay();
 								
 			}
 			else {
-				tmp_cell.setCellDate(0, 0, 0);
+				tmp_cell.setCellDate(0, 0, 0, id);
 				tmp_cell.setOtherMonthDay();
 			}
 			

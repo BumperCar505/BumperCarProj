@@ -25,9 +25,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import all.LoginManager;
+
 public class DayDetail extends JLabel {
 
 	private final DBManager dbManager = new DBManager();
+	private LoginManager loginManager;
 	
 	int year, month, days;
 	BookMain bMain;
@@ -43,6 +46,9 @@ public class DayDetail extends JLabel {
 
 	public DayDetail(int mainNum, String cusName, String cusCarNum, String srvName, String techName, String cusTel, BookMain bMain, String mainStartDay, String mainStartTime, String mainEndDay, String mainEndTime, int year, int month,
 			int days) {
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
+	    
 		this.get_maintenance_num = mainNum;
 		this.bMain = bMain;
 		
@@ -61,7 +67,7 @@ public class DayDetail extends JLabel {
 			public void mouseClicked(MouseEvent e) {
 				BookDetail bookDetail = new BookDetail(); 
 				bookDetail.setVisible(true);		
-				bookDetail.getDetail(mainNum);
+				bookDetail.getDetail(id, mainNum);
 			}
 		});
 		

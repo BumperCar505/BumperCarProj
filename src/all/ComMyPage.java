@@ -194,11 +194,9 @@ public class ComMyPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                frame.dispose();  
-        
-               String id = loginManager.getLogComNum();
-               
-               EditComInfo editComInfo = new EditComInfo();
-               editComInfo.showComInfo(id);
+
+               BookCalendar bookCalendar = new BookCalendar();
+               bookCalendar.setVisible(true);
 
             }
          });

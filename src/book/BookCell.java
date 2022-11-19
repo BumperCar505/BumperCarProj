@@ -18,6 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import all.LoginManager;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -26,6 +28,7 @@ import java.awt.event.MouseAdapter;
 public class BookCell extends JPanel {
 	
 	private final DBManager dbManager = new DBManager();
+	private LoginManager loginManager;
 
 	BookCalendar bookCalendar;
 	BookDetail detail;
@@ -41,6 +44,9 @@ public class BookCell extends JPanel {
 	
 	
 	public BookCell() {
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
+		
 		lday = new JPanel();
 		la_day = new JLabel();
 		lday.add(la_day);
@@ -54,32 +60,21 @@ public class BookCell extends JPanel {
 		add(lday, BorderLayout.NORTH);
 		p_center.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		add(p_center);
-		
-//		setPreferredSize(new Dimension(180, 100));
 
 		
 	}
 	
 
-	public void setCellDate(int year, int month, int days) {
+	public void setCellDate(int year, int month, int days, String id) {
 		this.year = year;
 		this.month = month;
 		this.days = days;
 		
 		if (year > 0) {
-			setSchedule();
+			setSchedule(id);
 		}
 	}
 	
-//	public void setDayDate(int year, int month, int days) {
-//		this.year = year;
-//		this.month = month;
-//		this.days = days;
-//		
-//		if (year > 0) {
-//			setDaySchedule();
-//		}
-//	}
 	
 	public void setCellColor(Color color) { p_center.setBackground(color); }
 	
@@ -121,7 +116,7 @@ public class BookCell extends JPanel {
 		this.updateUI();
 	}
 	
-	public void setSchedule() {
+	public void setSchedule(String id) {
 		Connection conn = dbManager.getConn();
 //		Connection conn = null;
 
@@ -132,7 +127,7 @@ public class BookCell extends JPanel {
 				+ "ON customer.cusNum = maintenance.mainCusNum "
 				+ "JOIN service "
 				+ "ON service.srvNum = maintenance.mainSrvNum "
-				+ "WHERE mainStartDay = ? "
+				+ "WHERE mainStartDay = ?  AND mainComNum = ? "
 				+ "ORDER BY mainStartTime ASC ";
 		
 		PreparedStatement pstmt = null;
@@ -143,6 +138,7 @@ public class BookCell extends JPanel {
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pstmt.setString(1, now_date);
+			pstmt.setString(2, id);
 			
 			rs = pstmt.executeQuery();
 			rs.last();
@@ -162,7 +158,6 @@ public class BookCell extends JPanel {
 					String mainStartTime = rs.getString("mainStartTime");
 					String mainEndDay = rs.getString("mainEndDay");
 					String mainEndTime = rs.getString("mainEndTime");
-					// DB
 					
 					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
 							 days, planCount);
@@ -192,7 +187,7 @@ public class BookCell extends JPanel {
 					String mainStartTime = rs.getString("mainStartTime");
 					String mainEndDay = rs.getString("mainEndDay");
 					String mainEndTime = rs.getString("mainEndTime");
-					// DB
+
 					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
 							 days, planCount);
 					plan_list.add(tmpLabel);
