@@ -53,6 +53,7 @@ public class BookCalendar extends JFrame {
 			public void run() {
 				try {
 					BookCalendar frame = new BookCalendar();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,7 +63,7 @@ public class BookCalendar extends JFrame {
 
 
 	public BookCalendar() {
-		setVisible(true);
+//		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
@@ -75,18 +76,13 @@ public class BookCalendar extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.setLayout(null);
 		
-		JLabel backgroundImg = new JLabel("");
-		backgroundImg.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/Car2.jpg")));
-		backgroundImg.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
-		contentPane.add(backgroundImg);
-		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/YellowCat.png")));
 		lblNewLabel.setBounds(717, 10, 230, 86);
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 106, 1640, 798);
+		panel.setBounds(0, 106, 1664, 798);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		p_center = new JPanel();
@@ -175,6 +171,11 @@ public class BookCalendar extends JFrame {
 		btnBackCusMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnBackCusMain.setBounds(687, 914, Size.BTN_B_W, Size.BTN_B_H);
 		contentPane.add(btnBackCusMain);
+		
+		JLabel backgroundImg = new JLabel("");
+		backgroundImg.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/Car2.jpg")));
+		backgroundImg.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		contentPane.add(backgroundImg);
 		
 		initCal();
 		setCal();
