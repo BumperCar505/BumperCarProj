@@ -473,9 +473,7 @@ public class BookDetail extends JFrame {
 //		} finally {
 //		dbManager.closeDB(pstmt);
 //		dbManager.closeDB();
-//		if (rs != null) { rs.close(); }
-//		if (pstmt != null) { pstmt.close(); }
-//		if (conn != null) { conn.close(); }
+
 		}
 	}
 }
