@@ -79,120 +79,121 @@ public class EditComInfo extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(438, 177, 807, 597);
+		panel.setBounds(438, 177, 1060, 597);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("기존 비밀번호");
-		lblNewLabel_1_1.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_1.setBounds(101, 91, 136, 41);
 		panel.add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("새로운 비밀번호");
-		lblNewLabel_1_2.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_2.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_2.setBounds(101, 154, 162, 41);
 		panel.add(lblNewLabel_1_2);
 		
 		JLabel lblNewLabel_1_3 = new JLabel("업체명");
-		lblNewLabel_1_3.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_3.setBounds(101, 277, 136, 41);
 		panel.add(lblNewLabel_1_3);
 		
 		JLabel lblNewLabel_1_5 = new JLabel("우편번호");
-		lblNewLabel_1_5.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_5.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_5.setBounds(101, 405, 136, 41);
 		panel.add(lblNewLabel_1_5);
 		
 		JLabel lblNewLabel_1_6 = new JLabel("주소");
-		lblNewLabel_1_6.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_6.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_6.setBounds(101, 470, 136, 41);
 		panel.add(lblNewLabel_1_6);
 		
 		JLabel lblNewLabel_1_7 = new JLabel("전화번호");
-		lblNewLabel_1_7.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_7.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_7.setBounds(101, 534, 136, 41);
 		panel.add(lblNewLabel_1_7);
 		
 		this.comNum = new JTextField();
-		this.comNum.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		this.comNum.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		this.comNum.setEditable(false);
 		this.comNum.setBounds(306, 26, 384, 42);
 		panel.add(this.comNum);
 		
 		comPw = new JTextField();
-		comPw.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		comPw.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		comPw.setColumns(10);
 		comPw.setBounds(306, 90, 384, 42);
 		panel.add(comPw);
 		
 		newComPw = new JTextField();
-		newComPw.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		newComPw.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		newComPw.setColumns(10);
 		newComPw.setBounds(306, 154, 384, 42);
 		panel.add(newComPw);
 		
 		comName = new JTextField();
-		comName.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		comName.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		comName.setColumns(10);
 		comName.setBounds(307, 278, 384, 42);
 		panel.add(comName);
 		
 		comEmail = new JTextField();
-		comEmail.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		comEmail.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		comEmail.setColumns(10);
 		comEmail.setBounds(307, 342, 384, 42);
 		panel.add(comEmail);
 		
 		comZip = new JTextField();
-		comZip.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		comZip.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		comZip.setColumns(10);
 		comZip.setBounds(307, 406, 169, 42);
 		panel.add(comZip);
 		
 		comAddr = new JTextField();
-		comAddr.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		comAddr.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		comAddr.setColumns(10);
 		comAddr.setBounds(307, 470, 384, 42);
 		panel.add(comAddr);
 		
 		comTel = new JTextField();
-		comTel.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		comTel.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		comTel.setColumns(10);
 		comTel.setBounds(307, 534, 384, 42);
 		panel.add(comTel);
 		
 		JLabel lblNewLabel_1_4 = new JLabel("사업자등록번호");
-		lblNewLabel_1_4.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_4.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_4.setBounds(101, 26, 166, 41);
 		panel.add(lblNewLabel_1_4);
 		
 		JLabel lblNewLabel_1_3_1 = new JLabel("이메일");
-		lblNewLabel_1_3_1.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+		lblNewLabel_1_3_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_3_1.setBounds(101, 342, 136, 41);
 		panel.add(lblNewLabel_1_3_1);
 		
 		password = new JLabel("");
-		password.setFont(new Font("굴림", Font.PLAIN, 21));
-		password.setBounds(716, 141, 238, 41);
+		password.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		password.setBounds(716, 91, 238, 41);
 		panel.add(password);
 		
 		JLabel lblNewLabel_1_2_1 = new JLabel("새로운 비밀번호 확인");
-		lblNewLabel_1_2_1.setFont(new Font("Dialog", Font.PLAIN, 21));
+		lblNewLabel_1_2_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		lblNewLabel_1_2_1.setBounds(101, 213, 192, 41);
 		panel.add(lblNewLabel_1_2_1);
 		
 		newComPwCheck = new JTextField();
-		newComPwCheck.setFont(new Font("Dialog", Font.PLAIN, 21));
+		newComPwCheck.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		newComPwCheck.setColumns(10);
 		newComPwCheck.setBounds(306, 213, 384, 42);
 		panel.add(newComPwCheck);
 		
 		newPassword = new JLabel("");
-		newPassword.setFont(new Font("굴림", Font.PLAIN, 21));
-		newPassword.setBounds(716, 263, 282, 41);
+		newPassword.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		newPassword.setBounds(716, 213, 282, 41);
 		panel.add(newPassword);
 		
 		JButton btnFixedComInfo = new JButton("수정 완료");
+		btnFixedComInfo.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnFixedComInfo.setBounds(687, 867, 290, 65);
 		btnFixedComInfo.setBackground(new Color(244, 204, 204));
 		btnFixedComInfo.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
@@ -251,7 +252,7 @@ public class EditComInfo extends JFrame {
 						new ComMyPage();
 					} else {
 						password.setText("비밀번호가 틀립니다.");
-						password.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+						password.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 						password.setForeground(Color.RED);
 					}
 				} else {
@@ -275,7 +276,7 @@ public class EditComInfo extends JFrame {
 						}
 						else {
 							newPassword.setText("비밀번호가 일치하지 않습니다.");
-							newPassword.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+							newPassword.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 							newPassword.setForeground(Color.RED);
 						}
 				
