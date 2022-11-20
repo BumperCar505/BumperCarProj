@@ -10,6 +10,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import book.BookCalendar;
+import book.DBManager;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
@@ -24,7 +26,7 @@ import java.awt.event.ActionEvent;
 
 public class EditComInfo extends JFrame {
 
-	private DBConnectionMgr pool;
+	private final DBManager dbManager = new DBManager();
 	private LoginManager loginManager;
 	
 	private JPanel contentPane;
@@ -57,7 +59,6 @@ public class EditComInfo extends JFrame {
 
 	
 	public EditComInfo() {
-		pool = DBConnectionMgr.getInstance();
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
 	      
@@ -213,7 +214,9 @@ public class EditComInfo extends JFrame {
 	}
 
 	public void updateComInfo(String id) {
-		Connection conn = null;
+//		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
+//		Connection conn = null;
+		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -244,12 +247,13 @@ public class EditComInfo extends JFrame {
 						pstmt.setString(6, this.comTel.getText());
 						pstmt.setString(7, id);
 						pstmt.executeUpdate();
-						
+						DialogManager.createMsgDialog("수정되었습니다!", "\\img\\success1.png",
+								"수정완료", JOptionPane.PLAIN_MESSAGE);
 						setVisible(false);
 						new ComMyPage();
 					} else {
 						password.setText("비밀번호가 틀립니다.");
-						password.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+						password.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 						password.setForeground(Color.RED);
 					}
 				} else {
@@ -267,14 +271,16 @@ public class EditComInfo extends JFrame {
 						pstmt.setString(7, id);
 						pstmt.executeUpdate();
 						
-						DialogManager.createMsgDialog("수정되었니다.", "\\img\\information5.png", "수정완", JOptionPane.PLAIN_MESSAGE);
+						DialogManager.createMsgDialog("수정되었습니다!", "\\img\\success1.png",
+								"수정완료", JOptionPane.PLAIN_MESSAGE);
+						
 						setVisible(false);
 						new ComMyPage();
 						
 						}
 						else {
 							newPassword.setText("비밀번호가 일치하지 않습니다.");
-							newPassword.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+							newPassword.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 							newPassword.setForeground(Color.RED);
 						}
 				
@@ -284,14 +290,15 @@ public class EditComInfo extends JFrame {
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
-			pool.freeConnection(conn, pstmt, rs);
+//		} finally {
+//			dbManager.closeDB(pstmt);
+//			dbManager.closeDB();
 		}
 	}
 	
 	
 	public void showComInfo(String id) {
-		Connection conn = null;
+		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -317,8 +324,9 @@ public class EditComInfo extends JFrame {
 			}
 		} catch (Exception e2) {
 			e2.printStackTrace();
-		} finally {
-			pool.freeConnection(conn, pstmt, rs);
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
 		}
 	}
 }
