@@ -168,7 +168,6 @@ public class BookCalendar extends JFrame {
 		btnBackCusMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		btnBackCusMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pool.finalize();
 				setVisible(false);
 				new ComMyPage();
 			}
