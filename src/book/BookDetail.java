@@ -375,9 +375,9 @@ public class BookDetail extends JFrame {
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-		} finally {
-			dbManager.closeDB(pstmt, rs);
-			dbManager.closeDB();
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
 		}
 
 	}
@@ -435,9 +435,9 @@ public class BookDetail extends JFrame {
 			
 		} catch (SQLException e3) {
 			e3.printStackTrace();
-		} finally {
-		dbManager.closeDB(pstmt);
-		dbManager.closeDB();
+//		} finally {
+//		dbManager.closeDB(pstmt);
+//		dbManager.closeDB();
 		}
 	}
 	
@@ -470,9 +470,9 @@ public class BookDetail extends JFrame {
 			pstmt.executeUpdate();
 		} catch (SQLException e3) {
 			e3.printStackTrace();
-		} finally {
-		dbManager.closeDB(pstmt);
-		dbManager.closeDB();
+//		} finally {
+//		dbManager.closeDB(pstmt);
+//		dbManager.closeDB();
 //		if (rs != null) { rs.close(); }
 //		if (pstmt != null) { pstmt.close(); }
 //		if (conn != null) { conn.close(); }

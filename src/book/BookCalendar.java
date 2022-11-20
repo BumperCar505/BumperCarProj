@@ -17,6 +17,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import all.ComMyPage;
+import all.DBConnectionMgr;
 import all.LoginManager;
 import all.Size;
 
@@ -27,6 +28,7 @@ import javax.swing.ImageIcon;
 public class BookCalendar extends JFrame {
 	
 	private LoginManager loginManager;
+	private DBConnectionMgr pool;
 
 	BookMain bMain;
 	ArrayList<BookCell> cell_list = new ArrayList<BookCell>();
@@ -166,6 +168,7 @@ public class BookCalendar extends JFrame {
 		btnBackCusMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		btnBackCusMain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				pool.finalize();
 				setVisible(false);
 				new ComMyPage();
 			}
