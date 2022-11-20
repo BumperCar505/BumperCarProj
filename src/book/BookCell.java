@@ -97,7 +97,7 @@ public class BookCell extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				// cell 클릭
 				DayDay dayDay = new DayDay(year, month, days);
-				dayDay.setDayDate(year, month, days);
+//				dayDay.setDayDate(year, month, days);
 				dayDay.setVisible(true);
 				
 			}
@@ -196,9 +196,9 @@ public class BookCell extends JPanel {
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt, rs);
-//			dbManager.closeDB();
+		} finally {
+			dbManager.closeDB(pstmt, rs);
+			dbManager.closeDB();
 //			if (rs != null) { rs.close(); }
 //			if (pstmt != null) { pstmt.close(); }
 //			if (conn != null) { conn.close(); }
