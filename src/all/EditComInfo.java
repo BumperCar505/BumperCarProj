@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 
 public class EditComInfo extends JFrame {
 
-	private final DBManager dbManager = new DBManager();	
+	private DBConnectionMgr pool;
 	private LoginManager loginManager;
 	
 	private JPanel contentPane;
@@ -58,6 +58,7 @@ public class EditComInfo extends JFrame {
 
 	
 	public EditComInfo() {
+		pool = DBConnectionMgr.getInstance();
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
 	      
@@ -201,7 +202,6 @@ public class EditComInfo extends JFrame {
 		btnFixedComInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateComInfo(id);
-
 			}
 		});
 		btnFixedComInfo.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
@@ -214,9 +214,7 @@ public class EditComInfo extends JFrame {
 	}
 
 	public void updateComInfo(String id) {
-//		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-//		Connection conn = null;
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -286,15 +284,14 @@ public class EditComInfo extends JFrame {
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt);
-//			dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 	}
 	
 	
 	public void showComInfo(String id) {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -320,9 +317,8 @@ public class EditComInfo extends JFrame {
 			}
 		} catch (Exception e2) {
 			e2.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt, rs);
-//			dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 	}
 }

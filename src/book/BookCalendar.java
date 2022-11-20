@@ -17,6 +17,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import all.ComMyPage;
+import all.DBConnectionMgr;
 import all.LoginManager;
 import all.Size;
 
@@ -27,6 +28,7 @@ import javax.swing.ImageIcon;
 public class BookCalendar extends JFrame {
 	
 	private LoginManager loginManager;
+	private DBConnectionMgr pool;
 
 	BookMain bMain;
 	ArrayList<BookCell> cell_list = new ArrayList<BookCell>();
@@ -198,7 +200,6 @@ public class BookCalendar extends JFrame {
 			}
 			p_dayOfWeek[i].add(la_dayOfWeek[i]);
 			p_dayOfWeek[i].setBackground(new Color(244, 204, 204));
-//			p_dayOfWeek[i].setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 			p_dayOfWeek[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			la_dayOfWeek[i].setFont(new Font("NanumBarunGothic", Font.BOLD, 19));
 			p_center.add(p_dayOfWeek[i]);

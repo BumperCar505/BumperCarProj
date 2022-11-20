@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import all.DBConnectionMgr;
 import all.LoginManager;
 
 import java.awt.event.ActionEvent;
@@ -27,7 +28,7 @@ import java.awt.event.MouseAdapter;
 // 날짜 정보가 들어있는 
 public class BookCell extends JPanel {
 	
-	private final DBManager dbManager = new DBManager();
+	private DBConnectionMgr pool;
 	private LoginManager loginManager;
 
 	BookCalendar bookCalendar;
@@ -44,6 +45,7 @@ public class BookCell extends JPanel {
 	
 	
 	public BookCell() {
+		pool = DBConnectionMgr.getInstance();
 		loginManager = loginManager.getInstance();
 		String id = loginManager.getLogComNum();
 		
@@ -117,8 +119,9 @@ public class BookCell extends JPanel {
 	}
 	
 	public void setSchedule(String id) {
-		Connection conn = dbManager.getConn();
-//		Connection conn = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
 		
 		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusTel, service.srvName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
@@ -130,12 +133,10 @@ public class BookCell extends JPanel {
 				+ "WHERE mainStartDay = ?  AND mainComNum = ? "
 				+ "ORDER BY mainStartTime ASC ";
 		
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
 		String now_date = year + "-" + (month + 1) + "-" + days;
 		
 		try {
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pstmt.setString(1, now_date);
 			pstmt.setString(2, id);
@@ -194,15 +195,10 @@ public class BookCell extends JPanel {
 					p_center.add(tmpLabel);
 				}
 			}
-		} catch (SQLException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt, rs);
-//			dbManager.closeDB();
-//			if (rs != null) { rs.close(); }
-//			if (pstmt != null) { pstmt.close(); }
-//			if (conn != null) { conn.close(); }
-			
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);			
 		}
 		
 	}

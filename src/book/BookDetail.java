@@ -275,7 +275,8 @@ public class BookDetail extends JFrame {
 					+ "FROM service "
 					+ "JOIN technician "
 					+ "ON technician.techNum = service.srvTechNum "
-					+ "WHERE technician.techComNum = ? ";
+					+ "WHERE technician.techComNum = ? "
+					+ "AND deleted_yn = 'N' ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -302,7 +303,8 @@ public class BookDetail extends JFrame {
 					+ "FROM technician "
 					+ "JOIN service "
 					+ "ON service.srvTechNum = technician.techNum "
-					+ "WHERE technician.techComNum = ? AND service.srvName = ? ";
+					+ "WHERE technician.techComNum = ? AND service.srvName = ? "
+					+ "AND service.deleted_yn = 'N' ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, selectedSrv);
@@ -371,8 +373,6 @@ public class BookDetail extends JFrame {
 				
 			}
 
-			
-
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 //		} finally {
@@ -435,13 +435,15 @@ public class BookDetail extends JFrame {
 			
 		} catch (SQLException e3) {
 			e3.printStackTrace();
+//		} finally {
+//		dbManager.closeDB(pstmt);
+//		dbManager.closeDB();
 		}
 	}
 	
 	public void updateDetail(int mainNum) {
 		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
 		
 		try {
 			String sql = "UPDATE maintenance, customer SET customer.cusName = ?, customer.cusCarNum = ?, customer.cusCarBrand = ?, customer.cusCarType = ?, customer.cusTel = ?, "
@@ -468,8 +470,13 @@ public class BookDetail extends JFrame {
 			pstmt.executeUpdate();
 		} catch (SQLException e3) {
 			e3.printStackTrace();
+//		} finally {
+//		dbManager.closeDB(pstmt);
+//		dbManager.closeDB();
+//		if (rs != null) { rs.close(); }
+//		if (pstmt != null) { pstmt.close(); }
+//		if (conn != null) { conn.close(); }
 		}
 	}
-	
 }
-//}
+

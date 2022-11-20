@@ -30,7 +30,6 @@ public class DayDay extends JFrame {
 
 	private JPanel contentPane;
 	BookCalendar bookCalendar;
-	BookDetail detail;
 	BookMain bMain;
 	PlanCount planCount = new PlanCount();
 	ArrayList<JLabel> plan_list = new ArrayList<JLabel>();
@@ -91,16 +90,16 @@ public class DayDay extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BookDetail detail = new BookDetail();
-				detail.setVisible(true);
-				detail.srvList(id);
-				detail.setDate(year, month, days);
-				detail.btnBook.setText("등록");
+				BookDetail bookDetail = new BookDetail();
+				bookDetail.setVisible(true);
+				bookDetail.srvList(id);
+				bookDetail.setDate(year, month, days);
+				bookDetail.btnBook.setText("등록");
 //				setVisible(false);
-				detail.btnBook.addActionListener(new ActionListener() {
+				bookDetail.btnBook.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						detail.insertDetail(id);
-						detail.setVisible(false);
+						bookDetail.insertDetail(id);
+						bookDetail.setVisible(false);
 //						BookCalendar bookCalendar = new BookCalendar();
 //						bookCalendar.setVisible(false);
 //						bookCalendar.setVisible(true);
