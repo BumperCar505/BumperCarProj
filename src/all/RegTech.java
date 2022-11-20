@@ -160,7 +160,7 @@ public class RegTech extends JFrame {
 		getContentPane().add(lblNewLabel_4);
 		lblNewLabel_4.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
-		JButton btnTechNext = new JButton("다음");
+		JButton btnTechNext = new JButton("회원가입완료");
 		btnTechNext.setBackground(new Color(244, 204, 204));
 		btnTechNext.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		btnTechNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 

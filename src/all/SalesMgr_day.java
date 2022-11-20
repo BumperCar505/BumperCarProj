@@ -181,7 +181,14 @@ public class SalesMgr_day extends JFrame {
 		});
 		getContentPane.setLayout(null);
 	
-		
+		JButton btnSearch = new JButton("검색");
+		btnSearch.setBounds(1475, 101, 87, 33);
+		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
+		getContentPane.add(btnSearch);
+		btnSearch.setBackground(new Color(244, 204, 204));
+		btnSearch.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		btnSearch.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
 		scSalesDList = new JScrollPane(tableSalesDay);
 		scSalesDList.setBounds(100, 171, 1462, 750);
 		scSalesDList.setEnabled(false);
@@ -234,14 +241,7 @@ public class SalesMgr_day extends JFrame {
 	      lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
 	      getContentPane.add(lblBackGround);
 		
-		JButton btnSearch = new JButton("검색");
-		btnSearch.setBounds(1475, 101, 87, 33);
-		btnSearch.setFont(new Font("나눔바른고딕", Font.PLAIN, 15));
-		getContentPane.add(btnSearch);
-		btnSearch.setBackground(new Color(244, 204, 204));
-		btnSearch.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		btnSearch.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
-				Color.red, Color.red));
+		
 		
 		JLabel lblNewLabel_2 = new JLabel("비용관리페이지");
 		lblNewLabel_2.setBounds(104, 102, 146, 28);

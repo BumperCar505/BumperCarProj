@@ -130,19 +130,26 @@ public class SalesMgr extends JFrame {
 		btnGoNext.setBackground(new Color(244, 204, 204));
 		
 //		돌아가기버튼
-		JButton btnBackSalesMain = new JButton("돌아가기");
-		btnBackSalesMain.setBounds(650, 922, 290, 65);
-		btnBackSalesMain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new ComMyPage();
-			}
-		});
-		getContentPane.add(btnBackSalesMain);
-		btnBackSalesMain.setBackground(new Color(244, 204, 204));
-		btnBackSalesMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+//		JButton btnBackSalesMain = new JButton("돌아가기");
+//		btnBackSalesMain.setBounds(650, 922, 290, 65);
+//		btnBackSalesMain.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				dispose();
+//				new ComMyPage();
+//			}
+//		});
+		btnBackSales = new JButton("돌아가기");
+		btnBackSales.setBounds(650, 817, 290, 65);
+		getContentPane.add(btnBackSales);
+		btnBackSales.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 				Color.red, Color.red));
-		btnBackSalesMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+		
+		btnBackSales.setBackground(new Color(244, 204, 204));
+		getContentPane.add(btnBackSales);
+		btnBackSales.setBackground(new Color(244, 204, 204));
+		btnBackSales.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		btnBackSales.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		DefaultTableModel model = new DefaultTableModel();
 		table = new JTable(model);
@@ -207,13 +214,7 @@ public class SalesMgr extends JFrame {
 
 		getContentPane.add(scSalesDList_1);//외곽 라인
 		
-		btnBackSales = new JButton("돌아가기");
-		btnBackSales.setBounds(650, 817, 290, 65);
-		getContentPane.add(btnBackSales);
-		btnBackSales.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
-				Color.red, Color.red));
 		
-		btnBackSales.setBackground(new Color(244, 204, 204));
 		
 		lblYellowCat = new JLabel("");
 		lblYellowCat.setBounds(710, 50, 230, 80);

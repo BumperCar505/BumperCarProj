@@ -1,0 +1,10 @@
+diff a/src/all/UnitStockMgr_addUnit.java b/src/all/UnitStockMgr_addUnit.java	(rejected hunks)
+@@ -51,6 +51,8 @@
+ 	private PreparedStatement pstmt = null;
+ 	private ResultSet rs = null;
+ 	private LoginManager loginManager;
++	
++
+ 
+ 	/**
+ 	 * Launch the application...
