@@ -2,39 +2,29 @@ package book;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import all.DBConnectionMgr;
 import all.LoginManager;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 
-// 날짜 정보가 들어있는 
+// 날짜 정보
 public class BookCell extends JPanel {
 	
 	private DBConnectionMgr pool;
 	private LoginManager loginManager;
 
-	BookCalendar bookCalendar;
-	BookDetail detail;
-	BookMain bMain;
-	PlanCount planCount = new PlanCount();
 	ArrayList<JLabel> plan_list = new ArrayList<JLabel>();
 	ArrayList<JLabel> day_list = new ArrayList<JLabel>();
 	JLabel la_day, plan_count;
@@ -146,7 +136,6 @@ public class BookCell extends JPanel {
 			int total = rs.getRow();
 			rs.beforeFirst();
 			
-			planCount.removeData();
 			if (total > 3) {
 				for (int i = 0; i < total; i++) {
 					rs.next();
@@ -160,17 +149,14 @@ public class BookCell extends JPanel {
 					String mainEndDay = rs.getString("mainEndDay");
 					String mainEndTime = rs.getString("mainEndTime");
 					
-					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
-							 days, planCount);
-					
-					
+					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
+							 days);
 				
 					plan_list.add(tmpLabel);
 					if (plan_list.size() < 3) {
 						p_center.add(tmpLabel);
 					}
 					else {
-					planCount.addData(tmpLabel);
 					plan_count.setText("+ " + (plan_list.size() - 2) + " ... ");  // 일정이 많으면 +숫자로 표시 
 				}
 			}
@@ -189,8 +175,8 @@ public class BookCell extends JPanel {
 					String mainEndDay = rs.getString("mainEndDay");
 					String mainEndTime = rs.getString("mainEndTime");
 
-					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
-							 days, planCount);
+					PlanInfo tmpLabel = new PlanInfo(mainNum, cusName, cusCarNum, srvName, cusTel, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
+							 days);
 					plan_list.add(tmpLabel);
 					p_center.add(tmpLabel);
 				}
