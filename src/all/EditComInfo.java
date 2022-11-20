@@ -204,7 +204,6 @@ public class EditComInfo extends JFrame {
 				updateComInfo(id);
 			}
 		});
-		btnFixedComInfo.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 		
 		JLabel backgroundImg = new JLabel("");
 		backgroundImg.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/Car2.jpg")));
@@ -253,7 +252,7 @@ public class EditComInfo extends JFrame {
 						new ComMyPage();
 					} else {
 						password.setText("비밀번호가 틀립니다.");
-						password.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+						password.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 						password.setForeground(Color.RED);
 					}
 				} else {
@@ -280,7 +279,7 @@ public class EditComInfo extends JFrame {
 						}
 						else {
 							newPassword.setText("비밀번호가 일치하지 않습니다.");
-							newPassword.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
+							newPassword.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 							newPassword.setForeground(Color.RED);
 						}
 				
