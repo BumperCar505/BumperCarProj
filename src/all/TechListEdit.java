@@ -172,8 +172,12 @@ public class TechListEdit extends JFrame {
 		btnBackMain.setBackground(new Color(244, 204, 204));
 		btnBackMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, Color.red, Color.red));
 		contentPane.add(btnBackMain);
-		
-		
+
+
+		JLabel lblBackGround = new JLabel("");
+	      lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+	      lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+	      contentPane.add(lblBackGround);
 		
 		
 		//추가 버튼 누르면 실행됨 -> 새 폼 띄우기
@@ -276,12 +280,16 @@ public class TechListEdit extends JFrame {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
+		loginManager = LoginManager.getInstance();
+		String id = loginManager.getLogComNum();
+		
 //		MemberBean bean = new MemberBean();
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, "root", "1234");
-			sql = "select * from technician ";
+			sql = "select * from technician WHERE techComNum = ? ";
 			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
 			String header[] = {"techNum","정비사 이름","전화번호","직급"}; 

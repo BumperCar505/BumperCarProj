@@ -18,11 +18,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+
+import all.LoginManager;
+
 import java.awt.FlowLayout;
 
 public class DayDay extends JFrame {
 	
 	private final DBManager dbManager = new DBManager();
+	private LoginManager loginManager;
 
 	private JPanel contentPane;
 	BookCalendar bookCalendar;
@@ -48,6 +52,9 @@ public class DayDay extends JFrame {
 	
 		
 	public DayDay(int year, int month, int days) {
+		loginManager = loginManager.getInstance();
+	    String id = loginManager.getLogComNum();
+	    
 		setTitle((month+1) + "월 " + days + "일 일정");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 500);
@@ -86,12 +93,13 @@ public class DayDay extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				BookDetail detail = new BookDetail();
 				detail.setVisible(true);
-				detail.srvList();
+				detail.srvList(id);
+				detail.setDate(year, month, days);
 				detail.btnBook.setText("등록");
 //				setVisible(false);
 				detail.btnBook.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						detail.insertDetail();
+						detail.insertDetail(id);
 						detail.setVisible(false);
 //						BookCalendar bookCalendar = new BookCalendar();
 //						bookCalendar.setVisible(false);

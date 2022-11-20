@@ -1,6 +1,5 @@
 package book;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -18,16 +17,16 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import all.ComMyPage;
+import all.LoginManager;
 import all.Size;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.ImageIcon;
 
 public class BookCalendar extends JFrame {
+	
+	private LoginManager loginManager;
 
 	BookMain bMain;
 	ArrayList<BookCell> cell_list = new ArrayList<BookCell>();
@@ -53,6 +52,7 @@ public class BookCalendar extends JFrame {
 			public void run() {
 				try {
 					BookCalendar frame = new BookCalendar();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,23 +62,20 @@ public class BookCalendar extends JFrame {
 
 
 	public BookCalendar() {
-		setVisible(true);
+		loginManager = loginManager.getInstance();
+		String id = loginManager.getLogComNum();
+		
+//		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Size.SCREEN_W, Size.SCREEN_H);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-//      폼 창이 화면 가운데서 뜨게 하는 기능
 		setLocationRelativeTo(null);
 		
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.setLayout(null);
-		
-		JLabel backgroundImg = new JLabel("");
-		backgroundImg.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/Car2.jpg")));
-		backgroundImg.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
-		contentPane.add(backgroundImg);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/YellowCat.png")));
@@ -86,7 +83,7 @@ public class BookCalendar extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 106, 1640, 798);
+		panel.setBounds(0, 106, 1664, 798);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		p_center = new JPanel();
@@ -120,16 +117,17 @@ public class BookCalendar extends JFrame {
 		panel.add(la_month);
 		la_month.setHorizontalAlignment(JLabel.CENTER);
 		
-		JButton btnReset = new JButton("새로고침");
-		btnReset.setBackground(new Color(244, 204, 204));
+		JButton btnReset = new JButton(" 새로고침");
+		btnReset.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/refresh.png")));
+		btnReset.setBackground(new Color(238, 238, 238));
 		btnReset.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setCal();
+				setCal(id);
 			}
 		});
 		btnReset.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-		btnReset.setBounds(1191, 1, 98, 50);
+		btnReset.setBounds(1174, 1, 115, 50);
 		panel.add(btnReset);
 		
 		// 이전 달
@@ -143,7 +141,7 @@ public class BookCalendar extends JFrame {
 					year--;
 					month = 11;
 				}
-				setCal();
+				setCal(id);
 			}
 			
 		});
@@ -159,7 +157,7 @@ public class BookCalendar extends JFrame {
 					year++;
 					month = 0;
 				}
-				setCal();
+				setCal(id);
 			}
 		});
 		
@@ -176,8 +174,13 @@ public class BookCalendar extends JFrame {
 		btnBackCusMain.setBounds(687, 914, Size.BTN_B_W, Size.BTN_B_H);
 		contentPane.add(btnBackCusMain);
 		
+		JLabel backgroundImg = new JLabel("");
+		backgroundImg.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/Car2.jpg")));
+		backgroundImg.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		contentPane.add(backgroundImg);
+		
 		initCal();
-		setCal();
+		setCal(id);
 		setWeek();
 	}
 	
@@ -210,7 +213,7 @@ public class BookCalendar extends JFrame {
 		}
 	}
 	
-	public void setCal() {
+	public void setCal(String id) {
 		for (int i = 0; i < cell_list.size(); i++) {
 			BookCell tmpCell = new BookCell();
 			tmpCell = cell_list.get(i);
@@ -232,12 +235,12 @@ public class BookCalendar extends JFrame {
 			
 			if((i + 1) >= startday && days < lastday) {
 				days++;
-				tmp_cell.setCellDate(year, month, days);
+				tmp_cell.setCellDate(year, month, days, id);
 				tmp_cell.setMonthDay();
 								
 			}
 			else {
-				tmp_cell.setCellDate(0, 0, 0);
+				tmp_cell.setCellDate(0, 0, 0, id);
 				tmp_cell.setOtherMonthDay();
 			}
 			

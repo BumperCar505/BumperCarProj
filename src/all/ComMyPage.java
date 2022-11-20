@@ -196,7 +196,6 @@ public class ComMyPage {
          }
       });
       
-//      일정 관리 페이지로
 //       일정 관리 페이지로
          btnMgrBook.addActionListener(new ActionListener() {
                
@@ -209,6 +208,7 @@ public class ComMyPage {
 
                }
             });
+         
 //      부품 재고 관리 페이지로
       btnMgrUnitStock.addActionListener(new ActionListener() {
             

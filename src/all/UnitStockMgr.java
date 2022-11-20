@@ -164,6 +164,12 @@ public class UnitStockMgr extends JFrame {
 		contentPane.add(btnAddUnitStockHistory);
 		
 		
+		JLabel lblBackGround = new JLabel("");
+	      lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+	      lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+	      contentPane.add(lblBackGround);
+		
+		
 		// 구매 이력 버튼 누르면 실행 됨 -> 새 폼 띄우기
 		btnUnitBuyHistory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
