@@ -27,9 +27,10 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import java.awt.SystemColor;
 
 // ComLogin
-public class ComLogin extends JFrame implements ActionListener, CaretListener {
+public class ComLogin extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JTextField comId;
 	private JPasswordField comPw;
@@ -153,18 +154,6 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		}
 	}
 	
-	@Override
-	public void caretUpdate(CaretEvent e) {
-		// TODO Auto-generated method stub
-		Object obj = e.getSource();
-		
-		if(obj == comId && comId.getText().equals("아이디")) {
-			comId.setText("");
-		} else if(obj == comPw && String.valueOf(comPw.getPassword()).equals("비밀번호")) {
-			comPw.setText("");
-		}
-	}
-	
 	/**
 	 * Create the frame.
 	 */
@@ -182,28 +171,26 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		contentPane.setLayout(null);
 		
 		comId = new JTextField();
-		comId.setBounds(638, 333, 404, 66);
-		comId.setText("아이디");
+		comId.setBounds(714, 333, 328, 66);
+		comId.setText("");
 		comId.setHorizontalAlignment(SwingConstants.CENTER);
 		comId.setColumns(
 				10);
 		comId.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 				Color.red, Color.red));
-		comId.addCaretListener(this);
 		contentPane.add(comId);
 		
 		comPw = new JPasswordField();
-		comPw.setBounds(638, 409, 404, 66);
-		comPw.setText("비밀번호");
+		comPw.setBounds(714, 409, 328, 66);
+		comPw.setText("");
 		comPw.setHorizontalAlignment(SwingConstants.CENTER);
 		comPw.setColumns(10);
 		comPw.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 				Color.red, Color.red));
-		comPw.addCaretListener(this);
 		contentPane.add(comPw);
 		
 		btnComLogin = new JButton("로그인");
-		btnComLogin.setBounds(638, 530, 404, 71);
+		btnComLogin.setBounds(714, 530, 328, 71);
 		btnComLogin.setForeground(new Color(0, 0, 0));
 		btnComLogin.setBackground(new Color(244, 204, 204));
 		btnComLogin.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
@@ -212,7 +199,7 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		contentPane.add(btnComLogin);
 		
 		btnComJoin = new JButton("회원가입");
-		btnComJoin.setBounds(638, 611, 404, 71);
+		btnComJoin.setBounds(714, 611, 328, 71);
 		btnComJoin.setBackground(new Color(244, 204, 204));
 		btnComJoin.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 				Color.red, Color.red));
@@ -223,6 +210,28 @@ public class ComLogin extends JFrame implements ActionListener, CaretListener {
 		lblYellowCat.setIcon(new ImageIcon(ComLogin.class.getResource("/img/YellowCat.png")));
 		lblYellowCat.setBounds(714, 215, 230, 80);
 		contentPane.add(lblYellowCat);
+		
+		JPanel panelComId = new JPanel();
+		panelComId.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.control, new Color(240, 240, 240), new Color(240, 240, 240), new Color(240, 240, 240)));
+		panelComId.setBounds(638, 333, 71, 66);
+		contentPane.add(panelComId);
+		panelComId.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(ComLogin.class.getResource("/img/profile.png")));
+		lblNewLabel.setBounds(3, 0, 71, 66);
+		panelComId.add(lblNewLabel);
+		
+		JPanel panelComPwd = new JPanel();
+		panelComPwd.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.control, SystemColor.control, SystemColor.control, SystemColor.control));
+		panelComPwd.setBounds(638, 409, 71, 66);
+		contentPane.add(panelComPwd);
+		panelComPwd.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(ComLogin.class.getResource("/img/lock.png")));
+		lblNewLabel_1.setBounds(3, 0, 71, 66);
+		panelComPwd.add(lblNewLabel_1);
 		
 		lblBackGround = new JLabel("");
 		lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car.png")));
