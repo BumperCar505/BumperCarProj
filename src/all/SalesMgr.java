@@ -169,7 +169,7 @@ public class SalesMgr extends JFrame {
 		columnHeaders.add("정비사명");
 		columnHeaders.add("고객명");
 		columnHeaders.add("서비스명");
-		columnHeaders.add("부품명");
+//		columnHeaders.add("부품명");
 		columnHeaders.add("가격");
 		
 		HashMap<String, Integer> columnWidthValues = new HashMap<>();
@@ -177,7 +177,7 @@ public class SalesMgr extends JFrame {
 		columnWidthValues.put("정비사명", 80);
 		columnWidthValues.put("고객명", 75);
 		columnWidthValues.put("서비스명", 50);
-		columnWidthValues.put("부품명", 50);
+//		columnWidthValues.put("부품명", 50);
 		columnWidthValues.put("가격", 80);
 		
 		
@@ -324,35 +324,35 @@ public class SalesMgr extends JFrame {
 //			DefaultTableModel model = new DefaultTableModel(header, 0);
 //			table.setModel(model);
 	
-			sql = "SELECT mainEndDay, tech.techName, srv.srvName, cus.cusName, un.unitPrice, un.unitName "
-					+ "FROM maintenance   "
-					+ "	JOIN service srv  "
-					+ "	ON mainSrvNum = srv.srvNum  "
-					+ "	JOIN technician tech  "
-					+ "	ON srv.srvTechNum = tech.techNum  "
-					+ "	JOIN customer cus "
-					+ "	ON cus.cusNum = mainCusNum "
-					+ "	JOIN detail dtl "
-					+ "	ON dtl.dtlSrvNum = srv.srvNum "
-					+ "	JOIN unit un "
-					+ "	ON un.unitNum = dtl.dtlUnitNum "
-					+ " WHERE DATE_FORMAT(mainEndDay,'%Y-%m') = DATE_FORMAT(now(),?) and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
+			sql = "SELECT main.mainEndDay , tech.techName, srv.srvName , cus.cusName , unit.unitPrice, unit.unitName "
+					+ "FROM maintenance main "
+					+ "JOIN service srv "
+					+ "ON main.mainSrvNum = srv.srvNum "
+					+ "JOIN customer cus "
+					+ "ON main.mainCusNum = cus.cusNum "
+					+ "JOIN technician tech "
+					+ "ON main.mainTechNum = tech.techNum "
+					+ "JOIN detail detail "
+					+ "ON detail.dtlSrvNum = srv.srvNum "
+					+ "JOIN unit unit "
+					+ "ON unit.unitNum = detail.dtlUnitNum "
+					+ "WHERE DATE_FORMAT(mainEndDay,'%Y-%m') = DATE_FORMAT(NOW(),?) and mainStatus='정비완료' AND tech.techComNum=? AND unit.unitNum LIKE 's%' " ;
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boxTotalDay); 
 			pstmt.setString(2, id); 
-
+			rs = pstmt.executeQuery();
 		
 			DefaultTableModel dtm = (DefaultTableModel)tableSalesD.getModel();
-			rs = pstmt.executeQuery();
+			
 				while(rs.next()){         
-					model.addRow(new Object[]{
-	            		 rs.getString("mainEndDay"), 
+					dtm.addRow(new Object[]{
+	            		 rs.getString("main.mainEndDay"), 
 	            		 rs.getString("tech.techName"), 
 	            		 rs.getString("cus.cusName"),
 	            		 rs.getString("srv.srvName"), 
-	            		 rs.getString("un.unitName"),
-	            		 rs.getInt("un.unitPrice")
+//	            		 rs.getString("unit.unitName"),
+	            		 rs.getInt("unit.unitPrice")
 	             	});
 	            }
 				
@@ -367,7 +367,8 @@ public class SalesMgr extends JFrame {
 			
 			
 	}
-	
+}
+
 	//들어가면 현재 년 월에 맞는 값 나오게
 //			private void getSales() {
 //				Connection conn = null;
@@ -442,4 +443,3 @@ public class SalesMgr extends JFrame {
 //			}
 		
 //		}
-}
