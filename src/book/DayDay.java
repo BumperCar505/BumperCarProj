@@ -94,6 +94,7 @@ public class DayDay extends JFrame {
 				BookDetail detail = new BookDetail();
 				detail.setVisible(true);
 				detail.srvList(id);
+				detail.setDate(year, month, days);
 				detail.btnBook.setText("등록");
 //				setVisible(false);
 				detail.btnBook.addActionListener(new ActionListener() {

@@ -250,6 +250,20 @@ public class BookDetail extends JFrame {
 		
 		
 	}
+	public void setDate(int year, int month, int days) {
+		String mon, day;
+		if (month < 10) {
+			mon = "0" + (month + 1);
+		} else {
+			mon = String.valueOf(month + 1);
+		}
+		if (days < 10) {
+			day = "0" + days;
+		} else {
+			day = Integer.toString(days);
+		}
+		this.cusBookTime.setText(year + "-" + mon + "-" + day + " ");
+	}
 	
 	public void srvList(String id) {
 		Connection conn = dbManager.getConn();
