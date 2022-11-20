@@ -10,9 +10,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import book.BookCalendar;
-import book.DBManager;
-
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -268,6 +267,7 @@ public class EditComInfo extends JFrame {
 						pstmt.setString(7, id);
 						pstmt.executeUpdate();
 						
+						DialogManager.createMsgDialog("수정되었니다.", "\\img\\information5.png", "수정완", JOptionPane.PLAIN_MESSAGE);
 						setVisible(false);
 						new ComMyPage();
 						
