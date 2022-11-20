@@ -48,7 +48,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
-//test11
+
+// 안쓰는 페이지, 정비사 등록에서 회원가입 완료 예정
+
 public class SrvReg extends JFrame {
 
 	private JPanel contentPane;
@@ -307,12 +309,12 @@ public class SrvReg extends JFrame {
 		}
 	}
 	
-	private List<ComSrvBeans> createServiceBeans() {
-		List<ComSrvBeans> srvBeans = new ArrayList<ComSrvBeans>();
-		for(int i = 0; i < table.getRowCount(); ++i) {
-			
-		}
-	}
+//	private List<ComSrvBeans> createServiceBeans() {
+//		List<ComSrvBeans> srvBeans = new ArrayList<ComSrvBeans>();
+//		for(int i = 0; i < table.getRowCount(); ++i) {
+//			
+//		}
+//	}
 	
 	private List<String> getDbUnitPrice() {
 		List<String> list = new ArrayList<String>();
