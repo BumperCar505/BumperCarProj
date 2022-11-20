@@ -117,8 +117,9 @@ public class BookCalendar extends JFrame {
 		panel.add(la_month);
 		la_month.setHorizontalAlignment(JLabel.CENTER);
 		
-		JButton btnReset = new JButton("새로고침");
-		btnReset.setBackground(new Color(244, 204, 204));
+		JButton btnReset = new JButton(" 새로고침");
+		btnReset.setIcon(new ImageIcon(BookCalendar.class.getResource("/img/refresh.png")));
+		btnReset.setBackground(new Color(238, 238, 238));
 		btnReset.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK));
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -126,7 +127,7 @@ public class BookCalendar extends JFrame {
 			}
 		});
 		btnReset.setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-		btnReset.setBounds(1191, 1, 98, 50);
+		btnReset.setBounds(1174, 1, 115, 50);
 		panel.add(btnReset);
 		
 		// 이전 달
