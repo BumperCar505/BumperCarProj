@@ -10,7 +10,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
 import book.BookCalendar;
-import book.DBManager;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,8 +24,8 @@ import java.sql.ResultSet;
 import java.awt.event.ActionEvent;
 
 public class EditComInfo extends JFrame {
-
-	private final DBManager dbManager = new DBManager();
+	
+	private DBConnectionMgr pool;
 	private LoginManager loginManager;
 	
 	private JPanel contentPane;
@@ -59,6 +58,8 @@ public class EditComInfo extends JFrame {
 
 	
 	public EditComInfo() {
+		pool = DBConnectionMgr.getInstance();
+		
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
 	      
@@ -213,9 +214,7 @@ public class EditComInfo extends JFrame {
 	}
 
 	public void updateComInfo(String id) {
-//		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
-//		Connection conn = null;
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -226,6 +225,7 @@ public class EditComInfo extends JFrame {
 			String sql1 = "SELECT pw FROM login "
 					+ "WHERE logComNum = ? ";
 			
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql1);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -289,15 +289,14 @@ public class EditComInfo extends JFrame {
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt);
-//			dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 	}
 	
 	
 	public void showComInfo(String id) {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -308,6 +307,7 @@ public class EditComInfo extends JFrame {
 				+ "WHERE comNum = ? ";
 		
 		try {
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -323,9 +323,8 @@ public class EditComInfo extends JFrame {
 			}
 		} catch (Exception e2) {
 			e2.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt, rs);
-//			dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 	}
 }

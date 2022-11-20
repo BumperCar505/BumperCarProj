@@ -1,17 +1,14 @@
 package book;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,13 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import all.DBConnectionMgr;
 import all.LoginManager;
 
 import java.awt.FlowLayout;
 
 public class DayDay extends JFrame {
 	
-	private final DBManager dbManager = new DBManager();
+	private DBConnectionMgr pool;
 	private LoginManager loginManager;
 
 	private JPanel contentPane;
@@ -49,6 +47,8 @@ public class DayDay extends JFrame {
 	
 		
 	public DayDay(int year, int month, int days) {
+		
+		pool = DBConnectionMgr.getInstance();
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
 	    
@@ -108,8 +108,8 @@ public class DayDay extends JFrame {
 
 //	날짜 클릭하면 나오는 폼 스케쥴
 	public void setDaySchedule(int year, int month, int days) {
-		Connection conn = dbManager.getConn();
-//		Connection conn = null;
+
+		Connection conn = null;
 
 		
 		String sql = "SELECT mainNum, customer.cusName, customer.cusCarNum, customer.cusTel, service.srvName, technician.techName, mainStartDay, mainStartTime, mainEndDay, mainEndTime "
@@ -129,6 +129,7 @@ public class DayDay extends JFrame {
 		String now_date = this.year + "-" + (this.month + 1) + "-" + this.days;
 		
 		try {
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pstmt.setString(1, now_date);
 			
@@ -159,11 +160,10 @@ public class DayDay extends JFrame {
 					
 			}
 
-		} catch (SQLException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt, rs);
-//			dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 			
 		}
 		

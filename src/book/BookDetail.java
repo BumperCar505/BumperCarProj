@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import all.DBConnectionMgr;
 import all.LoginManager;
 import all.Size;
 
@@ -18,10 +19,6 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.text.ParseException;
-
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -33,7 +30,7 @@ import javax.swing.SwingConstants;
 
 public class BookDetail extends JFrame {
 
-	private final DBManager dbManager = new DBManager();
+	private DBConnectionMgr pool;
 	private LoginManager loginManager;
 	
 	JPanel contentPane;
@@ -65,6 +62,8 @@ public class BookDetail extends JFrame {
 	
 
 	public BookDetail() {
+		pool = DBConnectionMgr.getInstance();
+		
 		loginManager = loginManager.getInstance();
 		String id = loginManager.getLogComNum();
 		
@@ -266,7 +265,7 @@ public class BookDetail extends JFrame {
 	}
 	
 	public void srvList(String id) {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
@@ -277,6 +276,7 @@ public class BookDetail extends JFrame {
 					+ "ON technician.techNum = service.srvTechNum "
 					+ "WHERE technician.techComNum = ? "
 					+ "AND deleted_yn = 'N' ";
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -286,13 +286,15 @@ public class BookDetail extends JFrame {
 					this.srvName.addItem(srvName);
 			}
 			srvName.setSelectedItem(null);
-		} catch (SQLException e1) {			
+		} catch (Exception e1) {			
 			e1.printStackTrace();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 	}
 	
 	public void techList(String id, String selectedSrv) {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -305,6 +307,7 @@ public class BookDetail extends JFrame {
 					+ "ON service.srvTechNum = technician.techNum "
 					+ "WHERE technician.techComNum = ? AND service.srvName = ? "
 					+ "AND service.deleted_yn = 'N' ";
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, selectedSrv);
@@ -315,13 +318,15 @@ public class BookDetail extends JFrame {
 					this.techName.addItem(techName);
 			}
 			techName.setSelectedItem(null);
-		} catch (SQLException e1) {			
+		} catch (Exception e1) {			
 			e1.printStackTrace();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 	}
 	
 	public void getDetail(String id, int mainNum) {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
@@ -338,6 +343,7 @@ public class BookDetail extends JFrame {
 		
 
 		try {
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, mainNum);
 			rs = pstmt.executeQuery();
@@ -373,18 +379,17 @@ public class BookDetail extends JFrame {
 				
 			}
 
-		} catch (SQLException e2) {
+		} catch (Exception e2) {
 			e2.printStackTrace();
-//		} finally {
-//			dbManager.closeDB(pstmt, rs);
-//			dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 
 	}
 	
 	
 	public void insertCusInfo() {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -392,6 +397,7 @@ public class BookDetail extends JFrame {
 			String sql1 = "SELECT cusName, cusCarNum, cusCarBrand, cusCarType, cusTel "
 					+ "FROM customer "
 					+ "WHERE cusName = ? ";
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql1);
 			pstmt.setString(1, this.cusName.getText());
 			rs = pstmt.executeQuery();
@@ -403,13 +409,15 @@ public class BookDetail extends JFrame {
 				this.cusTel.setText(rs.getString("cusTel"));
 			}
 
-		} catch (SQLException e3) {
+		} catch (Exception e3) {
 			e3.printStackTrace();
+		} finally {
+			pool.freeConnection(conn, pstmt, rs);
 		}
 	}
 	
 	public void insertDetail(String id) {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -418,6 +426,7 @@ public class BookDetail extends JFrame {
 					+ "(SELECT service.srvNum FROM service WHERE service.srvName = ? AND srvTechNum = (SELECT techNum FROM technician WHERE techName = ?)), "
 					+ "?, ?, ?, ?, ?, (SELECT technician.techNum FROM technician WHERE technician.techName = ?) ";
 
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, id);
@@ -433,16 +442,15 @@ public class BookDetail extends JFrame {
 			
 			pstmt.executeUpdate();
 			
-		} catch (SQLException e3) {
+		} catch (Exception e3) {
 			e3.printStackTrace();
-//		} finally {
-//		dbManager.closeDB(pstmt);
-//		dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt);
 		}
 	}
 	
 	public void updateDetail(int mainNum) {
-		Connection conn = dbManager.getConn();
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -450,6 +458,7 @@ public class BookDetail extends JFrame {
 					+ "mainSrvNum = (SELECT srvNum FROM service WHERE srvName = ? AND srvTechNum = (SELECT techNum FROM technician WHERE techName = ?)), "
 					+ "mainTechNum = (SELECT techNum FROM technician WHERE techName = ?), mainStatus = ?, mainStartDay = ?, mainStartTime = ?, mainEndDay = ?, mainEndTime = ? "
 					+ "WHERE customer.cusNum = maintenance.mainCusNum AND maintenance.mainNum = ? ";
+			conn = pool.getConnection();
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, this.cusName.getText());
@@ -468,11 +477,10 @@ public class BookDetail extends JFrame {
 			pstmt.setInt(14, mainNum);
 			
 			pstmt.executeUpdate();
-		} catch (SQLException e3) {
+		} catch (Exception e3) {
 			e3.printStackTrace();
-//		} finally {
-//		dbManager.closeDB(pstmt);
-//		dbManager.closeDB();
+		} finally {
+			pool.freeConnection(conn, pstmt);
 
 		}
 	}

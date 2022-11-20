@@ -15,7 +15,6 @@ import all.LoginManager;
 
 public class DayDetail extends JLabel {
 
-	private final DBManager dbManager = new DBManager();
 	private LoginManager loginManager;
 	
 	int year, month, days;
