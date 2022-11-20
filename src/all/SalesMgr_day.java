@@ -54,6 +54,7 @@ public class SalesMgr_day extends JFrame {
 	private JButton btnDelSalesD;
 	private JButton btnBackSales;
 	private JLabel lblYellowCat;
+	private JLabel lblBackGround;
 	private final int FONT_SIZE = 21;
 //	String header[] = {"날짜","부품번호", "부품이름", "수량","부품단가" ,"총비용"};
 //	DefaultTableModel model = new DefaultTableModel(header, 0);
@@ -212,12 +213,6 @@ public class SalesMgr_day extends JFrame {
 		getContentPane.add(year);
 		year.setColumns(10);
 		
-		month = new JTextField();
-		month.setBounds(1354, 102, 76, 33);
-		month.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
-		month.setColumns(10);
-		getContentPane.add(month);
-		
 		JLabel lblNewLabel = new JLabel("년");
 		lblNewLabel.setBounds(1327, 105, 29, 24);
 		lblNewLabel.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
@@ -227,6 +222,17 @@ public class SalesMgr_day extends JFrame {
 		lblNewLabel_1.setBounds(1434, 105, 29, 24);
 		lblNewLabel_1.setFont(new Font("나눔바른고딕", Font.PLAIN, 16));
 		getContentPane.add(lblNewLabel_1);
+		
+		month = new JTextField();
+		month.setBounds(1354, 102, 76, 33);
+		month.setFont(new Font("나눔바른고딕", Font.PLAIN, 19));
+		month.setColumns(10);
+		getContentPane.add(month);
+		
+		lblBackGround = new JLabel("");
+	      lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+	      lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+	      getContentPane.add(lblBackGround);
 		
 		JButton btnSearch = new JButton("검색");
 		btnSearch.setBounds(1475, 101, 87, 33);

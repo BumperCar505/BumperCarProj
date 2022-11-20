@@ -63,6 +63,11 @@ public class SalesMgr extends JFrame {
 	private JTextField year;
 	private JTextField month;
 	private LoginManager loginManager;
+	private JLabel lblBackGround;
+	
+	
+
+	
 	
 
 	/**
@@ -74,6 +79,7 @@ public class SalesMgr extends JFrame {
 				try {
 					SalesMgr frame = new SalesMgr();
 					frame.setVisible(true);
+				
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -92,6 +98,7 @@ public class SalesMgr extends JFrame {
 	
 	
 	public SalesMgr() {
+//		getSales();
 		setVisible(true);
 		setTitle("다고쳐카센터 - 고객관리페이지");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,14 +108,41 @@ public class SalesMgr extends JFrame {
 		
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
+	    
+
 
 
 		
 		getContentPane = new JPanel();
 		getContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		
+		
+		//비용버튼
 		setContentPane(getContentPane);
 		TextField tf = new TextField();
+		JButton btnGoNext = new JButton("비용");
+		btnGoNext.setBounds(240, 94, 106, 41);
+		btnGoNext.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
+		getContentPane.add(btnGoNext);
+		btnGoNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+	
+		btnGoNext.setBackground(new Color(244, 204, 204));
+		
+//		돌아가기버튼
+		JButton btnBackSalesMain = new JButton("돌아가기");
+		btnBackSalesMain.setBounds(650, 922, 290, 65);
+		btnBackSalesMain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new ComMyPage();
+			}
+		});
+		getContentPane.add(btnBackSalesMain);
+		btnBackSalesMain.setBackground(new Color(244, 204, 204));
+		btnBackSalesMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
+				Color.red, Color.red));
+		btnBackSalesMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
 		DefaultTableModel model = new DefaultTableModel();
 		table = new JTable(model);
@@ -221,43 +255,22 @@ public class SalesMgr extends JFrame {
 		lblNewLabel_2.setFont(new Font("나눔바른고딕", Font.BOLD, 19));
 		getContentPane.add(lblNewLabel_2);
 		
-		JButton btnGoNext = new JButton("비용");
-		btnGoNext.setBounds(240, 94, 106, 41);
-		btnGoNext.setFont(new Font("나눔바른고딕", Font.PLAIN, 18));
-		getContentPane.add(btnGoNext);
-		btnGoNext.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
-				Color.red, Color.red));
 		
+		lblBackGround = new JLabel("");
+	    lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+	    lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+	    getContentPane.add(lblBackGround);
+
 		
-//	    현재 년도, 월 구하기
-	    Date date = new Date();
-	    String sDate = "%tY";
-	    String nowYear = String.format(sDate, date);
-	    
-	    sDate = "%tm";
-		String nowMonth = String.format(sDate, date);
-		
+
 	
 		
 		
 		
-		//돌아가기버튼
-		btnGoNext.setBackground(new Color(244, 204, 204));
+	
 		
-		JButton btnBackSalesMain = new JButton("돌아가기");
-		btnBackSalesMain.setBounds(650, 922, 290, 65);
-		btnBackSalesMain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new ComMyPage();
-			}
-		});
-		getContentPane.add(btnBackSalesMain);
-		btnBackSalesMain.setBackground(new Color(244, 204, 204));
-		btnBackSalesMain.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
-				Color.red, Color.red));
-		btnBackSalesMain.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
 		
+		// 비용관리페이지로 넘어가게
 		btnGoNext.addActionListener(new ActionListener() {
 			
 			@Override
@@ -306,7 +319,9 @@ public class SalesMgr extends JFrame {
 				e1.printStackTrace();
 			}
 			con = DriverManager.getConnection(url, "root", "1234");
-			
+//			String header[] = {"날짜","정비사명","서비스명","고객명","부품비","부품명"}; 
+//			DefaultTableModel model = new DefaultTableModel(header, 0);
+//			table.setModel(model);
 	
 			sql = "SELECT mainEndDay, tech.techName, srv.srvName, cus.cusName, un.unitPrice, un.unitName "
 					+ "FROM maintenance   "
@@ -327,7 +342,7 @@ public class SalesMgr extends JFrame {
 			pstmt.setString(2, id); 
 
 		
-			DefaultTableModel model = (DefaultTableModel)tableSalesD.getModel();
+			DefaultTableModel dtm = (DefaultTableModel)tableSalesD.getModel();
 			rs = pstmt.executeQuery();
 				while(rs.next()){         
 					model.addRow(new Object[]{
@@ -344,11 +359,86 @@ public class SalesMgr extends JFrame {
 				eq.printStackTrace();
 			} finally {
 				
-		}
-	}
-	});
+			}
+			}
+		});
 		
 			
 			
 	}
+	
+	//들어가면 현재 년 월에 맞는 값 나오게
+//			private void getSales() {
+//				Connection conn = null;
+//				PreparedStatement pstmt = null;
+//				ResultSet rs = null;
+//				String sql = "";
+//				
+//				loginManager = loginManager.getInstance();
+//			    String id = loginManager.getLogComNum();
+//			    
+//				YuriSalesMgr_mgr mgr = new YuriSalesMgr_mgr();
+//				YuriSalesMgrBean bean = new YuriSalesMgrBean();
+////			    
+////			    String header[] = {"techNum","정비사 이름","전화번호","직급","aa","bb"}; 
+////		        DefaultTableModel model = new DefaultTableModel(header, 0);
+////		        table.setModel(model);
+//			    
+////			    현재 년도, 월 구하기
+//			    Date date = new Date();
+//			    String sDate = "%tY";
+//			    String nowYear = String.format(sDate, date);
+//			  
+//			    
+//			    sDate = "%tm";
+//				String nowMonth = String.format(sDate, date);
+//				
+//				String nowDate = nowYear + "-" + nowMonth;
+//		
+//		try {
+//			Class.forName(driver);
+//			conn = DriverManager.getConnection(url,"root","1234");
+//			sql = sql = "SELECT mainEndDay, tech.techName, srv.srvName, cus.cusName, un.unitPrice, un.unitName "
+//					+ "FROM maintenance   "
+//					+ "	JOIN service srv  "
+//					+ "	ON mainSrvNum = srv.srvNum  "
+//					+ "	JOIN technician tech  "
+//					+ "	ON srv.srvTechNum = tech.techNum  "
+//					+ "	JOIN customer cus "
+//					+ "	ON cus.cusNum = mainCusNum "
+//					+ "	JOIN detail dtl "
+//					+ "	ON dtl.dtlSrvNum = srv.srvNum "
+//					+ "	JOIN unit un "
+//					+ "	ON un.unitNum = dtl.dtlUnitNum "
+//					+ " WHERE DATE_FORMAT(mainEndDay,'%Y-%m') = DATE_FORMAT(now(),?) and mainStatus='정비완료' AND tech.techComNum=? AND un.unitNum LIKE 'p%' " ;
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setString(1, nowDate); 
+//			pstmt.setString(2, id); 
+//
+//		
+//			DefaultTableModel model = (DefaultTableModel)tableSalesD.getModel();
+////			String header[] = {"techNum","정비사 이름","전화번호","직급","a","b"}; 
+////	        DefaultTableModel model = new DefaultTableModel(header, 0);
+//	        table.setModel(model);
+//			rs = pstmt.executeQuery();
+//				while(rs.next()){         
+//					model.addRow(new Object[]{
+//	            		 rs.getString("mainEndDay"), 
+//	            		 rs.getString("tech.techName"), 
+//	            		 rs.getString("cus.cusName"),
+//	            		 rs.getString("srv.srvName"), 
+//	            		 rs.getString("un.unitName"),
+//	            		 rs.getInt("un.unitPrice")
+//	             	});
+//	            }
+//				
+//			} catch (SQLException eq) {
+//				eq.printStackTrace();
+//			} catch (ClassNotFoundException e) {
+//				e.printStackTrace();
+//			} finally {
+//				
+//			}
+		
+//		}
 }

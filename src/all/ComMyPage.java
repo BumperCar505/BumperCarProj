@@ -23,6 +23,7 @@ public class ComMyPage {
 
    private JFrame frame;
    private LoginManager loginManager;
+   private JLabel lblBackGround;
    
    /**
     * Launch the application.
@@ -66,6 +67,8 @@ public class ComMyPage {
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.getContentPane().setLayout(null);
       frame.setTitle("다고쳐카센터 - 메인화면");
+      
+
       
       JLabel lblNewLabel = new JLabel("New label");
       lblNewLabel.setIcon(new ImageIcon(ComMyPage.class.getResource("/img/YellowCat.png")));
@@ -153,6 +156,11 @@ public class ComMyPage {
       btnLogout.setBackground(new Color(199, 199, 199));
       btnLogout.setBorder(new BevelBorder(BevelBorder.RAISED, Color.red, Color.red, 
 				Color.red, Color.red));
+      lblBackGround = new JLabel("");
+      lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+      lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+      frame.getContentPane().add(lblBackGround);
+
       
 //         코멘트 관리 페이지로
       btnMgrComment.addActionListener(new ActionListener() {
@@ -189,20 +197,18 @@ public class ComMyPage {
       });
       
 //      일정 관리 페이지로
-      btnMgrBook.addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               frame.dispose();  
-        
-               String id = loginManager.getLogComNum();
+//       일정 관리 페이지로
+         btnMgrBook.addActionListener(new ActionListener() {
                
-               EditComInfo editComInfo = new EditComInfo();
-               editComInfo.showComInfo(id);
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                  frame.dispose();  
 
-            }
-         });
-      
+                  BookCalendar bookCalendar = new BookCalendar();
+                  bookCalendar.setVisible(true);
+
+               }
+            });
 //      부품 재고 관리 페이지로
       btnMgrUnitStock.addActionListener(new ActionListener() {
             

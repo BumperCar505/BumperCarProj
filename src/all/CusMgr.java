@@ -40,12 +40,14 @@ public class CusMgr extends JFrame {
 	private final int FONT_SIZE = 21;
 	private JPanel mainPanel;
 	private CusMgr oneSelf;
+	private JLabel lblBackGround;
 
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/cardb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
+	private JLabel lblNewLabel;
 	// String[] header = {"Num", "고객이름", "차번호", "브랜드", "차종", "주행거리","우편번호","주소","전화번호", "가입날짜"};
 	// DefaultTableModel model = new DefaultTableModel(header,0);
 //	
@@ -178,7 +180,12 @@ public class CusMgr extends JFrame {
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1666, 1037);
 		getContentPane.add(mainPanel);
-		mainPanel.setLayout(new CardLayout(0, 0));
+		mainPanel.setLayout(null);
+		
+		lblBackGround = new JLabel("");
+		lblBackGround.setIcon(new ImageIcon(ComLogin.class.getResource("/img/Car2.jpg")));
+		lblBackGround.setBounds(0, 0, Size.SCREEN_W, Size.SCREEN_H);
+		mainPanel.add(lblBackGround);
 		
 		JPanel jpList = new JPanel();		
 	    jpList.setLayout(new GridBagLayout());			
