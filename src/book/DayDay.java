@@ -29,9 +29,7 @@ public class DayDay extends JFrame {
 	private LoginManager loginManager;
 
 	private JPanel contentPane;
-	BookCalendar bookCalendar;
-	BookMain bMain;
-	PlanCount planCount = new PlanCount();
+
 	ArrayList<JLabel> plan_list = new ArrayList<JLabel>();
 	ArrayList<JLabel> day_list = new ArrayList<JLabel>();
 	JLabel la_day, plan_count;
@@ -73,7 +71,7 @@ public class DayDay extends JFrame {
 
 		panel = new JPanel();
 		panel.setBounds(12, 59, 460, 332);
-//		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		contentPane.add(panel);
 
@@ -95,14 +93,11 @@ public class DayDay extends JFrame {
 				bookDetail.srvList(id);
 				bookDetail.setDate(year, month, days);
 				bookDetail.btnBook.setText("등록");
-//				setVisible(false);
+
 				bookDetail.btnBook.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						bookDetail.insertDetail(id);
 						bookDetail.setVisible(false);
-//						BookCalendar bookCalendar = new BookCalendar();
-//						bookCalendar.setVisible(false);
-//						bookCalendar.setVisible(true);
 						setVisible(false);
 					}
 				});
@@ -155,9 +150,8 @@ public class DayDay extends JFrame {
 					String mainStartTime = rs.getString("mainStartTime");
 					String mainEndDay = rs.getString("mainEndDay");
 					String mainEndTime = rs.getString("mainEndTime");
-					// DB
 					
-					DayDetail dayLabel = new DayDetail(mainNum, cusName, cusCarNum, srvName, techName, cusTel, bMain, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
+					DayDetail dayLabel = new DayDetail(mainNum, cusName, cusCarNum, srvName, techName, cusTel, mainStartDay, mainStartTime, mainEndDay, mainEndTime, year, month,
 							 days);
 					
 //					System.out.println(dayLabel);
@@ -170,9 +164,6 @@ public class DayDay extends JFrame {
 //		} finally {
 //			dbManager.closeDB(pstmt, rs);
 //			dbManager.closeDB();
-//			if (rs != null) { rs.close(); }
-//			if (pstmt != null) { pstmt.close(); }
-//			if (conn != null) { conn.close(); }
 			
 		}
 		

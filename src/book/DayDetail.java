@@ -2,29 +2,15 @@ package book;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
 import all.LoginManager;
 
 public class DayDetail extends JLabel {
@@ -33,8 +19,6 @@ public class DayDetail extends JLabel {
 	private LoginManager loginManager;
 	
 	int year, month, days;
-	BookMain bMain;
-	BookDetail detail;
 	int get_maintenance_num;
 	String mon;
 	String day;
@@ -44,22 +28,17 @@ public class DayDetail extends JLabel {
 	SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
 
 
-	public DayDetail(int mainNum, String cusName, String cusCarNum, String srvName, String techName, String cusTel, BookMain bMain, String mainStartDay, String mainStartTime, String mainEndDay, String mainEndTime, int year, int month,
+	public DayDetail(int mainNum, String cusName, String cusCarNum, String srvName, String techName, String cusTel, String mainStartDay, String mainStartTime, String mainEndDay, String mainEndTime, int year, int month,
 			int days) {
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
 	    
 		this.get_maintenance_num = mainNum;
-		this.bMain = bMain;
 		
 		setOpaque(true);
 		setBackground(Color.WHITE);
 		setFont(new Font("NanumBarunGothic", Font.BOLD, 16));
-//		try {
-//			startTime = formatTime.parse(mainStartTime);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
+
 
 		setText(" " + cusName + ", " + srvName + ", " + mainStartTime + " ( 담당자 : " + techName + " )");
 

@@ -13,6 +13,7 @@ import book.BookCalendar;
 import book.DBManager;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -25,7 +26,7 @@ import java.awt.event.ActionEvent;
 
 public class EditComInfo extends JFrame {
 
-	private DBConnectionMgr pool;
+	private final DBManager dbManager = new DBManager();
 	private LoginManager loginManager;
 	
 	private JPanel contentPane;
@@ -58,7 +59,6 @@ public class EditComInfo extends JFrame {
 
 	
 	public EditComInfo() {
-		pool = DBConnectionMgr.getInstance();
 		loginManager = loginManager.getInstance();
 	    String id = loginManager.getLogComNum();
 	      
@@ -80,38 +80,38 @@ public class EditComInfo extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(438, 177, 1060, 597);
+		panel.setBounds(438, 177, 1130, 597);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("기존 비밀번호");
 		lblNewLabel_1_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_1.setBounds(101, 91, 136, 41);
+		lblNewLabel_1_1.setBounds(79, 91, 215, 41);
 		panel.add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("새로운 비밀번호");
 		lblNewLabel_1_2.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_2.setBounds(101, 154, 162, 41);
+		lblNewLabel_1_2.setBounds(79, 154, 215, 41);
 		panel.add(lblNewLabel_1_2);
 		
 		JLabel lblNewLabel_1_3 = new JLabel("업체명");
 		lblNewLabel_1_3.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_3.setBounds(101, 277, 136, 41);
+		lblNewLabel_1_3.setBounds(79, 277, 215, 41);
 		panel.add(lblNewLabel_1_3);
 		
 		JLabel lblNewLabel_1_5 = new JLabel("우편번호");
 		lblNewLabel_1_5.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_5.setBounds(101, 405, 136, 41);
+		lblNewLabel_1_5.setBounds(79, 405, 215, 41);
 		panel.add(lblNewLabel_1_5);
 		
 		JLabel lblNewLabel_1_6 = new JLabel("주소");
 		lblNewLabel_1_6.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_6.setBounds(101, 470, 136, 41);
+		lblNewLabel_1_6.setBounds(79, 470, 215, 41);
 		panel.add(lblNewLabel_1_6);
 		
 		JLabel lblNewLabel_1_7 = new JLabel("전화번호");
 		lblNewLabel_1_7.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_7.setBounds(101, 534, 136, 41);
+		lblNewLabel_1_7.setBounds(79, 534, 215, 41);
 		panel.add(lblNewLabel_1_7);
 		
 		this.comNum = new JTextField();
@@ -164,12 +164,12 @@ public class EditComInfo extends JFrame {
 		
 		JLabel lblNewLabel_1_4 = new JLabel("사업자등록번호");
 		lblNewLabel_1_4.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_4.setBounds(101, 26, 166, 41);
+		lblNewLabel_1_4.setBounds(79, 26, 215, 41);
 		panel.add(lblNewLabel_1_4);
 		
 		JLabel lblNewLabel_1_3_1 = new JLabel("이메일");
 		lblNewLabel_1_3_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_3_1.setBounds(101, 342, 136, 41);
+		lblNewLabel_1_3_1.setBounds(79, 342, 215, 41);
 		panel.add(lblNewLabel_1_3_1);
 		
 		password = new JLabel("");
@@ -179,7 +179,7 @@ public class EditComInfo extends JFrame {
 		
 		JLabel lblNewLabel_1_2_1 = new JLabel("새로운 비밀번호 확인");
 		lblNewLabel_1_2_1.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		lblNewLabel_1_2_1.setBounds(101, 213, 192, 41);
+		lblNewLabel_1_2_1.setBounds(79, 213, 215, 41);
 		panel.add(lblNewLabel_1_2_1);
 		
 		newComPwCheck = new JTextField();
@@ -190,7 +190,7 @@ public class EditComInfo extends JFrame {
 		
 		newPassword = new JLabel("");
 		newPassword.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
-		newPassword.setBounds(716, 213, 282, 41);
+		newPassword.setBounds(716, 213, 320, 41);
 		panel.add(newPassword);
 		
 		JButton btnFixedComInfo = new JButton("수정 완료");
@@ -214,7 +214,9 @@ public class EditComInfo extends JFrame {
 	}
 
 	public void updateComInfo(String id) {
-		Connection conn = null;
+//		DBConnectionMgr mgr = DBConnectionMgr.getInstance();
+//		Connection conn = null;
+		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -245,12 +247,13 @@ public class EditComInfo extends JFrame {
 						pstmt.setString(6, this.comTel.getText());
 						pstmt.setString(7, id);
 						pstmt.executeUpdate();
-						
+						DialogManager.createMsgDialog("수정되었습니다!", "\\img\\success1.png",
+								"수정완료", JOptionPane.PLAIN_MESSAGE);
 						setVisible(false);
 						new ComMyPage();
 					} else {
 						password.setText("비밀번호가 틀립니다.");
-						password.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+						password.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 						password.setForeground(Color.RED);
 					}
 				} else {
@@ -268,13 +271,16 @@ public class EditComInfo extends JFrame {
 						pstmt.setString(7, id);
 						pstmt.executeUpdate();
 						
+						DialogManager.createMsgDialog("수정되었습니다!", "\\img\\success1.png",
+								"수정완료", JOptionPane.PLAIN_MESSAGE);
+						
 						setVisible(false);
 						new ComMyPage();
 						
 						}
 						else {
 							newPassword.setText("비밀번호가 일치하지 않습니다.");
-							newPassword.setFont(new Font("NanumBarunGothic", Font.BOLD, 21));
+							newPassword.setFont(new Font("NanumBarunGothic", Font.PLAIN, 21));
 							newPassword.setForeground(Color.RED);
 						}
 				
@@ -284,14 +290,15 @@ public class EditComInfo extends JFrame {
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
-			pool.freeConnection(conn, pstmt, rs);
+//		} finally {
+//			dbManager.closeDB(pstmt);
+//			dbManager.closeDB();
 		}
 	}
 	
 	
 	public void showComInfo(String id) {
-		Connection conn = null;
+		Connection conn = dbManager.getConn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -317,8 +324,9 @@ public class EditComInfo extends JFrame {
 			}
 		} catch (Exception e2) {
 			e2.printStackTrace();
-		} finally {
-			pool.freeConnection(conn, pstmt, rs);
+//		} finally {
+//			dbManager.closeDB(pstmt, rs);
+//			dbManager.closeDB();
 		}
 	}
 }
