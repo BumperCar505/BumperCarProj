@@ -496,7 +496,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		
 		for(int aCount = 0; aCount < techAllName.size(); ++aCount) {
 			for(int rCount = 0; rCount < regTechNames.size(); ++rCount) {
-				if(techAllName.get(aCount).split(" ")[1].equals(regTechNames.get(rCount))) {
+				if(techAllName.get(aCount).split(" ")[1].trim().equals(regTechNames.get(rCount).trim())) {
 					list.add(techAllName.get(aCount));
 					break;
 				}
@@ -532,7 +532,7 @@ public class ComSrvListSub1 extends JFrame implements ActionListener {
 		contentPane.add(lblProvideTechList);
 		
 		lblSrvPrice = new JLabel("서비스 가격");
-		lblSrvPrice.setBounds(40, 350, 100, 40);
+		lblSrvPrice.setBounds(40, 350, 136, 40);
 		contentPane.add(lblSrvPrice);
 		
 		textFieldSrvName = new JTextField();
