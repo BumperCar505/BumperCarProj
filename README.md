@@ -27,7 +27,7 @@
 <br>
 
 ## 😀 DB설계
-<img src=""> 넣을 예정 조금만 기다리삼
+<img src="https://user-images.githubusercontent.com/101693599/221773420-1d475c08-7c08-45c5-b84c-748f80f877fc.png">
 
 <br>
 
