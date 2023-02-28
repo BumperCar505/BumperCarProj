@@ -27,7 +27,7 @@
 <br>
 
 ## 😀 DB설계
-<img src="https://user-images.githubusercontent.com/101693599/221773420-1d475c08-7c08-45c5-b84c-748f80f877fc.png">
+<img src="https://user-images.githubusercontent.com/101693599/221776611-a56af1f4-c05d-4bee-b3b4-4c5c919dee46.png">
 
 <br>
 
